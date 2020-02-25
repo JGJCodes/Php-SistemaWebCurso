@@ -1,0 +1,5 @@
+usuario: 	admincurso
+contraseña:	admin123
+
+Debe tener todos los permisos autorizados sobre
+la base de datos "dbproyecto"
