@@ -1,0 +1,2 @@
+Dia1:	5Introduccion al curso
+Dia2:	13Diseño de la Base de Datos
