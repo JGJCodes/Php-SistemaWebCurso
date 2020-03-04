@@ -32,6 +32,15 @@
         public function ruta(){
             return "http://localhost/proyecto/";
         }
+
+        /**Metodo que realiza la conexion y 
+         * la codificacion de caracteres
+         
+        public static function set_conexion(){
+            $conectar=parent::conexion();
+            parent::set_names();
+            return $conectar;
+        }*/
         
     } //Fin de la clase conectar
 
