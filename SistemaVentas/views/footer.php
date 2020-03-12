@@ -215,7 +215,9 @@
 <script src="../public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
 <!-- DataTables -->
-<script src="../public/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<!--<script src="../public/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>-->
+<script src="../public/plugins/datatables/dataTables.js"></script>
+<script src="../public/plugins/datatables/dataTables.min.js"></script>
 
 <!-- Morris.js charts -->
 <script src="../public/bower_components/raphael/raphael.min.js"></script>
@@ -244,5 +246,13 @@
 <script src="../public/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../public/dist/js/demo.js"></script>
+<!-- Libreria Bootbox  -->
+<script src="../public/plugins/bootbox/bootbox.js"></script>
+<script src="../public/plugins/bootbox/bootbox.min.js"></script>
+<script src="../public/plugins/bootbox/bootbox.all.js"></script>
+<script src="../public/plugins/bootbox/bootbox.all.min.js"></script>
+<script src="../public/plugins/bootbox/bootbox.locales.js"></script>
+<script src="../public/plugins/bootbox/bootbox.locales.min.js"></script>
+
 </body>
 </html>

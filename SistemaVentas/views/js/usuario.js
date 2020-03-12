@@ -3,6 +3,20 @@ var tabla;
 //Funcion que se ejecuta al inicio
 function init(){
 
+    listar();
+    //cuando se da click al boton submit se ejecuta la funcion guardaryeditar
+    $("#usuario_form").on("submit",function(e){
+                                    guardaryeditar(e)
+                        }
+    )
+
+    //cambia el titulo de la ventana modal cuando se da click al boton
+    $("#add_button").click(function(){
+                            $(".modal-title").text("Agregar Usuario");
+                            }
+    );
+    
+
 }
 
 //Funcion que limpia los campos del formulario
@@ -96,6 +110,64 @@ function mostrar(id_usuario){
             $("#action").val(Edit);
         }
     );
-}
+}//Fin de la funcion mostrar
+
+//La funcion guardaryeditar(e) es llamada cuando se da click al boton submit
+function guardaryeditar(e){
+
+    e.preventDefault(); //No se activara la accion predeterminada del evento
+    var formData = new FormData($("#usuario_form")[0]);
+
+    var password1 = $("#password1").val();
+    var password2 = $("#password2").val();
+
+    if(password1==password2){ //validar las contraseñas
+        //objeto ajax que realiza el proceso de guardar y editar datos
+        $.ajax({
+            url:"../ajax/usuario.php?op=guardaryeditar",
+            type:"POST",
+            data:formData,
+            contentType:false,
+            processData:false,
+            success: function(datos){
+                        $('#usuario_form')[0].reset();
+                        $('#usuarioModal').modal('hide');
+                        $('#resultados_ajax').html(datos);
+                        $('#usuario_data').DataTable().ajax.reload();
+
+                        limpiar(); //Llamada a la funcion limpiar del archiv0
+                    }
+        });//Fin de la validacion
+    }else{
+        //mostrar el mensaje de error
+        bootbox.alert("No coincide la contraseña");
+    }
+}//Fin de la funcion guardaryeditar
+
+
+/**
+ * Funcion que cambia el estado del usuario con el id enviado por ajax
+ * IMPORTANTE: id_usuario,est se envian por POST via AJAX
+ * **/
+function cambiarEstado(id_usuario,est){
+
+    bootbox.confirm(
+        "¿Está seguro de cambiar el estado?",
+        function(result){
+
+            if(result){
+                $.ajax({
+                    url:"../ajax/usuario.php?op=activarydesactivar",
+                    method:"POST",
+                    data:{ id_usuario: id_usuario, est:est }, //Toma el valor del id y estado
+                    success: function(data){
+                                $('#usuario_data').DataTable().ajax.reload();
+                            }//Fin de funcion 
+                })
+            }//Fin de la estructura if
+        }//Fin de la funcion
+    );//Fin del bootbox
+
+}//Fin de la funcion cambiarEstado
 
 init();
