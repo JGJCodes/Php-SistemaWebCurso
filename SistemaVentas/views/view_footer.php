@@ -247,8 +247,10 @@
 <script src="../public/bower_components/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
 <script src="../public/dist/js/adminlte.min.js"></script>
+
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="../public/dist/js/pages/dashboard.js"></script>
+<!-- <script src="../public/dist/js/pages/dashboard.js"></script> -->
+
 <!-- AdminLTE for demo purposes -->
 <script src="../public/dist/js/demo.js"></script>
 

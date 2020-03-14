@@ -130,6 +130,8 @@ function guardaryeditar(e){
             contentType:false,
             processData:false,
             success: function(datos){
+                        console.log(datos); //imprime el mensaje de error por consola
+
                         $('#usuario_form')[0].reset();
                         $('#usuarioModal').modal('hide');
                         $('#resultados_ajax').html(datos);

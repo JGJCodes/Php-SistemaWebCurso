@@ -1,5 +1,7 @@
 <?php
 
+    session_start(); //Inicia la variable de login
+
     class Conectar{
         protected $dbh; // atributo que almacena la conexion mysql
 
@@ -10,7 +12,7 @@
          */
         protected function conexion(){
             try{
-                $conectar = $this-> dbh = new PDO("mysql:local=localhost;dbname=dbproyecto","root","");
+                $conectar = $this-> dbh = new PDO("mysql:local=localhost;dbname=dbproyecto","admincurso","admin123");
     
                 return $conectar;
             }catch(Exception $e){
@@ -28,9 +30,11 @@
         }
 
         /**Metodo que muestra la ruta del proyecto
+         * NOTA: se utiliza para direccionar a los usuarios
+         * a la pagina de inicio durante el proceso de login
          */
         public function ruta(){
-            return "http://localhost/proyecto/";
+            return "http://localhost/SistemaVentas/";
         }
 
         /**Metodo que realiza la conexion y 

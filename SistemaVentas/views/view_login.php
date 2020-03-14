@@ -1,4 +1,16 @@
+<?php
+  
+  require_once("../config/conexion.php");//Agregamos la conexion con la BD
+  require_once("../models/usuario.php"); //Añadimos la clase usuarios
 
+  //Evalua si se ha realizado un intento de iniciar sesion
+  if(isset($_POST["enviar"]) and $_POST["enviar"]=="si"){
+   
+    $usuario = new Usuarios();
+    $usuario->login();
+  }
+
+?>
 
 
 <!DOCTYPE html>
@@ -46,7 +58,32 @@
         
         <div class="box-body">
             
+          <?php
+            //Evalua si se genero un error en el proceso de login
+            if(isset($_GET["m"])){
+              switch($_GET["m"]){
+                //Caso A: los datos son incorrectos
+                case "1": ?>
+                <div class="alert alert-danger alert-dismissible">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                  <h4><i class="icon fa fa-ban" ></i> ¡El correo y/o la contraseña es incorrecto o no tienes permiso! </h4>
+                </div>
+                  <?php
+                  break;
+                  //Caso B: los datos son vacios
+                  case "2": ?>
+                    <div class="alert alert-danger alert-dismissible">
+                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                      <h4><i class="icon fa fa-ban" ></i> ¡Los campos estan vacios! </h4>
+                    </div>
+                      <?php
+                      break;
+
+              }// Fin switch
+
+            }//Fin de la validacion
           
+          ?>
 
              
         </div>

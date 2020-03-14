@@ -129,14 +129,14 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MENU</li>
         <li class="">
-          <a href="index.php">
+          <a href="view_login.php">
             <i class="fa fa-home" aria-hidden="true"></i> <span>Inicio</span>
           </a>
           
         </li>
 
          <li class="">
-          <a href="categorias.php">
+          <a href="view_categorias.php">
             <i class="fa fa-list" aria-hidden="true"></i> <span>Categoría</span>
             <span class="pull-right-container badge bg-blue">
               <i class="fa fa-bell pull-right">20</i>
@@ -146,7 +146,7 @@
         </li>
 
         <li class="">
-          <a href="presentacion.php">
+          <a href="view_presentacion.php">
             <i class="fa fa-shopping-basket" aria-hidden="true"></i> <span>Presentación</span>
             <span class="pull-right-container badge bg-blue">
               <i class="fa fa-bell pull-right">20</i>
@@ -157,7 +157,7 @@
 
 
          <li class="">
-          <a href="productos.php">
+          <a href="view_productos.php">
             <i class="fa fa-tasks" aria-hidden="true"></i> <span>Productos</span>
             <span class="pull-right-container badge bg-blue">
               <i class="fa fa-bell pull-right">20</i>
@@ -167,7 +167,7 @@
         </li>
 
          <li class="">
-              <a href="proveedores.php">
+              <a href="view_proveedores.php">
                 <i class="fa fa-users"></i> <span>Proveedores</span>
                 <span class="pull-right-container badge bg-blue">
                   <i class="fa fa-bell pull-right">5</i>
@@ -177,7 +177,7 @@
           </li>
 
            <li class="">
-          <a href="compras.php">
+          <a href="view_compras.php">
             <i class="fa fa-shopping-cart" aria-hidden="true"></i> <span>Compras</span>
             <span class="pull-right-container badge bg-blue">
               <i class="fa fa-bell pull-right">10</i>
@@ -187,7 +187,7 @@
         </li>
 
            <li class="">
-          <a href="clientes.php">
+          <a href="view_clientes.php">
             <i class="fa fa-users"></i> <span>Clientes</span>
             <span class="pull-right-container badge bg-blue">
               <i class="fa fa-bell pull-right">3</i>
@@ -197,7 +197,7 @@
         </li>
 
          <li class="">
-          <a href="ventas.php">
+          <a href="view_ventas.php">
             <i class="fa fa-suitcase" aria-hidden="true"></i> <span>Ventas</span>
             <span class="pull-right-container badge bg-blue">
               <i class="fa fa-bell pull-right">8</i>
@@ -207,7 +207,7 @@
         </li>
 
         <li class="">
-          <a href="ventas.php">
+          <a href="view_ventas.php">
             <i class="fa fa-print" aria-hidden="true"></i> <span>Reportes</span>
             <span class="pull-right-container badge bg-blue">
               <i class="fa fa-bell pull-right">8</i>
@@ -218,7 +218,7 @@
 
 
         <li class="">
-          <a href="usuarios.php">
+          <a href="view_usuarios.php">
             <i class="fa fa-user" aria-hidden="true"></i> <span>Usuarios</span>
             <span class="pull-right-container badge bg-blue">
               <i class="fa fa-bell pull-right">3</i>
@@ -228,7 +228,7 @@
         </li>
 
          <li class="">
-          <a href="backup.php">
+          <a href="view_backup.php">
             <i class="fa fa-database" aria-hidden="true"></i> <span>BackUp</span>
             <span class="pull-right-container badge bg-blue">
               <i class="fa fa-bell pull-right">3</i>
