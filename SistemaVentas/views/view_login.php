@@ -5,7 +5,6 @@
 
   //Evalua si se ha realizado un intento de iniciar sesion
   if(isset($_POST["enviar"]) and $_POST["enviar"]=="si"){
-   
     $usuario = new Usuarios();
     $usuario->login();
   }

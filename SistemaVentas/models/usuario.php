@@ -134,7 +134,7 @@
                 direccion=?,
                 cargo=?,
                 usuario=?,
-                password1=?,
+                password=?,
                 password2=?,
                 estado=? where id_usuario=?";
 

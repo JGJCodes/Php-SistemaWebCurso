@@ -1,3 +1,12 @@
+<?php
+
+
+   require_once("../config/conexion.php");
+
+    if(isset($_SESSION["id_usuario"])){
+
+?>
+
 
 <!DOCTYPE html>
 <html>
@@ -73,7 +82,7 @@
              
              <!-- <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">-->
               <i class="fa fa-user" aria-hidden="true"></i>
-              <span class="hidden-xs">Eyter Higuera</span>
+              <span class="hidden-xs"> <?php echo $_SESSION["nombre"]?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
@@ -83,7 +92,7 @@
                  <i class="fa fa-user" aria-hidden="true"></i>
 
                 <p>
-                  Eyter Higuera - Web Developer
+                <?php echo $_SESSION["nombre"]?> - Web Developer
                   <small>Administrador desde Noviembre 2017</small>
                 </p>
               </li>
@@ -105,10 +114,12 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Perfil</a>
+                <a href="#" class="btn btn-default btn-flat" 
+                onclick="mostrar_perfil('<?php echo $_SESSION["id_usuario"]?>')"  
+                        data-toggle="modal" data-target="#perfilModal" > Perfil de usuario </a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Cerrar</a>
+                  <a href="logout.php" class="btn btn-default btn-flat">Cerrar sesión</a>
                 </div>
               </li>
             </ul>
@@ -129,7 +140,7 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MENU</li>
         <li class="">
-          <a href="view_login.php">
+          <a href="view_home.php">
             <i class="fa fa-home" aria-hidden="true"></i> <span>Inicio</span>
           </a>
           
@@ -144,17 +155,6 @@
           </a>
          
         </li>
-
-        <li class="">
-          <a href="view_presentacion.php">
-            <i class="fa fa-shopping-basket" aria-hidden="true"></i> <span>Presentación</span>
-            <span class="pull-right-container badge bg-blue">
-              <i class="fa fa-bell pull-right">20</i>
-            </span>
-          </a>
-         
-        </li>
-
 
          <li class="">
           <a href="view_productos.php">
@@ -176,14 +176,22 @@
 
           </li>
 
-           <li class="">
+           <li class="treeview">
           <a href="view_compras.php">
             <i class="fa fa-shopping-cart" aria-hidden="true"></i> <span>Compras</span>
             <span class="pull-right-container badge bg-blue">
               <i class="fa fa-bell pull-right">10</i>
+              <i class="fa fa-angle-left pull-right"></i>  <!-- icono de submenu -->
             </span>
           </a>
-         
+         <!-- Submenu de opciones del modulo compras -->
+          <ul class="treeview-menu">
+            <li><a href="view_compras.php"><i class="fa fa_circle-o"></i>Compras</a></li>
+            <li><a href="view_compras_cons.php"><i class="fa fa_circle-o"></i>Consultar compras</a></li>
+            <li><a href="view_compras_fecha.php"><i class="fa fa_circle-o"></i>Consultar compras por fecha</a></li>
+            <li><a href="view_compras_mes.php"><i class="fa fa_circle-o"></i>Consultar compras por mes</a></li>
+          </ul>
+
         </li>
 
            <li class="">
@@ -195,25 +203,56 @@
           </a>
          
         </li>
-
-         <li class="">
+          <!-- clase treeview de submenu -->
+         <li class="treeview">
           <a href="view_ventas.php">
             <i class="fa fa-suitcase" aria-hidden="true"></i> <span>Ventas</span>
             <span class="pull-right-container badge bg-blue">
               <i class="fa fa-bell pull-right">8</i>
+              <i class="fa fa-angle-left pull-right"></i>  <!-- icono de submenu -->
             </span>
           </a>
          
+          <!-- Submenu de opciones del modulo ventas -->
+          <ul class="treeview-menu">
+            <li><a href="view_ventas.php"><i class="fa fa_circle-o"></i>Ventas</a></li>
+            <li><a href="view_ventas_cons.php"><i class="fa fa_circle-o"></i>Consultar ventas</a></li>
+            <li><a href="view_ventas_fecha.php"><i class="fa fa_circle-o"></i>Consultar ventas por fecha</a></li>
+            <li><a href="view_ventas_mes.php"><i class="fa fa_circle-o"></i>Consultar ventas por mes</a></li>
+          </ul>
+
         </li>
 
-        <li class="">
-          <a href="view_ventas.php">
-            <i class="fa fa-print" aria-hidden="true"></i> <span>Reportes</span>
+        <li class="treeview">
+          <a href="view_reportes_compras.php">
+            <i class="fa fa-bar-chart" aria-hidden="true"></i> <span>Reportes de compras</span>
             <span class="pull-right-container badge bg-blue">
-              <i class="fa fa-bell pull-right">8</i>
+              <i class="fa fa-angle-left pull-right">
             </span>
           </a>
-         
+          <!-- Submenu de opciones del modulo compras -->
+          <ul class="treeview-menu">
+            <li><a href="view_reporte_compras_general.php"><i class="fa fa_circle-o"></i>Reporte general de compras</a></li>
+            <li><a href="view_reporte_compras_mensual.php"><i class="fa fa_circle-o"></i>Reporte de compras mensuales </a></li>
+            <li><a href="view_reporte_compras_proveedor.php"><i class="fa fa_circle-o"></i>Reporte de compras por proveedor</a></li>
+           
+          </ul>
+        </li>
+
+        <li class="treeview">
+          <a href="view_reportes_ventas.php">
+            <i class="fa fa-pie-chart" aria-hidden="true"></i> <span>Reportes de ventas</span>
+            <span class="pull-right-container badge bg-blue">
+              <i class="fa fa-angle-left pull-right">
+            </span>
+          </a>
+          <!-- Submenu de opciones del modulo ventas -->
+          <ul class="treeview-menu">
+            <li><a href="view_reporte_ventas_general.php"><i class="fa fa_circle-o"></i>Reporte general de ventas</a></li>
+            <li><a href="view_reporte_ventas_mensual.php"><i class="fa fa_circle-o"></i>Reporte de ventas mensuales </a></li>
+            <li><a href="view_reporte_ventas_cliente.php"><i class="fa fa_circle-o"></i>Reporte de ventas por cliente</a></li>
+           
+          </ul>
         </li>
 
 
@@ -237,6 +276,11 @@
          
         </li>
 
+        <li class="">
+          <a href="">
+            <i class="fa fa-building" aria-hidden="true"> <span>Empresa</span> </i>
+          </a>
+        </li>
        
        
       </ul>
@@ -244,3 +288,13 @@
     <!-- /.sidebar -->
   </aside>
 
+  <?php
+
+    require_once("view_perfil.php");
+     
+    } else {
+
+       header("Location:".Conectar::ruta()."views/view_login.php");
+       exit();
+    }
+ ?>

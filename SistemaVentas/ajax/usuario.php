@@ -1,7 +1,7 @@
 <?php
 //importar la conexion de la BD y el modelo usuario
 require_once("../config/conexion.php");
-require_once("../modelos/usuario.php");
+require_once("../models/usuario.php");
 
 $usuarios = new Usuarios();
 
