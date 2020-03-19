@@ -43,7 +43,10 @@ switch($_GET["op"]){
                                 $errores[]="El password no coincide";
                             }//Cierre de IF ELSE
 
-                            //Mostrar los mesajes informativos de los procesos
+                            require_once("../views/view_mensajes.php");
+                            require_once("../views/view_alertas.php");
+
+                            /**Mostrar los mesajes informativos de los procesos
                             if(isset($messages)){
                                 ?> <!-- Si existen mensajes por mostrar se genera un contenedor para imprimirlos en la pagina -->
                                 <div class="alert alert-success" role="alert">
@@ -71,7 +74,7 @@ switch($_GET["op"]){
                                     ?>
                                 </div>
                                 <?php
-                            }//Cierre del IF errors
+                            }//Cierre del IF errors**/
                             break;
     case "mostrar"://Mostrar los datos del usuario recuperados con el id enviado por ajax
                     $datos = $usuarios->get_usuarioid($_POST["id_usuario"]);
@@ -96,7 +99,10 @@ switch($_GET["op"]){
                     }else{//Mostrar el mensaje de error que el usuario no existe
                         $errores[]="El usuario no existe";
                     }
-                    //Mostrar los mensajes de errores de las operaciones
+
+                    require_once("../views/view_alertas.php");
+
+                    /**Mostrar los mensajes de errores de las operaciones
                     if(isset($errores)){
                         ?> <!-- Si existen errores por mostrar se genera un contenedor para imprimirlos en la pagina -->
                         <div class="alert alert-danger" role="alert">
@@ -109,7 +115,7 @@ switch($_GET["op"]){
                             ?>
                         </div>
                         <?php
-                    }//Cierre del IF errors
+                    }//Cierre del IF errors**/
                     break; //Termino del proceso mostrar datos por id
     case "activarydesactivar":
                             $datos = $usuarios->get_usuarioid($_POST["id_usuario"]);

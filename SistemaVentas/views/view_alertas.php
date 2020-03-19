@@ -12,5 +12,5 @@
             ?>
         </div>
     <?php
-}//Cierre del IF errors
+    }//Cierre del IF errors
 

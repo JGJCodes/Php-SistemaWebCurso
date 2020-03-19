@@ -93,8 +93,8 @@
          * Metodo que registra un usuario 
          * en la tabla de la BD
          */
-        public function registrar_usuario($nombre,$apellido,$cedula,$telefono,
-        $email,$direccion,$cargo,$usuario,$password1,$password2,$estado){
+        public function registrar_usuario($nombre,$apellido,$cedula,$telefono,$email,$direccion,
+                                         $cargo,$usuario,$password1,$password2,$estado){
             $conectar=parent::conexion();
             parent::set_names();
 
@@ -114,6 +114,46 @@
             $sql->bindValue(10,$_POST["password2"]);
             $sql->bindValue(11,$_POST["estado"]);
             $sql->execute();
+        }
+
+        /**
+         * Metodo que actualiza el perfil
+         * de un usuario 
+         **/
+        public function editar_perfil($id_perfil,$nombre,$apellido,$cedula,$telefono,
+                                    $email,$direccion,$usuario,$password1,$password2){
+            $conectar=parent::conexion();
+            parent::set_names();
+
+            $sql="update usuarios set
+                nombre=?,
+                apellido=?,
+                cedula=?,
+                telefono=?,
+                email=?,
+                direccion=?,
+                usuario=?,
+                password=?,
+                password2=?,
+                 where id_usuario=?";
+
+            echo $sql;  //Imprime la sentencia sql en la consola
+
+            $sql=$conectar->prepare($sql);
+
+            $sql->bindValue(1,$_POST["nombre"]);
+            $sql->bindValue(2,$_POST["apellido"]);
+            $sql->bindValue(3,$_POST["cedula"]);
+            $sql->bindValue(4,$_POST["telefono"]);
+            $sql->bindValue(5,$_POST["email"]);
+            $sql->bindValue(6,$_POST["direccion"]);
+            $sql->bindValue(8,$_POST["usuario"]);
+            $sql->bindValue(9,$_POST["password1"]);
+            $sql->bindValue(10,$_POST["password2"]);
+            $sql->bindValue(12,$_POST["id_perfil"]);
+            $sql->execute();
+
+            //print_r($_POST); Imprime los resultados de la consulta en la pagina
         }
 
         /**

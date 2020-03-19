@@ -1,7 +1,8 @@
 <?php
 //importar la conexion de la BD y el modelo perfil
 require_once("../config/conexion.php");
-require_once("../models/perfil.php");
+//require_once("../models/perfil.php");
+require_once("../models/usuario.php");
 
 $perfil=new Perfil();
 
@@ -25,7 +26,7 @@ switch($_GET["op"]){
 
     case 'mostrar_perfil':
                         //selecciona el id del usuario
-                        $datos=$perfil->get_usuario_por_id($_POST["id_usuario"]);
+                        $datos=$perfil->get_usuarioid($_POST["id_usuario"]);
 
                             // si existe el id del usuario entonces recorre el array
                         if(is_array($datos)==true and count($datos)>0){
@@ -46,8 +47,8 @@ switch($_GET["op"]){
                                 $errors[]="El usuario no existe";
                         }
 
-                            
-                        //inicio de mensaje de error
+                        require_once("../views/view_alertas.php");
+                        /**inicio de mensaje de error
                         if (isset($errors)){
                             ?>
                             <div class="alert alert-danger" role="alert">
@@ -61,7 +62,7 @@ switch($_GET["op"]){
                             </div>
                             <?php
                             }
-                            //fin de mensaje de error
+                            //fin de mensaje de error**/
                         break;
 
 
@@ -69,7 +70,7 @@ switch($_GET["op"]){
                         /**verificamos si el usuario existe en la base de datos, 
                         si ya existe un registro con la cedula, nombre o correo entonces no lo registra**/
 
-                        $datos= $perfil->get_usuario_nombre($_POST["cedula"], $_POST["email"]);
+                        $datos= $perfil->get_cedula_correo($_POST["cedula"], $_POST["email"]);
 
                         /**verificamos si el password1 coincide con el password2, si se cumple entonces 
                         verificamos si existe un registro con los datos enviados y en caso que no existe 
@@ -86,7 +87,9 @@ switch($_GET["op"]){
                                 $errors[]="El password no coincide";
                             }
 
-                            //mensaje success
+                            require_once("../views/view_mensajes.php");
+                            require_once("../views/view_alertas.php");
+                            /**mensaje success
                             if (isset($messages)){
                                 ?>
                                 <div class="alert alert-success" role="alert">
@@ -115,7 +118,7 @@ switch($_GET["op"]){
                                         ?>
                                 </div>
                                 <?php
-                            }//fin mensaje error
+                            }//fin mensaje error**/
                             break;
 
 
