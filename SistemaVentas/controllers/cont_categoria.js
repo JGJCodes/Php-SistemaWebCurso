@@ -24,7 +24,7 @@ function init(){
 
 /*Función limpiar los campos del formulario
 *IMPORTANTE: no limpiar el campo oculto del id_usuario, 
-    sino no se registrala categoria*/
+    sino no se registra la categoria*/
 function limpiar(){
 	$('#categoria').val("");
 	$('#estado').val("");
@@ -37,7 +37,7 @@ function listar(){
 	{
 		"aProcessing": true,//Activamos el procesamiento del datatables
 	    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-	    dom: 'Bfrtip',//Definimos los elementos del control de tabla
+	    dom: 'Bfrtip',		//Definimos los elementos del control de la tabla
 	    buttons: [		          
 		            'copyHtml5',
 		            'excelHtml5',
@@ -62,7 +62,7 @@ function listar(){
  
 			    "sProcessing":     "Procesando...",
 			    "sLengthMenu":     "Mostrar _MENU_ registros",
-			    "sZeroRecords":    "No se encontraron resultados",
+			    "sZeroRecords":    "No se encontraron los resultados",
 			    "sEmptyTable":     "Ningún dato disponible en esta tabla",
 			    "sInfo":           "Mostrando un total de _TOTAL_ registros",
 			    "sInfoEmpty":      "Mostrando un total de 0 registros",

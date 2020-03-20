@@ -1,4 +1,9 @@
 <?php
+/**
+ * Archivo que contiene la definicion de la clase 
+ * Conectar que realiza los procesos de conexion 
+ * con la base de datos del sistema
+ */
 
     session_start(); //Inicia la variable de login
 

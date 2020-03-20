@@ -1,3 +1,9 @@
+<!--
+  Archivo que contiene las estructuras
+  de la pagina web que define la vista
+  del modulo Usuarios
+-->
+
 <?php
     require_once("../config/conexion.php");
 
@@ -63,7 +69,7 @@
   <!--Fin-Contenido-->
 
 <!--FORMULARIO VENTANAN MODAL (Registro de usuario)-->
-<div id="usuariomodal" class="modal fade">  
+<div id="usuarioModal" class="modal fade">  
   <div class="modal-dialog">
 
     <form method="post" id="usuario_form">
@@ -128,7 +134,7 @@
            </select>
         </div>
 
-        <div class="modeal-footer">
+        <div class="modal-footer">
           <input type="hidden" name="id_usuario" id="id_usuario"/> <!-- input que envia el id del usuario -->
 
           <button type="submit" name="action" id="btnGuardar" class="btn btn-success pull-left" value="Add">

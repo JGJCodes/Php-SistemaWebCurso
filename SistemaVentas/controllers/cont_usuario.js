@@ -1,8 +1,12 @@
+/**
+ * Archivo que contiene los procesos de controlar
+ * la informacion transmitida a la vista Usuario
+ */
+
 var tabla;
 
 //Funcion que se ejecuta al inicio
 function init(){
-
     listar();
     //cuando se da click al boton submit se ejecuta la funcion guardaryeditar
     $("#usuario_form").on("submit",function(e){
@@ -14,8 +18,7 @@ function init(){
     $("#add_button").click(function(){
                             $(".modal-title").text("Agregar Usuario");
                             }
-    );
-    
+    ); 
 
 }
 

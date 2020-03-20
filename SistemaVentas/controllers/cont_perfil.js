@@ -1,21 +1,21 @@
+/**
+ * Archivo que contiene los procesos de controlar
+ * los datos que se envian a la vista Perfil Usuario
+ */
+
 
 //una vez se da click a submit se llama a la funcion editar_perfil(e)
-
-$("#perfil_form").on("submit",function(e)
-{
+$("#perfil_form").on("submit",function(e){
     editar_perfil(e);
 });
 
 
 //MOSTRAR PERFIL DE USUARIO
-function mostrar_perfil(id_usuario)
-{
-$.post("../ajax/perfil.php?op=mostrar_perfil",{id_usuario : id_usuario}, function(data, status)
-{
-    data = JSON.parse(data);
-            
+function mostrar_perfil(id_usuario){
+    $.post("../ajax/perfil.php?op=mostrar_perfil",{id_usuario : id_usuario}, function(data, status){
+            data = JSON.parse(data);
+    
             //alert(data.cedula);
-
             //console.log(data.cedula);
         
             $('#perfilModal').modal('show');
@@ -34,57 +34,49 @@ $.post("../ajax/perfil.php?op=mostrar_perfil",{id_usuario : id_usuario}, functio
             $('#id_usuario').val(id_usuario);
             $('#action').val("Edit");
             $('#operation').val("Edit");
-            
-            
     });
-    
 }
 
 //EDITAR PERFIL
 
 //la funcion guardaryeditar(e); se llama cuando se da click al boton submit
-function editar_perfil(e)
-{
-e.preventDefault(); //No se activará la acción predeterminada del evento
-//$("#btnGuardar").prop("disabled",true);
-var formData = new FormData($("#perfil_form")[0]);
+function editar_perfil(e){
+    e.preventDefault(); //No se activará la acción predeterminada del evento
+    
+    //$("#btnGuardar").prop("disabled",true);
+    
+    var formData = new FormData($("#perfil_form")[0]);
+    var password1= $("#password1").val();
+    var password2= $("#password2").val();
 
+    //var id_usuario= $("#usuario_perfil_id").val();
+    //alert(id_usuario);
 
-var password1= $("#password1").val();
-var password2= $("#password2").val();
+    if(password1==password2){
+        $.ajax({
+            url: "../ajax/perfil.php?op=editar_perfil",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
 
-//var id_usuario= $("#usuario_perfil_id").val();
+            success: function(datos){                    
+                /*bootbox.alert(datos);	          
+                mostrarform(false);
+                tabla.ajax.reload();*/
+                //alert(datos);
 
-//alert(id_usuario);
+                console.log(datos);
 
-if(password1==password2){
+                //$('#perfil_form')[0].reset();
 
-    $.ajax({
-        url: "../ajax/perfil.php?op=editar_perfil",
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
+                $('#perfilModal').modal('hide');
+                $('#resultados_ajax').html(datos);
 
-        success: function(datos)
-        {                    
-              /*bootbox.alert(datos);	          
-              mostrarform(false);
-              tabla.ajax.reload();*/
-
-             //alert(datos);
-
-             console.log(datos);
-
-            //$('#perfil_form')[0].reset();
-            $('#perfilModal').modal('hide');
-
-            $('#resultados_ajax').html(datos);
-            //$('#usuario_data').DataTable().ajax.reload();
-            
-        }
+                //$('#usuario_data').DataTable().ajax.reload();
+                
+            }
     });
-
   }//cierre del condicional
 
 }

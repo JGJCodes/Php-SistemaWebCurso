@@ -1,4 +1,9 @@
 <?php
+/**
+ * Archivo que contiene los procesos de consultas
+ * de la informacion tabla Categoria por medio de ajax
+ */
+
   require_once("../config/conexion.php");//llamo a la conexion de la base de datos 
   require_once("../models/categoria.php"); //llamo al modelo Categoría
 

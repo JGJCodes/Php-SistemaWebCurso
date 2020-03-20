@@ -1,4 +1,9 @@
 <?php
+/**
+ * Archivo que contiene la clase Perfil
+ * con las funciones de editar y consultar
+ * el perfil de un usuario en la BD
+ */
     //conexion a la base de datos
     require_once("../config/conexion.php");
 

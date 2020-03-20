@@ -1,4 +1,9 @@
 <?php
+/**
+ * Archivo que contiene la clase Categoria
+ * con las funciones de crear,editar,borrar
+ * consultar registros en la base de datos
+ */
 
   require_once("../config/conexion.php");
 

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Archivo que contiene los procesos de consultas
+ * de la informacion tabla Usuario por medio de ajax
+ */
+
 //importar la conexion de la BD y el modelo perfil
 require_once("../config/conexion.php");
 //require_once("../models/perfil.php");

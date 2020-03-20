@@ -1,7 +1,12 @@
 <?php
+/**
+ * Archivo que define la clase Usuario
+ * con las funciones de iniciar sesion,
+ * registrar,borrar,actualizar,consultar
+ * y editar los datos en la base de datos
+ */
 
-    //requiere la conexion con la BD
-    require_once("../config/conexion.php");
+    require_once("../config/conexion.php");//requiere la conexion con la BD
 
     /** 
      * Clase que define a la tabla usuario 
