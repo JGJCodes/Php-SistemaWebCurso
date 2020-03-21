@@ -59,7 +59,7 @@
 
         	$sql="update categoria set categoria=?,estado=?,id_usuario=? where id_categoria=? ";
             
-           //echo $sql; exit();
+           //echo $sql; exit(); Forma de identificar un error en la consulta
 
         	  $sql=$conectar->prepare($sql);
 		    $sql->bindValue(1,$_POST["categoria"]);
@@ -69,7 +69,7 @@
 		    $sql->execute();
  
                //impriendo el envio de los datos
-               //print_r($nombre);
+               //print_r($nombre); Forma de identificar un error en la ejecucion del registro
 
         }
 
