@@ -1,3 +1,9 @@
+<!--
+  Archivo que contiene las estructuras
+  de la impresion de los mensajes de 
+  los procesos realizados
+-->
+
 <?php
 //Mostrar los mesajes informativos de los procesos
     if(isset($messages)){

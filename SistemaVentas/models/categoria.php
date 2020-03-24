@@ -23,7 +23,7 @@
    	   }
 
    	    //método para mostrar los datos de un registro a modificar
-        public function get_categoriaid($id_categoria){
+        public function get_categoria_id($id_categoria){
             $conectar= parent::conexion();
             parent::set_names();
 

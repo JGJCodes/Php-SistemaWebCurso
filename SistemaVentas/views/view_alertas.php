@@ -1,3 +1,10 @@
+<!--
+  Archivo que contiene las estructuras
+  de la impresion de los mensajes de 
+  errores de los procesos realizados
+-->
+
+
 <?php
 //Mostrar los mensajes de errores de las operaciones
     if(isset($errores)){

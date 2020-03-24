@@ -82,7 +82,7 @@ switch($_GET["op"]){
                             }//Cierre del IF errors**/
                             break;
     case "mostrar"://Mostrar los datos del usuario recuperados con el id enviado por ajax
-                    $datos = $usuarios->get_usuarioid($_POST["id_usuario"]);
+                    $datos = $usuarios->get_usuario_id($_POST["id_usuario"]);
                     //validacion del id del usuario
                     if(is_array($datos)==true and count($datos)>0){
                         //recuperacion de los datos del usuario
@@ -123,7 +123,7 @@ switch($_GET["op"]){
                     }//Cierre del IF errors**/
                     break; //Termino del proceso mostrar datos por id
     case "activarydesactivar":
-                            $datos = $usuarios->get_usuarioid($_POST["id_usuario"]);
+                            $datos = $usuarios->get_usuario_id($_POST["id_usuario"]);
                             //valida si existe el usuario
                             if(is_array($datos)==true and count($datos>0)){
                                 $usuarios->editar_estado($_POST["id_usuario"],$_POST["estado"]);

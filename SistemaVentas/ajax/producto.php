@@ -165,6 +165,8 @@ switch ($_GET["op"]) {
         if (is_array($datos) == true and count($datos) > 0) {
             //edita el estado del producto
             $productos->editar_estado($_POST["id_producto"], $_POST["est"]);
+            //edita el estado de la categoria
+            $productos->editar_estado_categoria($_POST["id_categoria"], $_POST["est"]);
         }
         break;
 

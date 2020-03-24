@@ -1,4 +1,9 @@
-
+<!--
+  Archivo que contiene los contenedor del
+  pie de pagina de las vistas
+-->
+ 
+ 
  <footer class="main-footer">
     <div class="pull-right hidden-xs">
       <b>Version</b> 2.4.0
@@ -257,6 +262,11 @@
 <!-- Libreria Bootbox  -->
 <script src="../public/plugins/bootbox/bootbox.min.js"></script>
 
+<!--BOOTSTRAP FILE STYLE-->
 
+<script src="../public/plugins/bootstrap-filestyle/src/bootstrap-filestyle.min.js"></script>
+
+<!-- Libreria Estilos  -->
+<script src="../public/estilos/estilos.js"></script>
 </body>
 </html>

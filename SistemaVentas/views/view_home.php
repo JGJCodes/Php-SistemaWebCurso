@@ -1,3 +1,8 @@
+<!--
+  Archivo que contiene las estructuras
+  de la pagina de inicio del perfil de usuario
+-->
+
 <?php
     require_once("../config/conexion.php");
 

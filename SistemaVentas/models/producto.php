@@ -39,7 +39,6 @@
         }
     }
 
-
     //método para insertar registros
     public function registrar_producto($id_categoria,$producto,$presentacion,$unidad,$moneda,
                                         $precio_compra,$precio_venta,$stock,$estado,$imagen,$id_usuario){
@@ -104,8 +103,7 @@
     }
 
 
-    //método para editar registros
-
+    //método para editar registro
     public function editar_producto($id_producto,$id_categoria,$producto,$presentacion,$unidad,$moneda,
                                     $precio_compra,$precio_venta,$stock,$estado,$imagen,$id_usuario){
         $conectar=parent::conexion();
@@ -137,7 +135,7 @@
 
         $sql="update producto set id_categoria=?,producto=?,
             presentacion=?,unidad=?,moneda=?,precio_compra=?,precio_venta=?,
-            stock=?,estado=?,imagen=?,fecha_vencimiento=? where id_producto=?";
+            stock=?,estado=?,imagen=?,fecha_vencimiento=? id_usuario=? where id_producto=?";
 
         $sql=$conectar->prepare($sql);
         $sql->bindValue(1, $_POST["categoria"]);
@@ -151,7 +149,8 @@
         $sql->bindValue(9, $_POST["estado"]);
         $sql->bindValue(10, $imagen);
         $sql->bindValue(11, $fecha);
-        $sql->bindValue(12, $_POST["id_producto"]);
+        $sql->bindValue(12, $_POST["id_usuario"]);
+        $sql->bindValue(13, $_POST["id_producto"]);
         $sql->execute();
     }
     
@@ -173,6 +172,45 @@
         $sql->bindValue(1, $estado);
         $sql->bindValue(2, $id_producto);
         $sql->execute();
+    }
+
+    //método para editar el estado del producto por la categoria
+    public function editar_estado_producto($id_categoria,$estado){
+        $conectar=parent::conexion();
+        parent::set_names();
+                  
+        /**si estado es igual a 0 entonces lo cambia a 1
+        //el parametro est viene por via ajax, viene de est:est**/
+        $estado = 0;
+        if($_POST["est"] == 0){
+            $estado = 1;
+        }
+
+        $sql="update producto set estado=? where id_categoria=?";
+
+        $sql=$conectar->prepare($sql);
+        $sql->bindValue(1, $estado);
+        $sql->bindValue(2, $id_categoria);
+        $sql->execute();
+    }
+
+    //método para editar el estado de la categoria por el producto
+    public function editar_estado_categoria($id_categoria,$estado){
+        $conectar=parent::conexion();
+        parent::set_names();
+                  
+        /**si estado es igual a 0 entonces lo cambia a 1
+        //el parametro est viene por via ajax, viene de est:est**/
+        $estado = 0;
+        if($_POST["est"] == 0){
+            $estado = 1;
+            $sql="update categoria set estado=? where id_categoria=?";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $estado);
+            $sql->bindValue(2, $id_categoria);
+            $sql->execute();
+        }
     }
 
     //método para obtener los datos de un producto por su nombre

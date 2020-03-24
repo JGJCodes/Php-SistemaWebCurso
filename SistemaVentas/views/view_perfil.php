@@ -1,3 +1,8 @@
+<!--
+  Archivo que contiene la definicion del formulario 
+  de edicion del perfil de usuario
+-->
+
 <div id="resultados_ajax" class="text-center"></div>
 
 

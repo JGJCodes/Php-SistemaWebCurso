@@ -13,7 +13,7 @@
        $categoria = new Categoria();
        $cat = $categoria->get_categorias();
        
-    require_once("view_header.php");
+      require_once("view_header.php");
 
 ?>
   <!--Contenido-->
@@ -145,16 +145,12 @@
                <div class="form-group">
                   <label for="" class="col-lg-1 control-label">Unid. Medida</label>
 
-                  <div class="col-lg-9 col-lg-offset-1">
-                  
+                  <div class="col-lg-9 col-lg-offset-1">    
                      <select class="selectpicker form-control" id="unidad" name="unidad" required>
                       <option value="">-- Seleccione unidad --</option>
                       <option value="kilo">kilo</option>
                       <option value="Gramo">Gramo</option>
-
                     </select>
-
-
                   </div>
               </div>
 
@@ -162,13 +158,10 @@
                   <label for="" class="col-lg-1 control-label">Precio Compra</label>
 
                   <div class="col-lg-9 col-lg-offset-1">
-
-
                     <select class="selectpicker form-control" id="moneda" name="moneda" required>
                       <option value="">-- Seleccione moneda --</option>
                       <option value="USD$">USD$</option>
                       <option value="EUR">EUR€</option>
-
                     </select>
 
                     <input type="text" class="form-control" id="precio_compra" name="precio_compra" placeholder="Precio Compra" required pattern="[0-9]{0,15}">

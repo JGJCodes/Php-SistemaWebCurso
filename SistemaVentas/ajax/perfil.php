@@ -31,7 +31,7 @@ switch($_GET["op"]){
 
     case 'mostrar_perfil':
                         //selecciona el id del usuario
-                        $datos=$perfil->get_usuarioid($_POST["id_usuario"]);
+                        $datos=$perfil->get_usuario_id($_POST["id_usuario"]);
 
                             // si existe el id del usuario entonces recorre el array
                         if(is_array($datos)==true and count($datos)>0){

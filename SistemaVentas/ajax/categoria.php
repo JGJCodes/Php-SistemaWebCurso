@@ -6,7 +6,9 @@
 
   require_once("../config/conexion.php");//llamo a la conexion de la base de datos 
   require_once("../models/categoria.php"); //llamo al modelo Categoría
+  require_once("../models/producto.php"); //llamo al modelo Producto
 
+  $productos = new Producto();
   $categorias = new Categoria();
 
   /**declaramos las variables de los valores que se envian por el formulario y que 
@@ -98,7 +100,7 @@
 
 	    //selecciona el id de la categoria
         //el parametro id_categoria se envia por AJAX cuando se edita la categoria
-	    $datos=$categorias->get_categoriaid($_POST["id_categoria"]);
+	    $datos=$categorias->get_categoria_id($_POST["id_categoria"]);
 
           // si existe el id de la categoria entonces recorre el array
 	      if(is_array($datos)==true and count($datos)>0){
@@ -137,12 +139,14 @@
         case "activarydesactivar":
      
             //los parametros id_categoria y est vienen por via ajax
-            $datos=$categorias->get_categoriaid($_POST["id_categoria"]);
+            $datos=$categorias->get_categoria_id($_POST["id_categoria"]);
 
              // si existe el id de la categoria entonces recorre el array
             if(is_array($datos)==true and count($datos)>0){
                 //edita el estado de la categoria
                 $categorias->editar_estado($_POST["id_categoria"],$_POST["est"]);
+                //edita el estado del producto
+                $productos->editar_estado_producto($_POST["id_categoria"],$_POST["est"]);
             } 
 
         break;

@@ -1,3 +1,8 @@
+<!--
+  Archivo que contiene la estructura de
+  la pagina de inicio de sesion o formulario de login
+-->
+
 <?php
   
   require_once("../config/conexion.php");//Agregamos la conexion con la BD

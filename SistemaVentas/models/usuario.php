@@ -208,7 +208,7 @@
          * Metodo que retorna un usuario 
          * de la tabla de la BD
          */
-        public function get_usuarioid($id_usuario){
+        public function get_usuario_id($id_usuario){
             $conectar=parent::conexion();
             parent::set_names();
 
