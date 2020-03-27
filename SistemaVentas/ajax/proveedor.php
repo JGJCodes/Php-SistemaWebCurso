@@ -125,7 +125,7 @@ switch($_GET["op"]){
                     }//Cierre del IF errors**/
                     break; //Termino del proceso mostrar datos por id
     case "activarydesactivar":
-                            $datos = $proveedores->get_proveedor_por_id($_POST["id_proveedor"]);
+                            $datos = $proveedores->get_proveedor_id($_POST["id_proveedor"]);
                             //valida si existe el proveedor
                             if(is_array($datos)==true and count($datos>0)){
                                 $proveedores->editar_estado($_POST["id_proveedor"],$_POST["est"]);
@@ -170,7 +170,7 @@ switch($_GET["op"]){
                     echo json_encode($results);
                     break;
     
-    case "listar_en_compras":/*se muestran en ventana modal el datatable de los proveedores en compras para seleccionar 
+    case "listar_compras":/*se muestran en ventana modal el datatable de los proveedores en compras para seleccionar 
                             luego los proveedores activos y luego se autocomplementa los campos desde un formulario*/
                             $datos=$proveedores->get_proveedores();
                     
@@ -210,11 +210,9 @@ switch($_GET["op"]){
                                 echo json_encode($results);
                     
                             break;
-   
-   
-         /*valida los proveedores activos y se muestran en un formulario*/
-        case "buscar_proveedor";
-                                $datos=$proveedores->get_proveedor_por_id_estado($_POST["id_proveedor"],$_POST["est"]);
+         
+        case "buscar_proveedor";//valida los proveedores activos y se muestran en un formulario
+                                $datos=$proveedores->get_proveedor_estado($_POST["id_proveedor"],$_POST["est"]);
 
                                 // comprobamos que el proveedor esté activo, de lo contrario no lo agrega
                                 if(is_array($datos)==true and count($datos)>0){
