@@ -7,9 +7,9 @@
 <?php
 
    require_once("../config/conexion.php");
+   require_once("../models/categoria.php");
 
     if(isset($_SESSION["id_usuario"])){
-       require_once("../modelos/Categorias.php");
        $categoria = new Categoria();
        $cat = $categoria->get_categorias();
        
