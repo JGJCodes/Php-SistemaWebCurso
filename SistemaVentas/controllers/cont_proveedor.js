@@ -222,7 +222,7 @@ function listar_compras(){
             }
         }//Fin language
     }).DataTable();
-}//Fin funcion listar usuario
+}//Fin funcion listar_compras
 
 //AUTOCOMPLETAR DATOS DEL PROVEEDOR EN COMPRAS
 function agregar_registro(id_proveedor,est){

@@ -242,6 +242,66 @@ switch ($_GET["op"]) {
         );
         echo json_encode($results);
         break;
+
+        case "listar_compras":
+            /*se muestran en ventana modal el datatable de los productos en compras para seleccionar 
+            luego los productos activos y luego se autocomplementa los campos desde un formulario*/
+            $datos=$productos->get_productos();
+    
+            //Vamos a declarar un array
+            $data= Array();
+    
+            foreach($datos as $row){
+                $sub_array = array();
+                $est = '';
+                $atrib = "btn btn-success btn-md estado";
+                if($row["estado"] == 0){
+                    $est = 'INACTIVO';
+                    $atrib = "btn btn-warning btn-md estado";
+                } else{
+                    if($row["estado"] == 1){
+                        $est = 'ACTIVO';
+                    }	
+                }
+                    
+                //STOCK, si es mejor de 10 se pone rojo sino se pone verde
+                $stock = "";
+                if ($row["stock"] <= 10) {
+                    $stock = $row["stock"];
+                    $atributo = "badge bg-red-active";
+                } else {
+                    $stock = $row["stock"];
+                    $atributo = "badge bg-green";
+                }
+
+                //moneda
+                $moneda = $row["moneda"];
+
+                //$sub_array = array();
+                $sub_array[] = $row["categoria"];
+                $sub_array[] = $row["producto"];
+                $sub_array[] = $row["presentacion"];
+                $sub_array[] = $row["unidad"];
+                $sub_array[] = $moneda . " " . $row["precio_compra"];
+                $sub_array[] = $moneda . " " . $row["precio_venta"];
+
+                $sub_array[] = '<span class="' . $atributo . '">' . $row["stock"] . ' </span>';
+                        
+                //Botones estado y agregar registro
+                $sub_array[] = '<button type="button"  name="estado" id="'.$row["id_producto"].'" class="'.$atrib.'">'.$est.'</button>';
+                $sub_array[] = '<button type="button" name="" id="'.$row["id_producto"].'" class="btn btn-primary btn-md " onClick="agregarDetalle('.$row["id_producto"].',\''.$row["producto"].'\','.$row["estado"].')"><i class="fa fa-plus"></i> Agregar</button>';
+                      
+                $data[] = $sub_array;
+            }
+    
+            $results = array(
+                    "sEcho"=>1, //Información para el datatables
+                    "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+                    "iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
+                    "aaData"=>$data);
+                echo json_encode($results);
+    
+            break;
     }
 
 ?>
