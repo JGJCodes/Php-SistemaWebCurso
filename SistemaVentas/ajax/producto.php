@@ -244,8 +244,8 @@ switch ($_GET["op"]) {
         break;
 
         case "listar_compras":
-            /*se muestran en ventana modal el datatable de los productos en compras para seleccionar 
-            luego los productos activos y luego se autocomplementa los campos desde un formulario*/
+            /**se muestran en ventana modal el datatable de los productos en compras para seleccionar 
+            luego los productos activos y luego se autocomplementa los campos desde un formulario**/
             $datos=$productos->get_productos();
     
             //Vamos a declarar un array
@@ -284,13 +284,14 @@ switch ($_GET["op"]) {
                 $sub_array[] = $row["unidad"];
                 $sub_array[] = $moneda . " " . $row["precio_compra"];
                 $sub_array[] = $moneda . " " . $row["precio_venta"];
-
                 $sub_array[] = '<span class="' . $atributo . '">' . $row["stock"] . ' </span>';
                         
                 //Botones estado y agregar registro
-                $sub_array[] = '<button type="button"  name="estado" id="'.$row["id_producto"].'" class="'.$atrib.'">'.$est.'</button>';
-                $sub_array[] = '<button type="button" name="" id="'.$row["id_producto"].'" class="btn btn-primary btn-md " onClick="agregarDetalle('.$row["id_producto"].',\''.$row["producto"].'\','.$row["estado"].')"><i class="fa fa-plus"></i> Agregar</button>';
-                      
+                $sub_array[] = '<button type="button"  name="estado" id="'.$row["id_producto"].
+                                '" class="'.$atrib.'">'.$est.'</button>';
+                $sub_array[] = '<button type="button" name="" id="'.$row["id_producto"].
+                                '" class="btn btn-primary btn-md " onClick="agregarDetalle('.$row["id_producto"].
+                                ',\''.$row["producto"].'\','.$row["estado"].')"><i class="fa fa-plus"></i> Agregar</button>';
                 $data[] = $sub_array;
             }
     
@@ -302,6 +303,37 @@ switch ($_GET["op"]) {
                 echo json_encode($results);
     
             break;
+    
+    case "buscar_producto":
+            $datos=$productos->get_producto_estado($_POST["id_producto"], $_POST["estado"]);
+  
+            //comprobamos que el producto esté activo, de lo contrario no lo agrega
+            if(is_array($datos)==true and count($datos)>0){
+                  foreach($datos as $row) {
+                      $output["id_producto"] = $row["id_producto"];
+                      $output["id_categoria"] = $row["id_categoria"];
+                      $output["producto"] = $row["producto"];
+                      $output["moneda"] = $row["moneda"];
+                      $output["precio_compra"] = $row["precio_compra"];
+                      $output["stock"] = $row["stock"];
+                      $output["estado"] = $row["estado"];
+                  }
+                    //echo json_encode($output);
+              } else {
+                   //si no existe el registro entonces no recorre el array
+                   $output["error"]="El producto seleccionado está inactivo, intenta con otro";
+              }
+              echo json_encode($output);
+       break;
+  
+       case "registrar_compra":
+                    //se llama al modelo Compras.php
+                    require_once('../models/compra.php');
+                        
+                    $compra = new Compras();
+                    $compra->agrega_detalle_compra();
+       break;
+    
     }
 
 ?>

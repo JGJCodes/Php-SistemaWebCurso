@@ -226,6 +226,19 @@
         return $sql->fetchAll(PDO::FETCH_ASSOC);
       }
 
+    //metodo que valida si hay registros activos
+    public function get_producto_estado($id_producto,$estado){
+        $conectar=parent::conexion();
+        parent::set_names();
+
+        $sql= "select * from producto where id_producto=? and estado=?";
+
+        $sql=$conectar->prepare($sql);
+        $sql->bindValue(1, $id_producto);
+        $sql->bindValue(2, $estado);
+        $sql->execute();
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+      }
 
      
  }
