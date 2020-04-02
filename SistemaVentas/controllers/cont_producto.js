@@ -443,8 +443,6 @@ function  eliminarProd(event, idx){
   	listarDetalles();
 }
 
- 
-
 /**Funcion que registra un compra en el sistema
  * IMPORTANTE: se declaran las variables ya que se usan en el data, sino da error*/
 function registrarCompra(){
@@ -466,9 +464,8 @@ function registrarCompra(){
      console.log(cedula);
      console.log(razon);
      console.log(direccion);
-     console.log(datepicker);**/
-
-     console.log('Hola Eyter');
+     console.log(datepicker);
+     console.log('Hola Eyter');**/
     
     /**IMPORTANTE: el array detalles de la data viene de var detalles = []; esta vacio pero
      *  como ya se usó en la function agregarDetalle(id_producto,producto)

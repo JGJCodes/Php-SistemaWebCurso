@@ -1,12 +1,13 @@
 <!--
   Archivo que contiene las estructuras
   de la pagina web que define la vista
+  del formulario de registro de compra
   del modulo Compras
 -->
 
 <?php
    require_once("../config/conexion.php"); //Conexion con la DB
-   require_once("../models/compras.php"); //Modelo Compras
+   require_once("../models/compra.php"); //Modelo Compras
 
     if(isset($_SESSION["id_usuario"])){
       $compra = new Compras();
@@ -27,7 +28,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
          <div class="btn-group text-center">
-          <a href="consultar_compras.php" class="btn btn-primary btn-lg" >
+          <a href="view_compras_consultar.php" class="btn btn-primary btn-lg" >
             <i class="fa fa-search" aria-hidden="true"></i> Consultar Compras</a>
          </div>
 
@@ -54,7 +55,6 @@
                 
               </div>
 
-
                <div class="form-group">
                   <label for="" class="col-lg-3 control-label">Número Compra</label>
 
@@ -63,7 +63,6 @@
                     value="<?php $codigo=$compra->numero_compra();?>"  readonly>
                   </div>
               </div>
-
 
 
                <div class="form-group">
