@@ -1,16 +1,14 @@
 <!--
   Archivo que contiene la definicion del
   encabezado de las paginas del sistema
--->
 
-<?php
-
+php
    require_once("../config/conexion.php");
 
     if(isset($_SESSION["id_usuario"])){
+php
 
-?>
-
+-->
 
 <!DOCTYPE html>
 <html>
@@ -101,7 +99,7 @@
 
                 <p>
                 <?php echo $_SESSION["nombre"]?> - Web Developer
-                  <small>Administrador desde Noviembre 2017</small>
+               <!--   <small>Administrador desde Noviembre 2017</small>-->
                 </p>
               </li>
               <!-- Menu Body -->
@@ -155,7 +153,7 @@
         </li>
 
          <li class="">
-          <a href="view_categorias.php">
+          <a href="view_categoria.php">
             <i class="fa fa-list" aria-hidden="true"></i> <span>Categoría</span>
             <span class="pull-right-container badge bg-blue">
               <i class="fa fa-bell pull-right">20</i>
@@ -165,7 +163,7 @@
         </li>
 
          <li class="">
-          <a href="view_productos.php">
+          <a href="view_producto.php">
             <i class="fa fa-tasks" aria-hidden="true"></i> <span>Productos</span>
             <span class="pull-right-container badge bg-blue">
               <i class="fa fa-bell pull-right">20</i>
@@ -175,7 +173,7 @@
         </li>
 
          <li class="">
-              <a href="view_proveedores.php">
+              <a href="view_proveedor.php">
                 <i class="fa fa-users"></i> <span>Proveedores</span>
                 <span class="pull-right-container badge bg-blue">
                   <i class="fa fa-bell pull-right">5</i>
@@ -195,7 +193,7 @@
          <!-- Submenu de opciones del modulo compras -->
           <ul class="treeview-menu">
             <li><a href="view_compras.php"><i class="fa fa_circle-o"></i>Compras</a></li>
-            <li><a href="view_compras_cons.php"><i class="fa fa_circle-o"></i>Consultar compras</a></li>
+            <li><a href="view_compras_consultar.php"><i class="fa fa_circle-o"></i>Consultar compras</a></li>
             <li><a href="view_compras_fecha.php"><i class="fa fa_circle-o"></i>Consultar compras por fecha</a></li>
             <li><a href="view_compras_mes.php"><i class="fa fa_circle-o"></i>Consultar compras por mes</a></li>
           </ul>
