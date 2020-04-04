@@ -1,14 +1,12 @@
 <!--
   Archivo que contiene la definicion del
   encabezado de las paginas del sistema
-
-php
+-->
+<?php
    require_once("../config/conexion.php");
 
     if(isset($_SESSION["id_usuario"])){
-php
-
--->
+?>
 
 <!DOCTYPE html>
 <html>
