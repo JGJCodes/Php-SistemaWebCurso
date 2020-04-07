@@ -140,7 +140,8 @@
             $conectar=parent::conexion();
             parent::set_names();
 
-            $sql= "select * from clientes where cedula_cliente=? or nombre_cliente=? or correo_cliente=?";
+            $sql= "select * from clientes where cedula_cliente=? or
+                     nombre_cliente=? or correo_cliente=?";
  
              $sql=$conectar->prepare($sql);
              $sql->bindValue(1, $cedula);
@@ -154,7 +155,7 @@
          }
 
          //metodo que valida si hay registros activos
-        public function get_cliente_id_estado($id_cliente,$estado){
+        public function get_cliente_estado($id_cliente,$estado){
             $conectar= parent::conexion();
             parent::set_names();
             
