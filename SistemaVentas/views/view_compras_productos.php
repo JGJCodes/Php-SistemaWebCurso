@@ -35,6 +35,7 @@
                     <th class="min-desktop">Precio Venta</th>
                     <th class="min-desktop">Stock</th>
                     <th class="min-desktop">Estado</th>
+                    <th class="min-desktop">Foto</th>
                     <th class="min-desktop">Agregar</th>
                   </tr>
                 </thead>

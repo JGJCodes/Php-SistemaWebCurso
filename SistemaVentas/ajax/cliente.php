@@ -201,7 +201,7 @@ switch($_GET["op"]){
    /*se muestran en ventana modal el datatable de los clientes en ventas para 
    seleccionar luego los clientes activos y luego se autocomplementa 
    los campos de un formulario*/
-  case "listar_en_ventas":
+  case "listar_ventas":
 
             $datos=$clientes->get_clientes();
             $data= Array();//Vamos a declarar un array

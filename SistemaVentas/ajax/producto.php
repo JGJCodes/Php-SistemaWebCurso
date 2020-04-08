@@ -247,9 +247,8 @@ switch ($_GET["op"]) {
             /**se muestran en ventana modal el datatable de los productos en compras para seleccionar 
             luego los productos activos y luego se autocomplementa los campos desde un formulario**/
             $datos=$productos->get_productos();
-    
-            //Vamos a declarar un array
-            $data= Array();
+            
+            $data= Array();//Vamos a declarar un array
     
             foreach($datos as $row){
                 $sub_array = array();
@@ -285,7 +284,22 @@ switch ($_GET["op"]) {
                 $sub_array[] = $moneda . " " . $row["precio_compra"];
                 $sub_array[] = $moneda . " " . $row["precio_venta"];
                 $sub_array[] = '<span class="' . $atributo . '">' . $row["stock"] . ' </span>';
-                        
+                 
+                $sub_array[] = '<button type="button"  name="estado" id="'.$row["id_producto"].
+                                '" class="'.$atrib.'">'.$est.'</button>';
+
+			   /*declaro la variable fecha*/
+               $fecha= date("d-m-Y", strtotime($row["fecha_vencimiento"]));				
+
+			if($row["imagen"] != ''){
+                $sub_array[] = ' <img src="upload/'.$row["imagen"].'" class="img-thumbnail" width="100" height="100" />
+                                <input type="hidden" name="hidden_producto_imagen" value="'.$row["imagen"].'" />
+                                 <span><i class="fa fa-calendar" aria-hidden="true"></i>  '.
+                                 $fecha.' <br/><strong>(vencimiento)</strong></span> ';
+			} else { 
+                $sub_array[] = '<button type="button" id="" class="btn btn-primary btn-md">
+                                <i class="fa fa-picture-o" aria-hidden="true"></i> Sin imagen</button>';
+            }
                 //Botones estado y agregar registro
                 $sub_array[] = '<button type="button"  name="estado" id="'.$row["id_producto"].
                                 '" class="'.$atrib.'">'.$est.'</button>';
