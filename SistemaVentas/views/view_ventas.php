@@ -43,10 +43,6 @@
             <div class="box">
               <div class="box-body">
               <div class="form-group">
-                
-                <!--IMPORTANTE PONER EL ID de data-target="#modalProveedor" debe ser DIFERENTE
-                 AL DE ventas.php ya que eran iguales y ocurra un error, es importante que el id 
-                 sea unico y diferente en todas las ventanas modales-->
                   <div class="col-lg-6 col-lg-offset-3">
                     <button type="button" class="btn btn-primary" data-toggle="modal" 
                     data-target="#modalCliente"><i class="fa fa-search" aria-hidden="true">
@@ -75,11 +71,20 @@
               </div>
 
               <div class="form-group">
-                  <label for="" class="col-lg-3 control-label">Razón Social</label>
+                  <label for="" class="col-lg-3 control-label">Nombres</label>
 
                   <div class="col-lg-9">
-                    <input type="text" class="form-control" id="razon" name="razon" 
-                    placeholder="Razón Social" required pattern="^[a-zA-Z_áéíóúñ\s]{0,30}$" readonly>
+                    <input type="text" class="form-control" id="nombre" name="nombre"
+                     placeholder="Nombres" required pattern="^[a-zA-Z_áéíóúñ\s]{0,30}$" readonly>
+                  </div>
+              </div>
+
+              <div class="form-group">
+                  <label for="" class="col-lg-3 control-label">Apellidos</label>
+
+                  <div class="col-lg-9">
+                    <input type="text" class="form-control" id="apellido" name="apellido"
+                     placeholder="Apellidos" required pattern="^[a-zA-Z_áéíóúñ\s]{0,30}$" readonly>
                   </div>
               </div>
 
@@ -97,7 +102,7 @@
         </div><!--fin col-lg-12-->  
      </div><!--fin row-->
 
-     <!--FILA CATEGORIA - PRODUCTO-->
+     <!--FILA - PRODUCTO-->
      <div class="row">
         <div class="col-sm-12">
             <div class="box">
@@ -107,15 +112,15 @@
                   <div class="col-lg-3">
                      <div class="col-lg-5 text-center">
                      <button type="button" id="#" class="btn btn-primary" data-toggle="modal" 
-                     data-target="#lista_productosModal"><i class="fa fa-plus" aria-hidden="true">
+                     data-target="#lista_productos_ventas_Modal"><i class="fa fa-plus" aria-hidden="true">
                      </i>  Agregar Productos</button>
                       </div>
                   </div>
 
                  <div class="col-lg-3">
                      <div class="col-lg-5">
-                     <label for="">ventador: </label>
-                      <h4 id="ventador" name="ventador"><?php echo $_SESSION["nombre"];?></h4>
+                     <label for="">Vendedor: </label>
+                      <h4 id="vendedor" name="vendedor"><?php echo $_SESSION["nombre"];?></h4>
                     </div>
                   </div>
     
@@ -146,16 +151,16 @@
         <div class="table-responsive"> 
           <!--<div class="box">-->
             <div class="box-header">
-              <h3 class="box-title">Lista de ventas a Proveedores</h3>
+              <h3 class="box-title">Lista de Ventas a Clientes</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
               <table id="detalles" class="table table-striped">
                 <thead>
                  <tr class="bg-success">
-                  <th class="all">Item</th>
+                 <th class="all">Item</th>
                   <th class="all">Producto</th>
-                  <th class="all">Precio venta</th>
+                  <th class="all">Precio Venta</th>
                   <th class="min-desktop">Stock</th>
                   <th class="min-desktop">Cantidad</th>
                   <th class="min-desktop">Descuento %</th>
@@ -163,6 +168,7 @@
                   <th class="min-desktop">Acciones</th>
                   </tr>
                 </thead>
+                <div id="resultados_ventas_ajax"></div>
                  <tbody id="listProdventas">  
                 </tbody>  
               </table>
@@ -214,14 +220,14 @@
                   <input type="hidden" name="grabar" value="si">
                   <input type="hidden" name="id_usuario" id="id_usuario"
                    value="<?php echo $_SESSION["id_usuario"];?>"/>
-                <input type="hidden" name="id_proveedor" id="id_proveedor"/>
+                   <input type="hidden" name="id_cliente" id="id_cliente"/>
                   
                  </tr>
             </tbody>
     </table>
 
-               <div class="boton_registrar">
-                <button type="button" onClick="registrarventa()" 
+            <div class="boton_registrar">
+                <button type="button" onClick="registrarVenta()" 
                 class="btn btn-primary col-lg-offset-10 col-xs-offset-3" id="btn">
                 <i class="fa fa-save" aria-hidden="true"></i>  Registrar venta</button>
               </div>
@@ -248,11 +254,11 @@
   
   <!--FIN DE CONTENIDO-->
 
-       <!--VISTA MODAL PARA AGREGAR CLIENTE-->
+
+    <!--VISTA MODAL PARA AGREGAR CLIENTE-->
     <?php require_once("view_ventas_clientes.php");?>
-    <!--VISTA MODAL PARA AGREGAR PROVEEDOR-->
     
-     <!--VISTA MODAL PARA AGREGAR PRODUCTO-->
+    <!--VISTA MODAL PARA AGREGAR PRODUCTO-->
     <?php require_once("view_ventas_productos.php");?>
 
 
@@ -260,9 +266,19 @@
 <!--Footer Libreria-->
 <?php require_once("view_footer.php");?>   
 
-  <!--AJAX PROVEEDORES-->
+
+ <!--AJAX CATEGORIAS-->
+ <script type="text/javascript" src="../controllers/cont_categoria.js"></script>
+   
+   <!--AJAX CLIENTES-->
 <script type="text/javascript" src="../controllers/cont_cliente.js"></script>
+
+  <!--AJAX PRODUCTOS-->
 <script type="text/javascript" src="../controllers/cont_producto.js"></script>
+
+ <!--AJAX VENTAS-->
+<script type="text/javascript" src="../controllers/cont_ventas.js"></script>
+
 
 <?php
   } else {
