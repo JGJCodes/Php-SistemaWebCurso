@@ -26,6 +26,24 @@
          return $sql->fetchAll(PDO::FETCH_ASSOC); 
     }
 
+    //método para seleccionar los registros para el formulario de ventas
+    public function get_productos_ventas(){
+        $conectar= parent::conexion();
+        parent::set_names();
+     
+        $sql= "select p.id_producto,p.id_categoria,p.producto,
+                p.presentacion,p.unidad, p.moneda, p.precio_compra,
+                p.precio_venta, p.stock, p.estado, p.imagen, 
+                p.fecha_vencimiento as fecha_vencimiento,
+                c.id_categoria, c.categoria as categoria
+                from producto p INNER JOIN categoria c ON p.id_categoria=c.id_categoria
+                where p.stock > 0 and p.estado='1' ";
+
+        $sql=$conectar->prepare($sql);
+        $sql->execute();
+        return $sql->fetchAll(PDO::FETCH_ASSOC); 
+    }
+
     /*Metodo que realiza el guardado de una imagen en el sistema
     poner la ruta vistas/upload
     */
@@ -224,8 +242,7 @@
         $sql->bindValue(1, $producto);
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_ASSOC);
-      }
-
+    }
     //metodo que valida si hay registros activos
     public function get_producto_estado($id_producto,$estado){
         $conectar=parent::conexion();
@@ -238,7 +255,7 @@
         $sql->bindValue(2, $estado);
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_ASSOC);
-      }
+    }
 
      
  }

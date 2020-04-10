@@ -23,7 +23,7 @@
 
       switch($_GET["op"]){
           
-          case "guardaryeditar":
+        case "guardaryeditar":
 
                 /*verificamos si existe la categoria en la base de datos, si ya existe un 
                 registro con la categoria entonces no se registra la categoria*/
@@ -96,45 +96,45 @@
         break;
 
 
-      case 'mostrar':
+        case 'mostrar':
 
-	    //selecciona el id de la categoria
-        //el parametro id_categoria se envia por AJAX cuando se edita la categoria
-	    $datos=$categorias->get_categoria_id($_POST["id_categoria"]);
+            //selecciona el id de la categoria
+            //el parametro id_categoria se envia por AJAX cuando se edita la categoria
+            $datos=$categorias->get_categoria_id($_POST["id_categoria"]);
 
-          // si existe el id de la categoria entonces recorre el array
-	      if(is_array($datos)==true and count($datos)>0){
+            // si existe el id de la categoria entonces recorre el array
+            if(is_array($datos)==true and count($datos)>0){
 
-    				foreach($datos as $row){
-    					$output["categoria"] = $row["categoria"];
-    					$output["estado"] = $row["estado"];
-                        $output["id_usuario"] = $row["id_usuario"];
-    				}
-                  echo json_encode($output);
+                        foreach($datos as $row){
+                            $output["categoria"] = $row["categoria"];
+                            $output["estado"] = $row["estado"];
+                            $output["id_usuario"] = $row["id_usuario"];
+                        }
+                    echo json_encode($output);
 
 
-	        } else {
-                 //si no existe la categoria entonces no recorre el array
-                $errors[]="La categoría no existe";
-	        }
+                } else {
+                    //si no existe la categoria entonces no recorre el array
+                    $errors[]="La categoría no existe";
+                }
 
-            require_once("../views/view_alertas.php");
-	         /**inicio de mensaje de error
-				if(isset($errors)){
-			
-					?>
-					<div class="alert alert-danger" role="alert">
-						<button type="button" class="close" data-dismiss="alert">&times;</button>
-							<strong>Error!</strong> 
-							<?php
-								foreach ($errors as $error) {
-										echo $error;
-									}
-								?>
-					</div>
-					<?php
-			      }//fin de mensaje de error **/
-	    break;
+                require_once("../views/view_alertas.php");
+                /**inicio de mensaje de error
+                    if(isset($errors)){
+                
+                        ?>
+                        <div class="alert alert-danger" role="alert">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>Error!</strong> 
+                                <?php
+                                    foreach ($errors as $error) {
+                                            echo $error;
+                                        }
+                                    ?>
+                        </div>
+                        <?php
+                    }//fin de mensaje de error **/
+        break;
 
         case "activarydesactivar":
      
@@ -200,7 +200,7 @@
         break;
 
 
-     }
+     }//Cierre del switch
 
 
 

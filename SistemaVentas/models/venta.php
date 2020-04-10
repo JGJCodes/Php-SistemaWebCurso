@@ -4,7 +4,7 @@
  * con las funciones de crear,editar,borrar
  * consultar registros en la base de datos
  */
-     require_once("../config/conexion.php");//conexion a la base de datos
+require_once("../config/conexion.php");//conexion a la base de datos
 
 class Ventas extends Conectar{
 
@@ -20,8 +20,8 @@ class Ventas extends Conectar{
       return $sql->fetchAll(PDO::FETCH_ASSOC); 
     }
 
-//método para mostrar los datos de un registro a modificar
-    public function get_compra_id($id_ventas){
+  //método para mostrar los datos de un registro a modificar
+    public function get_venta_id($id_ventas){
              $conectar= parent::conexion();
              parent::set_names();
 
@@ -120,7 +120,7 @@ class Ventas extends Conectar{
     }
 
     //Metodo que retorna el numero de venta    
-    public function numero_compra(){
+    public function numero_venta(){
 		  $conectar=parent::conexion();
 		  parent::set_names();
 		 
@@ -350,153 +350,9 @@ class Ventas extends Conectar{
            $sql2->bindValue(11,$id_usuario);
            $sql2->bindValue(12,$id_cliente);
            $sql2->execute();
-    }
+  }//Cierre del metodo
 
-    /*cambiar estado de la venta, solo se cambia si se quiere eliminar
-     una venta y se revertería la cantidad de venta al stock*/
-    public function cambiar_estado($id_ventas, $numero_venta, $est){
-      $conectar=parent::conexion();
-      parent::set_names();
-            
-      //si estado es igual a 0 entonces lo cambia a 1
-      $estado = 0;
-      //el parametro est se envia por via ajax, viene del $est:est
-      /*si el estado es ==0 cambiaria a PAGADO Y SE EJECUTARIA TODO LO QUE ESTA ABAJO*/
-        if($_POST["est"] == 0){
-        $estado = 1;
-      //declaro $numero_venta, viene via ajax
-      $numero_compra=$_POST["numero_venta"];
-      $sql="update ventas set estado=? where id_ventas=? ";
-
-            // echo $sql; 
-      $sql=$conectar->prepare($sql);
-      $sql->bindValue(1,$estado);
-      $sql->bindValue(2,$_POST["id_ventas"]);
-      $sql->execute();
-      $resultado= $sql->fetch(PDO::FETCH_ASSOC);
-
-      $sql_detalle= "update detalle_ventas set estado=? where numero_venta=?";
-      $sql_detalle=$conectar->prepare($sql_detalle);
-      $sql_detalle->bindValue(1,$estado);
-      $sql_detalle->bindValue(2,$numero_venta);
-      $sql_detalle->execute();
-      $resultado= $sql_detalle->fetch(PDO::FETCH_ASSOC);
-
-        //una vez se cambie de estado a ACTIVO entonces actualizamos la cantidad de stock en productos
-        //INICIO CONSULTA DE DETALLE DE VENTAS Y VENTAS
-
-      $sql2="select * from detalle_ventas where numero_venta=?";
-      $sql2=$conectar->prepare($sql2);
-      $sql2->bindValue(1,$numero_venta);
-      $sql2->execute();
-      $resultado=$sql2->fetchAll();
-
-      foreach($resultado as $row){
-          $id_producto=$output["id_producto"]=$row["id_producto"];
-          //selecciona la cantidad comprada
-          $cantidad_venta=$output["cantidad_venta"]=$row["cantidad_venta"];
-        //si el id_producto existe entonces que consulte si la cantidad de productos existe en la tabla producto
-
-          if(isset($id_producto)==true and count($id_producto)>0){    
-              $sql3="select * from producto where id_producto=?";
-              $sql3=$conectar->prepare($sql3);
-              $sql3->bindValue(1, $id_producto);
-              $sql3->execute();
-              $resultado=$sql3->fetchAll();
-
-              foreach($resultado as $row2){               
-                //este es la cantidad de stock para cada producto
-                   $stock=$output2["stock"]=$row2["stock"];
-                           
-                  /*esta debe estar dentro del foreach para que recorra 
-                  el $stock de los productos, ya que es mas de un producto
-                  que está asociado a la compra cuando das click a estado 
-                  pasa a PAGADO Y RESTA 
-                  la cantidad de stock con la cantidad de venta*/
-                  $cantidad_actual= $stock - $cantidad_venta;
-                }
-          }//Fin IF isset
-
-                //LE ACTUALIZO LA CANTIDAD DEL PRODUCTO 
-               $sql6="update producto set stock=? where id_producto=?";
-               $sql6=$conectar->prepare($sql6);   
-               $sql6->bindValue(1,$cantidad_actual);
-               $sql6->bindValue(2,$id_producto);
-               $sql6->execute();
-         }//cierre del foreach
-      }//cierre del if del estado
-
-      else {/*si el estado es igual a 1, entonces pasaria a ANULADO y 
-        restaria la cantidad de productos al stock*/
-        if($_POST["est"] == 1){
-            $estado = 0;
-
-      //declaro $numero_compra, viene via ajax
-
-      $numero_venta=$_POST["numero_venta"];
-      $sql="update ventas set estado=? where id_ventas=?";
-      // echo $sql; 
-      $sql=$conectar->prepare($sql);
-      $sql->bindValue(1,$estado);
-      $sql->bindValue(2,$_POST["id_ventas"]);
-      $sql->execute();
-      $resultado= $sql->fetch(PDO::FETCH_ASSOC);
-
-      $sql_detalle= "update detalle_ventas set estado=? where numero_venta=?";
-      $sql_detalle=$conectar->prepare($sql_detalle);
-      $sql_detalle->bindValue(1,$estado);
-      $sql_detalle->bindValue(2,$numero_venta);
-      $sql_detalle->execute();
-      $resultado= $sql_detalle->fetch(PDO::FETCH_ASSOC);
-
-     //una vez se cambie de estado a ACTIVO entonces actualizamos la cantidad de stock en productos
-
-      //INICIO ACTUALIZAR LA CANTIDAD DE PRODUCTOS COMPRADOS EN EL STOCK
-      $sql2="select * from detalle_ventas where numero_venta=?";
-      $sql2=$conectar->prepare($sql2);
-      $sql2->bindValue(1,$numero_venta);
-      $sql2->execute();
-      $resultado=$sql2->fetchAll();
-
-      foreach($resultado as $row){
-          $id_producto=$output["id_producto"]=$row["id_producto"];
-          //selecciona la cantidad comprada
-          $cantidad_compra=$output["cantidad_venta"]=$row["cantidad_venta"];
-
-        //si el id_producto existe entonces que consulte si la cantidad de productos existe en la tabla producto
-          if(isset($id_producto)==true and count($id_producto)>0){  
-            $sql3="select * from producto where id_producto=?";
-            $sql3=$conectar->prepare($sql3);
-            $sql3->bindValue(1, $id_producto);
-            $sql3->execute();
-            $resultado=$sql3->fetchAll();
-
-            foreach($resultado as $row2){
-                  //este es la cantidad de stock para cada producto
-                  $stock=$output2["stock"]=$row2["stock"];
-                           
-                  /*esta debe estar dentro del foreach para que recorra el 
-                  $stock de los productos, ya que es mas de un producto 
-                  que está asociado a la venta
-                  cuando le da click al estado pasa de PAGADO A ANULADO 
-                  y resta la cantidad de stock en productos con la cantidad
-                  de compra de detalle_compras, disminuyendo de esta manera
-                  la cantidad actual de productos en el stock de productos*/
-                  $cantidad_actual= $stock - $cantidad_venta;
-                }//cierre del foreach
-          } //cierre del if
-                //LE ACTUALIZO LA CANTIDAD DEL PRODUCTO
-               $sql6="update producto set stock=? where id_producto=?";
-               $sql6=$conectar->prepare($sql6);   
-               $sql6->bindValue(1,$cantidad_actual);
-               $sql6->bindValue(2,$id_producto);
-               $sql6->execute();
-          }//cierre del foreach
-      }//cierre del if del estado del else
-    }
-  }//CIERRE DEL METODO
-
-  //BUSCA REGISTROS COMPRAS-FECHA
+  //BUSCA REGISTROS VENTAS-FECHA
   public function lista_busca_registros_fecha($fecha_inicial, $fecha_final){
       $conectar= parent::conexion();
       parent::set_names();
@@ -508,15 +364,15 @@ class Ventas extends Conectar{
       $date = str_replace('/', '-', $date_final);
       $fecha_final = date("Y-m-d", strtotime($date));
 
-      $sql= "SELECT * FROM compras WHERE fecha_compra>=? and fecha_compra<=? ";
+      $sql= "SELECT * FROM ventas WHERE fecha_venta>=? and fecha_venta<=? ";
       $sql = $conectar->prepare($sql);
       $sql->bindValue(1,$fecha_inicial);
       $sql->bindValue(2,$fecha_final);
       $sql->execute();
       return  $sql->fetchAll(PDO::FETCH_ASSOC);
-  }
+  }//Cierre del metodo
   
-  //BUSCA REGISTROS COMPRAS-FECHA-MES
+ //BUSCA REGISTROS VENTAS-FECHA-MES
   public function lista_busca_registros_fecha_mes($mes, $ano){
       $conectar= parent::conexion();
       parent::set_names();
@@ -535,19 +391,18 @@ class Ventas extends Conectar{
      de una cadena, si pones 'queBusco%' significa que se busca al 
       principio de la cadena y si pones '%queBusco%' significa que 
      lo busca en medio, asi la imprimo la consulta en phpmyadmin 
-     SELECT * FROM compras WHERE fecha_compra like '2017-09%'**/
+     SELECT * FROM ventas WHERE fecha_venta like '2017-09%'**/
 
-      $sql= "SELECT * FROM compras WHERE fecha_compra like ? ";
+     $sql= "SELECT * FROM ventas WHERE fecha_venta like ? ";
       $sql = $conectar->prepare($sql);
       $sql->bindValue(1,$fecha);
       $sql->execute();
       return $sql->fetchAll(PDO::FETCH_ASSOC);
   }//Cierre del metodo
 
-/*cambiar estado de la venta, solo se cambia si se quiere eliminar una venta y se revertería la cantidad de venta al stock*/
-
-public function cambiar_estado(){
-
+  /*cambiar estado de la venta, solo se cambia si se quiere eliminar 
+  una venta y se revertería la cantidad de venta al stock*/
+  public function cambiar_estado(){
     $conectar=parent::conexion();
     parent::set_names();
     
@@ -555,311 +410,144 @@ public function cambiar_estado(){
     $estado = 0;
     //el parametro est se envia por via ajax, viene del $est:est
     /*si el estado es ==0 cambiaria a PAGADO Y SE EJECUTARIA TODO LO QUE ESTA ABAJO*/
-if($_POST["est"] == 0){
+    if($_POST["est"] == 0){
         $estado = 1;
-    
+  
+        //declaro $numero_venta, viene via ajax
+        $numero_venta=$_POST["numero_venta"];
+      
+        $sql="update ventas set estado=? where id_ventas=? ";
+        // echo $sql; 
+        $sql=$conectar->prepare($sql);
+        $sql->bindValue(1,$estado);
+        $sql->bindValue(2,$_POST["id_ventas"]);
+        $sql->execute();
+        $resultado= $sql->fetch(PDO::FETCH_ASSOC);
 
-    //declaro $numero_venta, viene via ajax
-
-    $numero_venta=$_POST["numero_venta"];
-
-
-    $sql="update ventas set 
-    
-    estado=?
-    where 
-    id_ventas=?
-   
-      ";
-
-    // echo $sql; 
-
-    $sql=$conectar->prepare($sql);
-
-    $sql->bindValue(1,$estado);
-    $sql->bindValue(2,$_POST["id_ventas"]);
-    $sql->execute();
-
-    $resultado= $sql->fetch(PDO::FETCH_ASSOC);
-
-
-$sql_detalle= "update detalle_ventas set
-
-  estado=?
-  where 
-  numero_venta=?
-  ";
-
+    $sql_detalle= "update detalle_ventas setestado=? where numero_venta=?";
     $sql_detalle=$conectar->prepare($sql_detalle);
-
     $sql_detalle->bindValue(1,$estado);
     $sql_detalle->bindValue(2,$numero_venta);
     $sql_detalle->execute();
-
     $resultado= $sql_detalle->fetch(PDO::FETCH_ASSOC);
 
-
-
-    /*una vez se cambie de estado a ACTIVO entonces actualizamos la cantidad de stock en productos*/
-
+    /*una vez se cambie de estado a ACTIVO entonces 
+    actualizamos la cantidad de stock en productos*/
 
     //INICIO CONSULTA EN DETALLE DE VENTAS Y VENTAS
-
-  $sql2="select * from detalle_ventas where numero_venta=?";
-
-  $sql2=$conectar->prepare($sql2);
-
- 
+    $sql2="select * from detalle_ventas where numero_venta=?";
+    $sql2=$conectar->prepare($sql2);
     $sql2->bindValue(1,$numero_venta);
     $sql2->execute();
-
     $resultado=$sql2->fetchAll();
 
-      foreach($resultado as $row){
-
+    foreach($resultado as $row){
          $id_producto=$output["id_producto"]=$row["id_producto"];
         //selecciona la cantidad vendida
         $cantidad_venta=$output["cantidad_venta"]=$row["cantidad_venta"];
-
-
-
         
-         //si el id_producto existe entonces que consulte si la cantidad de productos existe en la tabla producto
-
+         /*si el id_producto existe entonces que consulte si la cantidad
+          de productos existe en la tabla producto*/
           if(isset($id_producto)==true and count($id_producto)>0){
-              
               $sql3="select * from producto where id_producto=?";
-
               $sql3=$conectar->prepare($sql3);
-
               $sql3->bindValue(1, $id_producto);
               $sql3->execute();
-
               $resultado=$sql3->fetchAll();
 
-                 foreach($resultado as $row2){
-                   
+              foreach($resultado as $row2){ 
                    //este es la cantidad de stock para cada producto
                    $stock=$output2["stock"]=$row2["stock"];
                    
-                   //esta debe estar dentro del foreach para que recorra el $stock de los productos, ya que es mas de un producto que está asociado a la venta
-                   //cuando das click a estado pasa a PAGADO Y RESTA la cantidad de stock con la cantidad de venta
+                   /*esta debe estar dentro del foreach para que recorra 
+                   el $stock de los productos, ya que es mas de un producto
+                    que está asociado a la venta
+                   *cuando das click a estado pasa a PAGADO Y RESTA la 
+                   cantidad de stock con la cantidad de venta*/
                    $cantidad_actual= $stock - $cantidad_venta;
-
                  }
           }
 
-       
         //LE ACTUALIZO LA CANTIDAD DEL PRODUCTO 
-
-       $sql6="update producto set 
-       stock=?
-       where
-
-       id_producto=?
-
-       ";
-       
+       $sql6="update producto set stock=? where id_producto=?";
        $sql6=$conectar->prepare($sql6);   
-       
        $sql6->bindValue(1,$cantidad_actual);
        $sql6->bindValue(2,$id_producto);
-
        $sql6->execute();
-
-
       }//cierre del foreach
-
-  }//cierre del if del estado
-
-  else {
-
-        /*si el estado es igual a 0, entonces pasaria a ANULADO y reverteria de nuevo la cantidad de productos al stock*/
-
-        if($_POST["est"] == 1){
+    }//cierre del if del estado
+    else {
+      /*si el estado es igual a 0, entonces pasaria a ANULADO y
+       reverteria de nuevo la cantidad de productos al stock*/
+      if($_POST["est"] == 1){
         $estado = 0;
 
-    //declaro $numero_venta, viene via ajax
+        //declaro $numero_venta, viene via ajax
+        $numero_venta=$_POST["numero_venta"];
 
-    $numero_venta=$_POST["numero_venta"];
+        $sql="update ventas set estado=? where id_ventas=?";
+        // echo $sql; 
+        $sql=$conectar->prepare($sql);
+        $sql->bindValue(1,$estado);
+        $sql->bindValue(2,$_POST["id_ventas"]);
+        $sql->execute();
+        $resultado= $sql->fetch(PDO::FETCH_ASSOC);
 
+        $sql_detalle= "update detalle_ventas set estado=? where numero_venta=?";
+        $sql_detalle=$conectar->prepare($sql_detalle);
+        $sql_detalle->bindValue(1,$estado);
+        $sql_detalle->bindValue(2,$numero_venta);
+        $sql_detalle->execute();
+        $resultado= $sql_detalle->fetch(PDO::FETCH_ASSOC);
 
-    $sql="update ventas set 
-    
-    estado=?
-    where 
-    id_ventas=?
-   
-      ";
+        /*una vez se cambie de estado a ACTIVO entonces
+        revertimos la cantidad de stock en productos*/
 
-    // echo $sql; 
-
-    $sql=$conectar->prepare($sql);
-
-    $sql->bindValue(1,$estado);
-    $sql->bindValue(2,$_POST["id_ventas"]);
-    $sql->execute();
-
-    $resultado= $sql->fetch(PDO::FETCH_ASSOC);
-
-
-$sql_detalle= "update detalle_ventas set
-
-  estado=?
-  where 
-  numero_venta=?
-  ";
-
-    $sql_detalle=$conectar->prepare($sql_detalle);
-
-    $sql_detalle->bindValue(1,$estado);
-    $sql_detalle->bindValue(2,$numero_venta);
-    $sql_detalle->execute();
-
-    $resultado= $sql_detalle->fetch(PDO::FETCH_ASSOC);
-
-
-
-    /*una vez se cambie de estado a ACTIVO entonces revertimos la cantidad de stock en productos*/
-
-  //INICIO REVERTIR LA CANTIDAD DE PRODUCTOS VENDIDOS EN EL STOCK
-
-  $sql2="select * from detalle_ventas where numero_venta=?";
-
-  $sql2=$conectar->prepare($sql2);
-
- 
-    $sql2->bindValue(1,$numero_venta);
-    $sql2->execute();
-
-    $resultado=$sql2->fetchAll();
+        //INICIO REVERTIR LA CANTIDAD DE PRODUCTOS VENDIDOS EN EL STOCk
+        $sql2="select * from detalle_ventas where numero_venta=?";
+        $sql2=$conectar->prepare($sql2);
+        $sql2->bindValue(1,$numero_venta);
+        $sql2->execute();
+        $resultado=$sql2->fetchAll();
 
       foreach($resultado as $row){
-
          $id_producto=$output["id_producto"]=$row["id_producto"];
         //selecciona la cantidad vendida
         $cantidad_venta=$output["cantidad_venta"]=$row["cantidad_venta"];
-
-
-
-        
-         //si el id_producto existe entonces que consulte si la cantidad de productos existe en la tabla producto
-
-          if(isset($id_producto)==true and count($id_producto)>0){
-              
+         /*si el id_producto existe entonces que consulte si la
+          cantidad de productos existe en la tabla producto*/
+        if(isset($id_producto)==true and count($id_producto)>0){  
               $sql3="select * from producto where id_producto=?";
-
               $sql3=$conectar->prepare($sql3);
-
               $sql3->bindValue(1, $id_producto);
               $sql3->execute();
-
               $resultado=$sql3->fetchAll();
 
-                 foreach($resultado as $row2){
-                   
+              foreach($resultado as $row2){                 
                    //este es la cantidad de stock para cada producto
-                   $stock=$output2["stock"]=$row2["stock"];
-                   
-                   //esta debe estar dentro del foreach para que recorra el $stock de los productos, ya que es mas de un producto que está asociado a la venta
-              //cuando le da click al estado pasa de PAGADO A ANULADO y SUMA la cantidad de stock en productos con la cantidad de venta de detalle_ventas, aumentando de esta manera la cantidad actual de productos en el stock de productos
-                   $cantidad_actual= $stock + $cantidad_venta;
+                   $stock=$output2["stock"]=$row2["stock"];                
+                   /*esta debe estar dentro del foreach para que 
+                   recorra el $stock de los productos, ya que es 
+                   mas de un producto que está asociado a la venta
+                  *cuando le da click al estado pasa de PAGADO A 
+                  ANULADO y SUMA la cantidad de stock en productos
+                   con la cantidad de venta de detalle_ventas, 
+                   aumentando de esta manera la cantidad actual 
+                   de productos en el stock de productos*/
+                  $cantidad_actual= $stock + $cantidad_venta;
+              }//cierre del foreach
+          }//cierre del if
 
-                 }
-          }
-
-       
-        //LE ACTUALIZO LA CANTIDAD DEL PRODUCTO 
-
-       $sql6="update producto set 
-       stock=?
-       where
-
-       id_producto=?
-
-       ";
-       
-       $sql6=$conectar->prepare($sql6);   
-       
-       $sql6->bindValue(1,$cantidad_actual);
-       $sql6->bindValue(2,$id_producto);
-
-       $sql6->execute();
-
-     
-
-      }//cierre del foreach
-
-
-
-       }//cierre del if del estado del else
-
-
-  }
-
-
-}//CIERRE DEL METODO
-
-
-
-//BUSCA REGISTROS VENTAS-FECHA
-
-public function lista_busca_registros_fecha($fecha_inicial, $fecha_final){
-
-        $conectar= parent::conexion();
-
-        $date_inicial = $_POST["fecha_inicial"];
-        $date = str_replace('/', '-', $date_inicial);
-        $fecha_inicial = date("Y-m-d", strtotime($date));
-
-        $date_final = $_POST["fecha_final"];
-        $date = str_replace('/', '-', $date_final);
-        $fecha_final = date("Y-m-d", strtotime($date));
-
-
- 
-$sql= "SELECT * FROM ventas WHERE fecha_venta>=? and fecha_venta<=? ";
-
-
-    $sql = $conectar->prepare($sql);
-    $sql->bindValue(1,$fecha_inicial);
-    $sql->bindValue(2,$fecha_final);
-    $sql->execute();
-    return $result = $sql->fetchAll(PDO::FETCH_ASSOC);
-
-}
-
-
- //BUSCA REGISTROS VENTAS-FECHA-MES
-
-public function lista_busca_registros_fecha_mes($mes, $ano){
-
-  $conectar= parent::conexion();
-
-
-  //variables que vienen por POST VIA AJAX
-     $mes=$_POST["mes"];
-     $ano=$_POST["ano"];
-    
-
-    
-   $fecha= ($ano."-".$mes."%");
-
-   //la consulta debe hacerse asi para seleccionar el mes/ano
-
-   /*importante: explicacion de cuando se pone el like y % en una consulta: like sirve para buscar una palabra en especifica dentro de la columna, por ejemplo buscar 09 dentro de 2017-09-04. Los %% se ocupan para indicar en que parte se quiere buscar, si se pone like '%queBusco' significa que lo buscas al final de una cadena, si pones 'queBusco%' significa que se busca al principio de la cadena y si pones '%queBusco%' significa que lo busca en medio, asi la imprimo la consulta en phpmyadmin SELECT * FROM ventas WHERE fecha_venta like '2017-09%'*/
-
-
-  $sql= "SELECT * FROM ventas WHERE fecha_venta like ? ";
-
-    $sql = $conectar->prepare($sql);
-    $sql->bindValue(1,$fecha);
-    $sql->execute();
-    return $result = $sql->fetchAll(PDO::FETCH_ASSOC);
-
-
-}
-
+          //LE ACTUALIZO LA CANTIDAD DEL PRODUCTO 
+          $sql6="update producto set stock=? where id_producto=? ";      
+          $sql6=$conectar->prepare($sql6);   
+          $sql6->bindValue(1,$cantidad_actual);
+          $sql6->bindValue(2,$id_producto);
+          $sql6->execute();    
+        }//cierre del foreach
+      }//cierre del if del estado del else
+    }//cierre del if else
+  }//CIERRE DEL METODO
 
 }//Fin de la clase Ventas
 

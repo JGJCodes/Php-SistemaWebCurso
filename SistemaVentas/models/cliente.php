@@ -152,7 +152,7 @@
             //print_r($email); exit();
  
             return $sql->fetchAll(PDO::FETCH_ASSOC);
-         }
+        }
 
          //metodo que valida si hay registros activos
         public function get_cliente_estado($id_cliente,$estado){
