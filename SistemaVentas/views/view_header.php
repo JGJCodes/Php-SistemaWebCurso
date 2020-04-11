@@ -220,7 +220,7 @@
           <!-- Submenu de opciones del modulo ventas -->
           <ul class="treeview-menu">
             <li><a href="view_ventas.php"><i class="fa fa_circle-o"></i>Ventas</a></li>
-            <li><a href="view_ventas_cons.php"><i class="fa fa_circle-o"></i>Consultar ventas</a></li>
+            <li><a href="view_ventas_consultar.php"><i class="fa fa_circle-o"></i>Consultar ventas</a></li>
             <li><a href="view_ventas_fecha.php"><i class="fa fa_circle-o"></i>Consultar ventas por fecha</a></li>
             <li><a href="view_ventas_mes.php"><i class="fa fa_circle-o"></i>Consultar ventas por mes</a></li>
           </ul>

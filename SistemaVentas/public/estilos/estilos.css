@@ -4,3 +4,16 @@
 
        width:70%;
      }
+
+     .rojo{
+
+      border-color:#a94442;
+
+   }
+
+     /*oculta boton enviar si la cantidad seleccionada es mayor al stock*/
+    
+    .oculta_boton{
+
+      display:none;
+   }

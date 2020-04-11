@@ -229,7 +229,7 @@
         require_once("../models/producto.php");
         $producto= new Producto();
 
-        $datos=$producto->get_producto_por_id($_POST["id_producto"]);
+        $datos=$producto->get_producto_id($_POST["id_producto"]);
 
         // si existe el id del producto entonces recorre el array
         if(is_array($datos)==true and count($datos)>0){
@@ -260,6 +260,8 @@
             $errors[]="El producto no existe";
         }//cierre del if else
 
+        require_once("../views/view_alertas.php");
+        
             /*inicio de mensaje de error
                if (isset($errors)){
            
@@ -276,8 +278,6 @@
                    <?php
                  }
            //fin de mensaje de error*/
-
-
 
     break;
        

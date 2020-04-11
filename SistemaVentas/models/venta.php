@@ -178,7 +178,7 @@ class Ventas extends Conectar{
     se hizo desde registrar_compra.php, pero tambien se puede hacer desde
      comprasModulo.php y funciona igual, ya se hizo la prueba 
 	  Metodo para agregar la compra  **/
-    public function agrega_detalle_venta(){  
+  public function agrega_detalle_venta(){  
       //echo json_encode($_POST['arrayCompra']);
       $str = '';
       $detalles = array();

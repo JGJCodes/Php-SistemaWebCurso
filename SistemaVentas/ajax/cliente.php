@@ -202,9 +202,8 @@ switch($_GET["op"]){
    seleccionar luego los clientes activos y luego se autocomplementa 
    los campos de un formulario*/
   case "listar_ventas":
-
-            $datos=$clientes->get_clientes();
-            $data= Array();//Vamos a declarar un array
+        $datos=$clientes->get_clientes();
+        $data= Array();//Vamos a declarar un array
 
         foreach($datos as $row){
              $sub_array = array();
@@ -263,6 +262,6 @@ switch($_GET["op"]){
   break;
 
       
-  }
+  }//Cierre del switch
 
 ?>

@@ -101,7 +101,7 @@ switch ($_GET["op"]) {
         <?php
 
         }//fin mensaje error**/
-        break;
+    break;
 
 
     case 'mostrar':
@@ -155,7 +155,7 @@ switch ($_GET["op"]) {
             </div>
         <?php
         }//fin de mensaje de error**/
-        break;
+    break;
 
     case "activarydesactivar":
         //los parametros id_producto y est vienen por via ajax
@@ -168,7 +168,7 @@ switch ($_GET["op"]) {
             //edita el estado de la categoria
             $productos->editar_estado_categoria($_POST["id_categoria"], $_POST["est"]);
         }
-        break;
+    break;
 
     case "listar":
         $datos = $productos->get_productos();
@@ -241,9 +241,11 @@ switch ($_GET["op"]) {
             "aaData" => $data
         );
         echo json_encode($results);
-        break;
+    break;
 
-        case "listar_compras":
+    /****************COMPRAS*******************************/
+
+    case "listar_compras":
             /**se muestran en ventana modal el datatable de los productos en compras para seleccionar 
             luego los productos activos y luego se autocomplementa los campos desde un formulario**/
             $datos=$productos->get_productos();
@@ -316,7 +318,7 @@ switch ($_GET["op"]) {
                     "aaData"=>$data);
                 echo json_encode($results);
     
-            break;
+    break;
     
     case "buscar_producto":
             $datos=$productos->get_producto_estado($_POST["id_producto"], $_POST["estado"]);
@@ -338,16 +340,122 @@ switch ($_GET["op"]) {
                    $output["error"]="El producto seleccionado está inactivo, intenta con otro";
               }
               echo json_encode($output);
-       break;
+    break;
   
-       case "registrar_compra":
+    case "registrar_compra":
                     //se llama al modelo Compras.php
                     require_once('../models/compra.php');
                         
                     $compra = new Compras();
                     $compra->agrega_detalle_compra();
-       break;
-    
-    }
+    break;
+
+    /****************VENTAS*******************************/
+
+    case "listar_ventas":
+        /**se muestran en ventana modal el datatable de los productos en compras para seleccionar 
+        luego los productos activos y luego se autocomplementa los campos desde un formulario**/
+        $datos=$productos->get_productos_ventas();
+        
+        $data= Array();//Vamos a declarar un array
+
+        foreach($datos as $row){
+            $sub_array = array();
+            $est = '';
+            $atrib = "btn btn-success btn-md estado";
+            if($row["estado"] == 0){
+                $est = 'INACTIVO';
+                $atrib = "btn btn-warning btn-md estado";
+            } else{
+                if($row["estado"] == 1){
+                    $est = 'ACTIVO';
+                }	
+            }
+                
+            //STOCK, si es mejor de 10 se pone rojo sino se pone verde
+            $stock = "";
+            if ($row["stock"] <= 10) {
+                $stock = $row["stock"];
+                $atributo = "badge bg-red-active";
+            } else {
+                $stock = $row["stock"];
+                $atributo = "badge bg-green";
+            }
+
+            //moneda
+            $moneda = $row["moneda"];
+
+            //$sub_array = array();
+            $sub_array[] = $row["categoria"];
+            $sub_array[] = $row["producto"];
+            $sub_array[] = $row["presentacion"];
+            $sub_array[] = $row["unidad"];
+            $sub_array[] = $moneda . " " . $row["precio_compra"];
+            $sub_array[] = $moneda . " " . $row["precio_venta"];
+            $sub_array[] = '<span class="' . $atributo . '">' . $row["stock"] . ' </span>';
+             
+            $sub_array[] = '<button type="button"  name="estado" id="'.$row["id_producto"].
+                            '" class="'.$atrib.'">'.$est.'</button>';
+
+           /*declaro la variable fecha*/
+           $fecha= date("d-m-Y", strtotime($row["fecha_vencimiento"]));				
+
+        if($row["imagen"] != ''){
+            $sub_array[] = ' <img src="upload/'.$row["imagen"].'" class="img-thumbnail" width="100" height="100" />
+                            <input type="hidden" name="hidden_producto_imagen" value="'.$row["imagen"].'" />
+                             <span><i class="fa fa-calendar" aria-hidden="true"></i>  '.
+                             $fecha.' <br/><strong>(vencimiento)</strong></span> ';
+        } else { 
+            $sub_array[] = '<button type="button" id="" class="btn btn-primary btn-md">
+                            <i class="fa fa-picture-o" aria-hidden="true"></i> Sin imagen</button>';
+        }
+            //Botones estado y agregar registro
+            $sub_array[] = '<button type="button"  name="estado" id="'.$row["id_producto"].
+                            '" class="'.$atrib.'">'.$est.'</button>';
+            $sub_array[] = '<button type="button" name="" id="'.$row["id_producto"].
+                            '" class="btn btn-primary btn-md " onClick="agregarDetalleVenta('.$row["id_producto"].
+                            ',\''.$row["producto"].'\','.$row["estado"].')"><i class="fa fa-plus"></i> Agregar</button>';
+            $data[] = $sub_array;
+        }
+
+        $results = array(
+                "sEcho"=>1, //Información para el datatables
+                "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+                "iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
+                "aaData"=>$data);
+            echo json_encode($results);
+
+    break;
+
+    case "buscar_producto_venta":
+        $datos=$productos->get_producto_estado($_POST["id_producto"], $_POST["estado"]);
+
+        /*comprobamos que el producto esté activo, de lo contrario no lo agrega*/
+        if(is_array($datos)==true and count($datos)>0){
+              foreach($datos as $row){
+                  $output["id_producto"] = $row["id_producto"];
+                  $output["producto"] = $row["producto"];
+                  $output["moneda"] = $row["moneda"];
+                  $output["precio_venta"] = $row["precio_venta"];
+                  $output["stock"] = $row["stock"];
+                  $output["estado"] = $row["estado"];     
+              }
+        } else {
+               //si no existe el registro entonces no recorre el array
+               $output["error"]="El producto seleccionado está inactivo, intenta con otro";
+        }
+        echo json_encode($output);
+   break;
+
+   case "registrar_venta";
+        //se llama al modelo Ventas.php
+        require_once('../models/venta.php');
+        $venta = new Ventas();
+        $venta->agrega_detalle_venta();
+   break;
+
+
+}//Cierre del switch
+
 
 ?>
