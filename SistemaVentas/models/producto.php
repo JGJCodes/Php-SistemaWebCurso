@@ -120,6 +120,19 @@
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //metodo para consultar si la tabla productos tiene registros asociados con categorias
+    public function get_prod_por_id_cat($id_categoria){
+        $conectar= parent::conexion();
+        parent::set_names();
+        //$output = array();
+  
+        $sql="select * from producto where id_categoria=?";
+        $sql=$conectar->prepare($sql);
+        $sql->bindValue(1, $id_categoria);
+        $sql->execute();
+
+        return $sql->fetchAll(PDO::FETCH_ASSOC);   
+    }
 
     //método para editar registro
     public function editar_producto($id_producto,$id_categoria,$producto,$presentacion,$unidad,$moneda,
@@ -243,6 +256,7 @@
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
+
     //metodo que valida si hay registros activos
     public function get_producto_estado($id_producto,$estado){
         $conectar=parent::conexion();
@@ -257,5 +271,48 @@
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //consulta si el id del producto con tiene un detalle_compra asociado
+    public function get_producto_por_id_detalle_compra($id_producto){        
+        $conectar=parent::conexion();
+        parent::set_names();
+
+        $sql="select p.id_producto,p.producto,c.id_producto, c.producto as producto_compras
+          from producto p INNER JOIN detalle_compras c ON p.id_producto=c.id_producto where p.id_producto=?";
+
+        $sql=$conectar->prepare($sql);
+        $sql->bindValue(1,$id_producto);
+        $sql->execute();
+
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    //consulta si el id del producto con tiene un detalle_venta asociado
+    public function get_producto_por_id_detalle_venta($id_producto){           
+        $conectar=parent::conexion();
+        parent::set_names();
+
+        $sql="select p.id_producto,p.producto, v.id_producto, v.producto as producto_ventas      
+          from producto p INNER JOIN detalle_ventas v ON p.id_producto=v.id_producto where p.id_producto=? ";
+
+        $sql=$conectar->prepare($sql);
+        $sql->bindValue(1,$id_producto);
+        $sql->execute();
+
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //metodo que realiza la eliminacion de un producto
+    public function eliminar_producto($id_producto){
+       $conectar=parent::conexion();
+       parent::set_names();
+        
+       $sql="delete from producto where id_producto=?";
+        $sql=$conectar->prepare($sql);
+        $sql->bindValue(1, $id_producto);
+        $sql->execute();
+
+        return $resultado=$sql->fetch(PDO::FETCH_ASSOC);
+    }
      
  }

@@ -103,7 +103,6 @@ switch ($_GET["op"]) {
         }//fin mensaje error**/
     break;
 
-
     case 'mostrar':
 
         /**selecciona el id del producto
@@ -168,6 +167,65 @@ switch ($_GET["op"]) {
             //edita el estado de la categoria
             $productos->editar_estado_categoria($_POST["id_categoria"], $_POST["est"]);
         }
+    break;
+
+    case "eliminar_producto":
+        //verificamos si el producto existe en la bd y si el stock es igual a 0
+        $datos= $productos->get_producto_id($_POST["id_producto"]);       
+
+        //verifica si el id_producto tiene registro asociado a detalle_compra
+	    $producto_detalle_compra=$productos->get_producto_por_id_detalle_compra($_POST["id_producto"]);
+
+       //verifica si el id_producto tiene registro asociado a detalle_venta
+	   $producto_detalle_venta=$productos->get_producto_por_id_detalle_venta($_POST["id_producto"]);
+  
+	    //si no hay productos en detalle_compras y en detalle_ventas entonces se elimina el producto
+        if(is_array($datos)==true and count($datos)>0 and is_array($producto_detalle_compra)==true and
+             count($producto_detalle_compra)==0 and is_array($producto_detalle_venta)==true and count($producto_detalle_venta)==0){         	
+	        	$productos->eliminar_producto($_POST["id_producto"]);				
+			    $messages[]="El producto se eliminó correctamente";
+        } else {
+   	  	        $errors[]="Hay stock o tienes compras o ventas realizadas o anuladas, no se puede eliminar";
+        }
+
+        require_once("../views/view_mensajes.php");
+        require_once("../views/view_alertas.php");
+       
+        /*prueba mensaje de success
+        if (isset($messages)){
+                    
+                    ?>
+                    <div class="alert alert-success" role="alert">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>¡Bien hecho!</strong>
+                            <?php
+                                foreach ($messages as $message) {
+                                        echo $message;
+                                    }
+                                ?>
+                    </div>
+                    <?php
+                }
+
+
+        //fin mensaje success
+	   //inicio de mensaje de error
+
+				if (isset($errors)){
+			
+			?>
+			<div class="alert alert-danger" role="alert">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>Error!</strong> 
+					<?php
+						foreach ($errors as $error) {
+								echo $error;
+							}
+						?>
+			</div>
+			<?php
+			}
+	   //fin de mensaje de error*/
     break;
 
     case "listar":

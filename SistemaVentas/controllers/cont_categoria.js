@@ -156,4 +156,26 @@ function cambiarEstado(id_categoria, est){
 	});//bootbox
 }
 
+//ELIMINAR CATEGORIA
+function eliminar(id_categoria){
+	//IMPORTANTE: asi se imprime el valor de una funcion
+	//alert(categoria_id);
+
+   bootbox.confirm("¿Está Seguro de eliminar la categoría?", function(result){
+   if(result){
+		   $.ajax({
+			   url:"../ajax/categoria.php?op=eliminar_categoria",
+			   method:"POST",
+			   data:{id_categoria:id_categoria},
+			   success:function(data) {
+				   //alert(data);
+				   $("#resultados_ajax").html(data);
+				   $("#categoria_data").DataTable().ajax.reload();
+			   }
+		   });
+		 }
+	});//bootbox
+}
+
+
 init();

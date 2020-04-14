@@ -115,6 +115,19 @@
            return $sql->fetchAll(PDO::FETCH_ASSOC);
         }
 
+        //método para eliminar un registro
+        public function eliminar_categoria($id_categoria){
+         $conectar=parent::conexion();
+         parent::set_names();
+
+         $sql="delete from categoria where id_categoria=?";
+         $sql=$conectar->prepare($sql);
+         $sql->bindValue(1,$id_categoria);
+         $sql->execute();
+         
+         return $sql->fetch();
+      }
+
 
    }
 

@@ -994,8 +994,7 @@ function eliminar(id_producto){
 					method:"POST",
 					data:{id_producto:id_producto},
 
-					success:function(data)
-					{
+					success:function(data){
 						//alert(data);
 						$("#resultados_ajax").html(data);
 						$("#producto_data").DataTable().ajax.reload();
