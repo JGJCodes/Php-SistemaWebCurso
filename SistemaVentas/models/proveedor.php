@@ -156,5 +156,19 @@
         $sql->bindValue(2, $id_proveedor);
         $sql->execute();
     }
+
+    //método para eliminar un proveedor
+    public function eliminar_proveedor($id_proveedor){
+        $conectar=parent::conexion();
+        parent::set_names();
+
+        $sql="delete from proveedor where id_proveedor=?";
+
+        $sql=$conectar->prepare($sql);
+        $sql->bindValue(1, $id_proveedor);
+        $sql->execute();
+
+        return $sql->fetch(PDO::FETCH_ASSOC);
+    }
  }
 ?>

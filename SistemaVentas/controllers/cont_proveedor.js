@@ -246,6 +246,24 @@ function agregar_registro(id_proveedor,est){
                 } //cierre condicional error 
             }
     })//cierre condicional error
-}//cierre condicional error
+}//cierre condicional 
+
+//ELIMINAR PROVEEDOR
+function eliminar(id_proveedor){
+    bootbox.confirm("¿Está Seguro de eliminar el proveedor?", function(result){
+    if(result){
+            $.ajax({
+                url:"../ajax/proveedor.php?op=eliminar_proveedor",
+                method:"POST",
+                data:{id_proveedor:id_proveedor},
+                success:function(data) {
+                    //alert(data);
+                    $("#resultados_ajax").html(data);
+                    $("#proveedor_data").DataTable().ajax.reload();
+                }
+            });
+          }
+     });//bootbox
+}//cierre condicional 
 
 init();

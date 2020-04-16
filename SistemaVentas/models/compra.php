@@ -383,8 +383,8 @@ class Compras extends Conectar{
       $sql_detalle->execute();
       $resultado= $sql_detalle->fetch(PDO::FETCH_ASSOC);
 
-//una vez se cambie de estado a ACTIVO entonces actualizamos la cantidad de stock en productos
-//INICIO CONSULTA DE DETALLE DE COMPRAS Y COMPRAS
+    //una vez se cambie de estado a ACTIVO entonces actualizamos la cantidad de stock en productos
+    //INICIO CONSULTA DE DETALLE DE COMPRAS Y COMPRAS
 
       $sql2="select * from detalle_compras where numero_compra=?";
       $sql2=$conectar->prepare($sql2);
@@ -396,7 +396,7 @@ class Compras extends Conectar{
           $id_producto=$output["id_producto"]=$row["id_producto"];
           //selecciona la cantidad comprada
           $cantidad_compra=$output["cantidad_compra"]=$row["cantidad_compra"];
-//si el id_producto existe entonces que consulte si la cantidad de productos existe en la tabla producto
+      //si el id_producto existe entonces que consulte si la cantidad de productos existe en la tabla producto
 
           if(isset($id_producto)==true and count($id_producto)>0){    
               $sql3="select * from producto where id_producto=?";
@@ -450,7 +450,7 @@ class Compras extends Conectar{
       $sql_detalle->execute();
       $resultado= $sql_detalle->fetch(PDO::FETCH_ASSOC);
 
-//una vez se cambie de estado a ACTIVO entonces actualizamos la cantidad de stock en productos*/
+      //una vez se cambie de estado a ACTIVO entonces actualizamos la cantidad de stock en productos
 
       //INICIO ACTUALIZAR LA CANTIDAD DE PRODUCTOS COMPRADOS EN EL STOCK
       $sql2="select * from detalle_compras where numero_compra=?";
@@ -544,6 +544,32 @@ class Compras extends Conectar{
       $sql->execute();
       return $sql->fetchAll(PDO::FETCH_ASSOC);
   }//Cierre del metodo
+
+  public function get_compras_por_id_proveedor($id_proveedor){
+    $conectar= parent::conexion();
+    parent::set_names();
+   
+    $sql="select * from compras where id_proveedor=?";
+
+    $sql=$conectar->prepare($sql);
+    $sql->bindValue(1, $id_proveedor);
+    $sql->execute();
+
+    return $sql->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  public function get_detalle_compras_por_id_proveedor($id_proveedor){
+    $conectar= parent::conexion();
+    parent::set_names();
+
+    $sql="select * from detalle_compras where id_proveedor=?";
+
+    $sql=$conectar->prepare($sql);
+    $sql->bindValue(1, $id_proveedor);
+    $sql->execute();
+
+    return $sql->fetchAll(PDO::FETCH_ASSOC);
+  }
 
 }//Fin de la clase Compras
 

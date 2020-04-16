@@ -86,7 +86,8 @@ switch($_GET["op"]){
                                 </div>
                                 <?php
                             }//Cierre del IF errors**/
-                            break;
+    break;
+    
     case "mostrar"://Mostrar los datos del proveedor recuperados con el id enviado por ajax
                     $datos = $proveedores->get_proveedor_cedula($_POST["cedula_proveedor"]);
                     //validacion del id del proveedor
@@ -123,7 +124,8 @@ switch($_GET["op"]){
                         </div>
                         <?php
                     }//Cierre del IF errors**/
-                    break; //Termino del proceso mostrar datos por id
+    break; //Termino del proceso mostrar datos por id
+    
     case "activarydesactivar":
                             $datos = $proveedores->get_proveedor_id($_POST["id_proveedor"]);
                             //valida si existe el proveedor
@@ -131,7 +133,8 @@ switch($_GET["op"]){
                                 $proveedores->editar_estado($_POST["id_proveedor"],$_POST["est"]);
                                 //edita el estado del proveedor
                             }
-                            break; //Termino del proceso activar y desactivar estado
+    break; //Termino del proceso activar y desactivar estado
+    
     case "listar":
                     $datos = $proveedores->get_proveedores(); //Recuperamos la lista de los proveedor
                     $data = Array(); //Declaramos el arreglo
@@ -168,7 +171,7 @@ switch($_GET["op"]){
                                 "iTotalDisplayRecords"=>count($data), //Enviamos el total registros a visualizar
                                 "aaData"=>$data);
                     echo json_encode($results);
-                    break;
+    break;
     
     case "listar_compras":/*se muestran en ventana modal el datatable de los proveedores en compras para seleccionar 
                             luego los proveedores activos y luego se autocomplementa los campos desde un formulario*/
@@ -209,9 +212,9 @@ switch($_GET["op"]){
                                     "aaData"=>$data);
                                 echo json_encode($results);
                     
-                            break;
+    break;
          
-        case "buscar_proveedor";//valida los proveedores activos y se muestran en un formulario
+    case "buscar_proveedor";//valida los proveedores activos y se muestran en un formulario
                                 $datos=$proveedores->get_proveedor_estado($_POST["id_proveedor"],$_POST["est"]);
 
                                 // comprobamos que el proveedor esté activo, de lo contrario no lo agrega
@@ -228,7 +231,75 @@ switch($_GET["op"]){
                                 }
                                 echo json_encode($output);
                     
-                            break;
+    break;
+
+    case "eliminar_proveedor":  
+        //IMPORTANTE:normalmente las compras y ventas no se pude eliminar pero aqui le estamos aplicando seguridad en PHP para tener mas seguridad con los haquers
+        //verificamos si el proveedor existe en la tabla compras y detalle_compras, si existe entonces no se puede eliminar el proveedor
+
+        $compras = new Compras();
+        $comp= $compras->get_compras_por_id_proveedor($_POST["id_proveedor"]);
+        $detalle_comp= $compras->get_detalle_compras_por_id_proveedor($_POST["id_proveedor"]);
+      
+        //inicio
+        if(is_array($comp)==true and count($comp)>0 && is_array($detalle_comp)==true and count($detalle_comp)>0){
+        	//si existe el proveedor en compras y detalle_compras entonces no lo elimina					
+			$errors[]="El proveedor existe en compras y/0 en detalle compras, no se puede eliminar";				
+   	    }//fin
+   	    else{
+             //si existe el registro entonces lo elimina
+            $datos= $proveedores->get_proveedor_id($_POST["id_proveedor"]);
+
+		    if(is_array($datos)==true and count($datos)>0){
+		        $proveedores->eliminar_proveedor($_POST["id_proveedor"]);
+		        $messages[]="El Proveedor se eliminó exitosamente";  
+		    }    
+   	    }
+
+           require_once("../views/view_mensajes.php");
+                            require_once("../views/view_alertas.php");
+
+	    /*prueba mensaje de success
+
+        if (isset($messages)){
+				
+				?>
+				<div class="alert alert-success" role="alert">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+						<strong>¡Bien hecho!</strong>
+						<?php
+							foreach ($messages as $message) {
+									echo $message;
+								}
+							?>
+				</div>
+				<?php
+			}
+
+
+	    //fin mensaje success
+
+
+	   //inicio de mensaje de error
+
+				if (isset($errors)){
+			
+			?>
+			<div class="alert alert-danger" role="alert">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>Error!</strong> 
+					<?php
+						foreach ($errors as $error) {
+								echo $error;
+							}
+						?>
+			</div>
+			<?php
+			}
+
+	   //fin de mensaje de error*/
+
+    break;
     
 }
 
