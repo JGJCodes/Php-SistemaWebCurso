@@ -251,5 +251,23 @@ function agregar_registro(id_cliente,est){
 	})
 }
 
+//ELIMINAR CLIENTE
+function eliminar(id_cliente){
+	bootbox.confirm("¿Está Seguro de eliminar el cliente?", function(result){
+		if(result){
+				$.ajax({
+					url:"../ajax/cliente.php?op=eliminar_cliente",
+					method:"POST",
+					data:{id_cliente:id_cliente},
+					success:function(data){
+						//alert(data);
+						$("#resultados_ajax").html(data);
+						$("#cliente_data").DataTable().ajax.reload();
+					}
+				});
+		      }
+		 });//bootbox
+}
+
 
 init();

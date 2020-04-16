@@ -4,14 +4,10 @@
  * de la informacion tabla Cliente por medio de ajax
  */
 
-  //llamo a la conexion de la base de datos 
-  require_once("../config/conexion.php");
-  //llamo al modelo Clientes
-   require_once("../models/cliente.php");
+require_once("../config/conexion.php");//llamo a la conexion de la base de datos  
+require_once("../models/cliente.php");//llamo al modelo Clientes
 
-
-  $clientes = new Clientes();
-
+$clientes = new Clientes();
 
 /*declaramos las variables de los valores que se envian por el 
     formulario y que recibimos por ajax y decimos que si 
@@ -33,7 +29,7 @@ $estado=isset($_POST["estado"]);
 
 switch($_GET["op"]){
 
-    case "guardaryeditar":
+  case "guardaryeditar":
             /*verificamos si existe el cliente en la base de datos
             *importante: se debe poner el $_POST sino no funciona*/
             $datos = $clientes->get_datos_cliente($_POST["cedula"],$_POST["nombre"],$_POST["email"]);
@@ -139,7 +135,7 @@ switch($_GET["op"]){
                }//fin de mensaje de error*/
   break;
 
-   case "activarydesactivar":
+  case "activarydesactivar":
   
             //los parametros id_cliente y est vienen por via ajax
             $datos=$clientes->get_cliente_id($_POST["id_cliente"]);
@@ -149,8 +145,7 @@ switch($_GET["op"]){
                     //edita el estado del cliente
                     $clientes->editar_estado($_POST["id_cliente"],$_POST["est"]);
             } 
-    break;
-
+  break;
 
   case "listar":
         $datos=$clientes->get_clientes();
@@ -197,11 +192,11 @@ switch($_GET["op"]){
       echo json_encode($results);
 
   break;
-
-   /*se muestran en ventana modal el datatable de los clientes en ventas para 
+   
+  case "listar_ventas":
+    /*se muestran en ventana modal el datatable de los clientes en ventas para 
    seleccionar luego los clientes activos y luego se autocomplementa 
    los campos de un formulario*/
-  case "listar_ventas":
         $datos=$clientes->get_clientes();
         $data= Array();//Vamos a declarar un array
 
@@ -240,7 +235,6 @@ switch($_GET["op"]){
       echo json_encode($results);
   break;
 
-
   case "buscar_cliente":
      /*valida los clientes activos y se muestran en un formulario*/
         $datos=$clientes->get_cliente_estado($_POST["id_cliente"],$_POST["est"]);
@@ -261,7 +255,72 @@ switch($_GET["op"]){
          echo json_encode($output);
   break;
 
-      
-  }//Cierre del switch
+  case "eliminar_cliente":  	 
+    /*IMPORTANTE:normalmente las compras y ventas no se pude eliminar pero aqui le estamos 
+    aplicando seguridad en PHP para tener mas seguridad con los haquers
+    **verificamos si el cliente existe en la tabla ventas y detalle_ventas, si existe 
+    entonces no se puede eliminar el cliente*/
+        $ventas = new Ventas(); 
+        $vent= $ventas->get_ventas_por_id_cliente($_POST["id_cliente"]); 
+        $detalle_vent= $ventas->get_detalle_ventas_por_id_cliente($_POST["id_cliente"]);
+  
+        if(is_array($vent)==true and count($vent)>0 && is_array($detalle_vent)==true and count($detalle_vent)>0){
+                 //si existe el cliente en ventas y detalle_ventas entonces no lo elimina                
+                  $errors[]="El cliente existe en ventas y en detalle ventas, no se puede eliminar";
+  
+        }//fin
+            else{ //validamos si existe el registro en la bd
+              $datos= $clientes->get_cliente_por_id($_POST["id_cliente"]);
+                 if(is_array($datos)==true and count($datos)>0){
+                      $clientes->eliminar_cliente($_POST["id_cliente"]);
+                      $messages[]="El Cliente se eliminó exitosamente";    
+                 }         
+        }
+  
+        require_once("../views/view_mensajes.php");
+        require_once("../views/view_alertas.php");
+  
+    /*prueba mensaje de success
+  
+       if (isset($messages)){
+                  
+                  ?>
+                  <div class="alert alert-success" role="alert">
+                          <button type="button" class="close" data-dismiss="alert">&times;</button>
+                          <strong>¡Bien hecho!</strong>
+                          <?php
+                              foreach ($messages as $message) {
+                                      echo $message;
+                                  }
+                              ?>
+                  </div>
+                  <?php
+              }
+  
+  
+        //fin mensaje success
+  
+  
+         //inicio de mensaje de error
+  
+                  if (isset($errors)){
+              
+              ?>
+              <div class="alert alert-danger" role="alert">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                      <strong>Error!</strong> 
+                      <?php
+                          foreach ($errors as $error) {
+                                  echo $error;
+                              }
+                          ?>
+              </div>
+              <?php
+              }
+  
+    //fin de mensaje de error*/
+  break;
+   
+}//Cierre del switch
 
 ?>

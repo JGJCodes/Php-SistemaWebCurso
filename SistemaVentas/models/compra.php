@@ -545,6 +545,7 @@ class Compras extends Conectar{
       return $sql->fetchAll(PDO::FETCH_ASSOC);
   }//Cierre del metodo
 
+  //Retorna todas las compras por un proveedor especifico
   public function get_compras_por_id_proveedor($id_proveedor){
     $conectar= parent::conexion();
     parent::set_names();
@@ -558,6 +559,7 @@ class Compras extends Conectar{
     return $sql->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  //Retorna todas las compras por un proveedor especifico
   public function get_detalle_compras_por_id_proveedor($id_proveedor){
     $conectar= parent::conexion();
     parent::set_names();

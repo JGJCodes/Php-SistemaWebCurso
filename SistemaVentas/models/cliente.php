@@ -185,6 +185,19 @@
             return $resultado=$sql->fetchAll();
         }
 
+        //ELIMINAR CLIENTE
+        public function eliminar_cliente($id_cliente){
+            $conectar=parent::conexion();
+            parent::set_names();
+
+            $sql="delete from clientes where id_cliente=?";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $id_cliente);
+            $sql->execute();
+
+            return $sql->fetch(PDO::FETCH_ASSOC);
+        }
 
     }
 
