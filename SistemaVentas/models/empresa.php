@@ -28,7 +28,7 @@
        }
  
       //metodo muestra la informacion de la empresa por usuario
-       public function get_empresa_por_id_usuario($id_usuario_empresa){
+       public function get_empresa_usuario($id_usuario_empresa){
  
             $conectar= parent::conexion();
             parent::set_names();

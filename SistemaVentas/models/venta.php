@@ -549,6 +549,32 @@ class Ventas extends Conectar{
     }//cierre del if else
   }//CIERRE DEL METODO
 
+  //Metodo para retornar las ventas por un cliente especifico
+  public function get_ventas_idcliente($id_cliente){
+    $conectar= parent::conexion();
+    parent::set_names();
+
+    $sql="select * from ventas where id_cliente=?";
+    $sql=$conectar->prepare($sql);
+    $sql->bindValue(1, $id_cliente);
+    $sql->execute();
+
+    return $resultado= $sql->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  //Metodo para devolver los detalles de las ventas de un cliente
+  public function get_detalle_ventas_idcliente($id_cliente){
+    $conectar= parent::conexion();
+    parent::set_names();
+
+    $sql="select * from detalle_ventas where id_cliente=?";
+    $sql=$conectar->prepare($sql);
+    $sql->bindValue(1, $id_cliente);
+    $sql->execute();
+    
+    return $resultado= $sql->fetchAll(PDO::FETCH_ASSOC);
+  }
+
 }//Fin de la clase Ventas
 
 ?>

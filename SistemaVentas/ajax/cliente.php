@@ -261,8 +261,8 @@ switch($_GET["op"]){
     **verificamos si el cliente existe en la tabla ventas y detalle_ventas, si existe 
     entonces no se puede eliminar el cliente*/
         $ventas = new Ventas(); 
-        $vent= $ventas->get_ventas_por_id_cliente($_POST["id_cliente"]); 
-        $detalle_vent= $ventas->get_detalle_ventas_por_id_cliente($_POST["id_cliente"]);
+        $vent= $ventas->get_ventas_idcliente($_POST["id_cliente"]); 
+        $detalle_vent= $ventas->get_detalle_ventas_idcliente($_POST["id_cliente"]);
   
         if(is_array($vent)==true and count($vent)>0 && is_array($detalle_vent)==true and count($detalle_vent)>0){
                  //si existe el cliente en ventas y detalle_ventas entonces no lo elimina                
@@ -270,7 +270,7 @@ switch($_GET["op"]){
   
         }//fin
             else{ //validamos si existe el registro en la bd
-              $datos= $clientes->get_cliente_por_id($_POST["id_cliente"]);
+              $datos= $clientes->get_cliente_id($_POST["id_cliente"]);
                  if(is_array($datos)==true and count($datos)>0){
                       $clientes->eliminar_cliente($_POST["id_cliente"]);
                       $messages[]="El Cliente se eliminó exitosamente";    
