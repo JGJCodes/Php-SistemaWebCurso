@@ -6,6 +6,7 @@
 
 require_once("../config/conexion.php");//llamo a la conexion de la base de datos  
 require_once("../models/cliente.php");//llamo al modelo Clientes
+require_once("../models/venta.php");//llamo al modelo Ventas
 
 $clientes = new Clientes();
 

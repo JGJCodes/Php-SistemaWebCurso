@@ -281,7 +281,7 @@
         </li>
 
         <li class="">
-          <a href="">
+          <a href="" onclick="mostrar_empresa('<?php echo $_SESSION["id_usuario"]?>')">
             <i class="fa fa-building" aria-hidden="true"> <span>Empresa</span> </i>
           </a>
         </li>
@@ -295,6 +295,7 @@
   <?php
 
     require_once("view_perfil.php");
+    require_once("view_empresa.php");
      
     } else {
 
