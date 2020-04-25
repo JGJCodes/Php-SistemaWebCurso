@@ -119,6 +119,20 @@
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
+	
+	//método para mostrar los datos de un registro por usuario
+    public function get_producto_idusuario($id_usuario){
+            $conectar= parent::conexion();
+            parent::set_names();
+
+            $sql="select * from producto where id_usuario=?";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $id_usuario);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     //metodo para consultar si la tabla productos tiene registros asociados con categorias
     public function get_prod_por_id_cat($id_categoria){

@@ -34,7 +34,21 @@
             $sql->execute();
 
             return $sql->fetchAll();
-        } 
+        }
+
+		//método para mostrar los datos de un registro por usuario
+        public function get_categoria_idusuario($id_usuario){
+            $conectar= parent::conexion();
+            parent::set_names();
+
+            $sql="select * from categoria where id_usuario=?";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $id_usuario);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+        }
 
 
         //método para insertar registros

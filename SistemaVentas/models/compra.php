@@ -4,7 +4,7 @@
  * con las funciones de crear,editar,borrar
  * consultar registros en la base de datos
  */
-     require_once("../config/conexion.php");//conexion a la base de datos
+ require_once("../config/conexion.php");//conexion a la base de datos
 
    
 class Compras extends Conectar{
@@ -33,6 +33,34 @@ class Compras extends Conectar{
              $sql->execute();
 
              return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+	
+	//método para mostrar los datos de un registro por usuario
+    public function get_compras_idusuario($id_usuario){
+            $conectar= parent::conexion();
+            parent::set_names();
+
+            $sql="select * from compras where id_usuario=?";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $id_usuario);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+	
+	//método para mostrar los datos de un registro por usuario
+    public function get_detalle_compras_idusuario($id_usuario){
+            $conectar= parent::conexion();
+            parent::set_names();
+
+            $sql="select * from detalle_compras where id_usuario=?";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $id_usuario);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
     //Metodo que retorna el numero de compra    

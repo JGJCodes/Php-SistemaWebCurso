@@ -266,6 +266,22 @@
 
             return $sql->fetchAll();
         }
+		
+		//Retorna los permisos de un usuario
+		public function get_usuario_permiso_idusuario($id_usuario){
+            $conectar= parent::conexion();
+			parent::set_names();
+			
+            $sql="select * from usuario_permiso where id_usuario=?";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $id_usuario);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+		
+		
     }
 
 ?>

@@ -6,7 +6,7 @@
  * y editar los datos en la base de datos
  */
 
-    require_once("../config/conexion.php");//requiere la conexion con la BD
+ require_once("../config/conexion.php");//requiere la conexion con la BD
 
     /** 
      * Clase que define a la tabla Empresas 
@@ -28,7 +28,7 @@
        }
  
       //metodo muestra la informacion de la empresa por usuario
-       public function get_empresa_usuario($id_usuario_empresa){
+       public function get_empresa_idusuario($id_usuario_empresa){
  
             $conectar= parent::conexion();
             parent::set_names();

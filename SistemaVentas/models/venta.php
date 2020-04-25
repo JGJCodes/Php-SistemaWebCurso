@@ -19,6 +19,34 @@ class Ventas extends Conectar{
 
       return $sql->fetchAll(PDO::FETCH_ASSOC); 
     }
+	
+	//método para mostrar los datos de un registro por usuario
+    public function get_ventas_idusuario($id_usuario){
+            $conectar= parent::conexion();
+            parent::set_names();
+
+            $sql="select * from ventas where id_usuario=?";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $id_usuario);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+	
+	//método para mostrar los datos de un registro por usuario
+    public function get_detalle_ventas_idusuario($id_usuario){
+            $conectar= parent::conexion();
+            parent::set_names();
+
+            $sql="select * from detalle_ventas where id_usuario=?";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $id_usuario);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
 
   //método para mostrar los datos de un registro a modificar
     public function get_venta_id($id_ventas){

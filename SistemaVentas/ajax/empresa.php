@@ -25,7 +25,7 @@ switch($_GET["op"]){
 
   case "empresa":
             //selecciona el id del usuario
-            $datos = $empresa->get_empresa_usuario($_POST["id_usuario_empresa"]);
+            $datos = $empresa->get_empresa_idusuario($_POST["id_usuario_empresa"]);
 
             // si existe el id_usuario_empresa entonces recorre el array
             if(is_array($datos)==true and count($datos)==0){

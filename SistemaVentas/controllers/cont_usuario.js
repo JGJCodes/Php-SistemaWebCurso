@@ -175,4 +175,23 @@ function cambiarEstado(id_usuario,est){
 
 }//Fin de la funcion cambiarEstado
 
+//ELIMINAR USUARIO
+function eliminar(id_usuario){
+	bootbox.confirm("¿Está Seguro de eliminar el usuario?", function(result){
+		if(result){
+				$.ajax({
+					url:"../ajax/usuario.php?op=eliminar_usuario",
+					method:"POST",
+					data:{id_usuario:id_usuario},
+
+					success:function(data){
+						//alert(data);
+						$("#resultados_ajax").html(data);
+						$("#usuario_data").DataTable().ajax.reload();
+					}
+				});
+		      }
+		 });//bootbox
+}//Fin de la funcion
+
 init();
