@@ -96,43 +96,34 @@
         break;
 
         case 'mostrar':
-
             //selecciona el id de la categoria
-            //el parametro id_categoria se envia por AJAX cuando se edita la categoria
-            $datos=$categorias->get_categoria_id($_POST["id_categoria"]);
+			//el parametro id_categoria se envia por AJAX cuando se edita la categoria
+			$datos=$categorias->get_categoria_por_id($_POST["id_categoria"]);
 
-            // si existe el id de la categoria entonces recorre el array
-            if(is_array($datos)==true and count($datos)>0){
+			//verifica si el id_categoria tiene registro asociado a compras
+			$categoria_compras=$categorias->get_categoria_por_id_compras($_POST["id_categoria"]);
 
-                        foreach($datos as $row){
-                            $output["categoria"] = $row["categoria"];
-                            $output["estado"] = $row["estado"];
-                            $output["id_usuario"] = $row["id_usuario"];
-                        }
-                    echo json_encode($output);
+			//verifica si el id_categoria tiene registro asociado a detalle_compras
+			$categoria_detalle_compras=$categorias->get_categoria_por_id_detalle_compras($_POST["id_categoria"]);
 
-
-                } else {
-                    //si no existe la categoria entonces no recorre el array
-                    $errors[]="La categoría no existe";
-                }
-
-                require_once("../views/view_alertas.php");
-                /**inicio de mensaje de error
-                    if(isset($errors)){
-                
-                        ?>
-                        <div class="alert alert-danger" role="alert">
-                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                <strong>Error!</strong> 
-                                <?php
-                                    foreach ($errors as $error) {
-                                            echo $error;
-                                        }
-                                    ?>
-                        </div>
-                        <?php
-                    }//fin de mensaje de error **/
+            //valida si el id_categoria  tiene registros asociados en la tabla compras y detalle_compras
+			if(is_array($categoria_compras)==true and count($categoria_compras)==0 and 
+				is_array($categoria_detalle_compras)==true and count($categoria_detalle_compras)==0){
+    				foreach($datos as $row){
+    					$output["categoria"] = $row["categoria"];
+    					$output["estado"] = $row["estado"];
+                        $output["id_usuario"] = $row["id_usuario"];
+    				} 
+    			} else  {
+	           //si el id_categoria tiene relacion con la tabla compras y detalle_compras entonces se deshabilita la categoria
+					foreach($datos as $row){							
+						$output["categoria_id"] = $row["id_categoria"];
+						$output["categoria"] = $row["categoria"];
+						$output["estado"] = $row["estado"];
+						$output["id_usuario"] = $row["id_usuario"];
+					}	                      
+             }//cierre el else
+             echo json_encode($output);
         break;
 
         case "activarydesactivar":

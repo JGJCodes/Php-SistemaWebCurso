@@ -90,15 +90,32 @@ function listar(){
 function mostrar(id_categoria){
 	$.post("../ajax/categoria.php?op=mostrar",{id_categoria : id_categoria}, function(data, status){
 		data = JSON.parse(data);
+		
 		 //alert(data.cedula);
-		$('#categoriaModal').modal('show');
-		$('#categoria').val(data.categoria);
-		$('#estado').val(data.estado);
-		$('.modal-title').text("Editar Categoría");
-		$('#id_categoria').val(id_categoria);
-		$('#action').val("Edit");			
-	});     
-        
+		 
+		//si existe la categoria_id entonces tiene relacion con otras tablas
+		if(data.categoria_id){
+			$('#categoriaModal').modal('show');
+			$('#categoria').val(data.categoria);
+
+			//desactiva el campo
+		    $("#categoria").attr('disabled', 'disabled');
+						
+			$('#estado').val(data.estado);
+			$('.modal-title').text("Editar Categoría");
+			$('#id_categoria').val(id_categoria);						
+		} else{
+            $('#categoriaModal').modal('show');
+			$('#categoria').val(data.categoria);
+
+			//desactiva el campo
+		    $("#categoria").attr('disabled', false);
+						
+			$('#estado').val(data.estado);
+			$('.modal-title').text("Editar Categoría");
+			$('#id_categoria').val(id_categoria);					
+		}		
+	});       
 }
 
 

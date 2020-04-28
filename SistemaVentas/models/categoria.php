@@ -141,9 +141,41 @@
          
          return $sql->fetch();
       }
+	  
+	  //consulta si el id_categoria tiene una compra asociada
+      public function get_categoria_compras($id_categoria){
+			$conectar=parent::conexion();
+            parent::set_names();
+			
+			$sql="select c.id_categoria,comp.id_categoria from categoria c 
+              INNER JOIN compras comp ON c.id_categoria=comp.id_categoria
+			where c.id_categoria=? ";
 
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1,$id_categoria);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+
+		}
+
+      
+      //consulta si el id_categoria tiene un detalle_compra asociado
+      public function get_categoria_detallecompras($id_categoria){
+            $conectar=parent::conexion();
+            parent::set_names();
+
+           $sql="select c.id_categoria,d.id_categoria from categoria c             
+              INNER JOIN detalle_compras d ON c.id_categoria=d.id_categoria
+              where c.id_categoria=? ";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1,$id_categoria);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);       
+      }
 
    }
-
 
 ?>
