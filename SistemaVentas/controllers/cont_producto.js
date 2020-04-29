@@ -105,24 +105,60 @@ function mostrar(id_producto) {
     $.post("../ajax/producto.php?op=mostrar", { id_producto: id_producto }, function (data, status) {
         data = JSON.parse(data);
 
-        //alert(data.cedula);
-        $('#productoModal').modal('show');
-        $('#categoria').val(data.categoria);
-        $('#producto').val(data.producto);
-        $('#presentacion').val(data.presentacion);
-        $('#unidad').val(data.unidad);
-        $('#moneda').val(data.moneda);
-        $('#precio_compra').val(data.precio_compra);
-        $('#precio_venta').val(data.precio_venta);
-        $('#stock').val(data.stock);
-        $('#estado').val(data.estado);
-        $('#datepicker').val(data.fecha_vencimiento);
-        $('.modal-title').text("Editar Producto");
-        $('#id_producto').val(id_producto);
-        $('#producto_uploaded_image').html(data.producto_imagen);
-        $('#resultados_ajax').html(data);
-        $("#producto_data").DataTable().ajax.reload();
-    });
+        //alert(data.cedula);	
+				
+		  //si existe el id_producto es porque el producto tiene relacion con otras tablas
+             if(data.producto_id){
+				$('#productoModal').modal('show');
+				$('#categoria').val(data.categoria);
+
+				//desactiva el campo
+                $("#categoria").attr('disabled', 'disabled');
+
+                $('#producto').val(data.producto);
+
+                //desactiva el campo
+                $("#producto").attr('disabled', 'disabled');
+
+				$('#presentacion').val(data.presentacion);
+				$('#unidad').val(data.unidad);
+                $('#moneda').val(data.moneda);
+
+                //desactiva el campo
+                $("#moneda").attr('disabled', 'disabled');
+
+                $('#precio_compra').val(data.precio_compra);
+				$('#precio_venta').val(data.precio_venta);
+				$('#stock').val(data.stock);
+				$('#estado').val(data.estado);
+				$('#datepicker').val(data.fecha_vencimiento);
+				$('.modal-title').text("Editar Producto");
+				$('#id_producto').val(id_producto);
+				$('#producto_uploaded_image').html(data.producto_imagen);
+				$('#resultados_ajax').html(data);
+				$("#producto_data").DataTable().ajax.reload();
+		    } else {
+		    	    $('#productoModal').modal('show');
+					$('#categoria').val(data.categoria);
+					$('#categoria').attr('disabled', false);
+					$('#producto').val(data.producto);
+					$("#producto").attr('disabled', false);
+					$('#presentacion').val(data.presentacion);
+					$('#unidad').val(data.unidad);
+					$('#moneda').val(data.moneda);
+				    $("#moneda").attr('disabled', false);
+	                $('#precio_compra').val(data.precio_compra);
+					$('#precio_venta').val(data.precio_venta);
+					$('#stock').val(data.stock);
+					$('#estado').val(data.estado);
+					$('#datepicker').val(data.fecha_vencimiento);
+					$('.modal-title').text("Editar Producto");
+					$('#id_producto').val(id_producto);
+					$('#producto_uploaded_image').html(data.producto_imagen);
+					$('#resultados_ajax').html(data);
+					$("#producto_data").DataTable().ajax.reload();
+		   }
+	});        
 }
 
 

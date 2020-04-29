@@ -286,7 +286,7 @@
     }
 
     //consulta si el id del producto con tiene un detalle_compra asociado
-    public function get_producto_por_id_detalle_compra($id_producto){        
+    public function get_producto_detalle_compra($id_producto){        
         $conectar=parent::conexion();
         parent::set_names();
 
@@ -302,7 +302,7 @@
 
 
     //consulta si el id del producto con tiene un detalle_venta asociado
-    public function get_producto_por_id_detalle_venta($id_producto){           
+    public function get_producto_detalle_venta($id_producto){           
         $conectar=parent::conexion();
         parent::set_names();
 

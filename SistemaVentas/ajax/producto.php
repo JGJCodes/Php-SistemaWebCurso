@@ -104,56 +104,72 @@ switch ($_GET["op"]) {
     break;
 
     case 'mostrar':
+		//selecciona el id del producto
+    
+		//el parametro id_producto se envia por AJAX cuando se edita el producto
+		$datos=$productos->get_producto_por_id($_POST["id_producto"]);
 
-        /**selecciona el id del producto
-        //el parametro id_producto se envia por AJAX cuando se edita el producto**/
-        $datos = $productos->get_producto_id($_POST["id_producto"]);
+		//verifica si el id_producto tiene registro asociado a detalle_compra
+		$producto_detalle_compra=$productos->get_producto_detalle_compra($_POST["id_producto"]);
 
-        // si existe el id del producto entonces recorre el array
-        if (is_array($datos) == true and count($datos) > 0) {
-            foreach ($datos as $row) {
-                $output["id_producto"] = $row["id_producto"];
-                $output["categoria"] = $row["id_categoria"];
-                $output["producto"] = $row["producto"];
-                $output["presentacion"] = $row["presentacion"];
-                $output["unidad"] = $row["unidad"];
-                $output["moneda"] = $row["moneda"];
-                $output["precio_compra"] = $row["precio_compra"];
-                $output["precio_venta"] = $row["precio_venta"];
-                $output["stock"] = $row["stock"];
-                $output["estado"] = $row["estado"];
+		//verifica si el id_producto tiene registro asociado a detalle_venta
+		$producto_detalle_venta=$productos->get_producto_detalle_venta($_POST["id_producto"]);
+  
+          /*si el id del producto NO tiene registros asociados en las tablas detalle_compras 
+		  y detalle_ventas entonces se puede editar el producto*/
+		if(is_array($producto_detalle_compra)==true and count($producto_detalle_compra)==0 and 
+			is_array($producto_detalle_venta)==true and count($producto_detalle_venta)==0){
 
-                if ($row["imagen"] != '') {
-                    $output['producto_imagen'] = '<img src="upload/' . $row["imagen"] . '" class="img-thumbnail" width="300" height="50" />
-                                                    <input type="hidden" name="hidden_producto_imagen" value="' . $row["imagen"] . '" />';
-                } else {
-                    $output['producto_imagen'] = '<input type="hidden" name="hidden_producto_imagen" value="" />';
-                }
-                $output["fecha_vencimiento"] = date("d-m-Y", strtotime($row["fecha_vencimiento"]));
-            }
+			foreach($datos as $row){
+				$output["id_producto"] = $row["id_producto"];
+				$output["categoria"] = $row["id_categoria"];
+				$output["producto"] = $row["producto"];
+				$output["presentacion"] = $row["presentacion"];
+				$output["unidad"] = $row["unidad"];
+				$output["moneda"] = $row["moneda"];
+				$output["precio_compra"] = $row["precio_compra"];
+				$output["precio_venta"] = $row["precio_venta"];
+				$output["stock"] = $row["stock"];
+				$output["estado"] = $row["estado"];
+
+				if($row["imagen"] != ''){
+					$output['producto_imagen'] = '<img src="upload/'.$row["imagen"].'" class="img-thumbnail" width="300"'.
+												' height="50" /><input type="hidden" name="hidden_producto_imagen" value="'.
+												$row["imagen"].'" />';
+				} else {
+					$output['producto_imagen'] = '<input type="hidden" name="hidden_producto_imagen" value="" />';
+				}
+
+				$output["fecha_vencimiento"] = date("d-m-Y",strtotime($row["fecha_vencimiento"]));
+
+				}
+
+	        } else {                             
+				foreach($datos as $row){
+					$output["producto_id"] = $row["id_producto"];
+					$output["categoria"] = $row["id_categoria"];
+					$output["producto"] = $row["producto"];
+					$output["presentacion"] = $row["presentacion"];
+					$output["unidad"] = $row["unidad"];
+					$output["moneda"] = $row["moneda"];
+					$output["precio_compra"] = $row["precio_compra"];
+					$output["precio_venta"] = $row["precio_venta"];
+					$output["stock"] = $row["stock"];
+					$output["estado"] = $row["estado"];
+
+					if($row["imagen"] != ''){
+						$output['producto_imagen'] = '<img src="upload/'.$row["imagen"].'" class="img-thumbnail" width="300"'.
+													' height="50" /><input type="hidden" name="hidden_producto_imagen" value="'.
+													$row["imagen"].'" />';
+					} else {
+						$output['producto_imagen'] = '<input type="hidden" name="hidden_producto_imagen" value="" />';
+					}
+
+					$output["fecha_vencimiento"] = date("d-m-Y",strtotime($row["fecha_vencimiento"]));
+			    }		    
+	        }//cierre del else
+
             echo json_encode($output);
-        } else {
-            //si no existe el producto entonces no recorre el array
-            $errors[] = "El producto no existe";
-        }
-
-        require_once("../views/view_alertas.php");
-
-        /**inicio de mensaje de error
-        if (isset($errors)) {
-
-        ?>
-            <div class="alert alert-danger" role="alert">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>Error!</strong>
-                <?php
-                foreach ($errors as $error) {
-                    echo $error;
-                }
-                ?>
-            </div>
-        <?php
-        }//fin de mensaje de error**/
     break;
 
     case "activarydesactivar":
@@ -174,10 +190,10 @@ switch ($_GET["op"]) {
         $datos= $productos->get_producto_id($_POST["id_producto"]);       
 
         //verifica si el id_producto tiene registro asociado a detalle_compra
-	    $producto_detalle_compra=$productos->get_producto_por_id_detalle_compra($_POST["id_producto"]);
+	    $producto_detalle_compra=$productos->get_producto_detalle_compra($_POST["id_producto"]);
 
        //verifica si el id_producto tiene registro asociado a detalle_venta
-	   $producto_detalle_venta=$productos->get_producto_por_id_detalle_venta($_POST["id_producto"]);
+	   $producto_detalle_venta=$productos->get_producto_detalle_venta($_POST["id_producto"]);
   
 	    //si no hay productos en detalle_compras y en detalle_ventas entonces se elimina el producto
         if(is_array($datos)==true and count($datos)>0 and is_array($producto_detalle_compra)==true and
