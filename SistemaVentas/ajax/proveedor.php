@@ -88,42 +88,43 @@ switch($_GET["op"]){
                             }//Cierre del IF errors**/
     break;
     
-    case "mostrar"://Mostrar los datos del proveedor recuperados con el id enviado por ajax
-                    $datos = $proveedores->get_proveedor_cedula($_POST["cedula_proveedor"]);
-                    //validacion del id del proveedor
-                    if(is_array($datos)==true and count($datos)>0){
-                        //recuperacion de los datos del proveedor
-                        foreach($datos as $row){
-                            $output["cedula_proveedor"] = $row["cedula"];
-						    $output["proveedor"] = $row["razon_social"];
-                            $output["telefono"] = $row["telefono"];
-                            $output["correo"] = $row["correo"];
-                            $output["direccion"] = $row["direccion"];
-                            $output["fecha"] = $row["fecha"];
-                            $output["estado"] = $row["estado"];
-                        }
-                        echo json_encode($output); //mostrar los datos
+    case "mostrar":
+			//Mostrar los datos del proveedor recuperados con el id enviado por ajax
+            $datos = $proveedores->get_proveedor_cedula($_POST["cedula_proveedor"]);
+            
+			//verifica si la cedula_proveedor tiene registro asociado a compras
+			$proveedor_compras=$proveedores->get_proveedor_cedula_compras($_POST["cedula_proveedor"]);
 
-                    }else{//Mostrar el mensaje de error que el proveedor no existe
-                        $errores[]="El proveedor no existe";
-                    }
+			//verifica si la cedula_proveedor tiene registro asociado a detalle_compras
+			$proveedor_detalle_compras=$proveedores->get_proveedor_cedula_detalle_compras($_POST["cedula_proveedor"]);
 
-                    require_once("../views/view_alertas.php");
+            //si la cedula del proveedor NO tiene registros asociados en las tablas detalle_compras entonces se puede editar el pro
+			if(is_array($proveedor_compras)==true and count($proveedor_compras)==0 and 
+				is_array($proveedor_detalle_compras)==true and count($proveedor_detalle_compras)==0){
 
-                    /**Mostrar los mensajes de errores de las operaciones
-                    if(isset($errores)){
-                        ?> <!-- Si existen errores por mostrar se genera un contenedor para imprimirlos en la pagina -->
-                        <div class="alert alert-danger" role="alert">
-                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            <strong>¡Error!</strong>
-                            <?php //impresion de los mensajes
-                                foreach($errores as $error){
-                                    echo $error;
-                                }
-                            ?>
-                        </div>
-                        <?php
-                    }//Cierre del IF errors**/
+    				foreach($datos as $row){
+    					$output["cedula_proveedor"] = $row["cedula"];
+						$output["proveedor"] = $row["razon_social"];
+						$output["telefono"] = $row["telefono"];
+						$output["correo"] = $row["correo"];
+						$output["direccion"] = $row["direccion"];
+						$output["fecha"] = $row["fecha"];
+						$output["estado"] = $row["estado"];
+    				}
+			} else {            
+	                 //si la cedula tiene relacion con la tabla compras y detalle_compras entonces se deshabilita el proveedor
+		        	foreach($datos as $row){
+						$output["cedula_relacion"] = $row["cedula"];
+						$output["proveedor"] = $row["razon_social"];
+						$output["telefono"] = $row["telefono"];
+						$output["correo"] = $row["correo"];
+						$output["direccion"] = $row["direccion"];
+						$output["fecha"] = $row["fecha"];
+						$output["estado"] = $row["estado"];
+					}
+	        }//cierre del else 
+            echo json_encode($output);
+		
     break; //Termino del proceso mostrar datos por id
     
     case "activarydesactivar":

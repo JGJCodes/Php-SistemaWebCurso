@@ -184,5 +184,40 @@
 
         return $sql->fetch(PDO::FETCH_ASSOC);
     }
+	
+	//consulta si la cedula del proveedor tiene una compra asociada
+    public function get_proveedor_cedula_compras($cedula_proveedor){
+        $conectar=parent::conexion();
+        parent::set_names();
+
+        $sql="select p.cedula,c.cedula_proveedor from proveedor p             
+              INNER JOIN compras c ON p.cedula=c.cedula_proveedor
+              where p.cedula=?";
+
+        $sql=$conectar->prepare($sql);
+        $sql->bindValue(1,$cedula_proveedor);
+        $sql->execute();
+
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+      
+    //consulta si la cedula del proveedor tiene un detalle_compra asociado
+    public function get_proveedor_cedula_detalle_compras($cedula_proveedor){
+        $conectar=parent::conexion();
+        parent::set_names();
+
+        $sql="select p.cedula,d.cedula_proveedor from producto p        
+              INNER JOIN detalle_compras c ON p.cedula=d.cedula_proveedor
+              where p.cedula=?";
+
+        $sql=$conectar->prepare($sql);
+        $sql->bindValue(1,$cedula_proveedor);
+        $sql->execute();
+
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
  }
 ?>

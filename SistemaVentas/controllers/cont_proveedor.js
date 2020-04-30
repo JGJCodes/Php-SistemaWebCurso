@@ -92,22 +92,47 @@ function listar(){
 //Funcion para mostrar datos del proveedor
 function mostrar(cedula_proveedor){
     $.post("../ajax/proveedor.php?op=mostrar",
-        {cedula_proveedor : cedula_proveedor}, 
-        function(data,status){
-            data= JSON.parse(data);
-    		 //alert(data.cedula);
-             $('#proveedorModal').modal('show');
-             $('#cedula').val(cedula_proveedor);
-             $('#razon').val(data.proveedor);
-             $('#telefono').val(data.telefono);
-             $('#email').val(data.correo);
-             $('#direccion').val(data.direccion);
-             $('#datepicker').val(data.fecha);
-             $('#estado').val(data.estado);
-             $('.modal-title').text("Editar Proveedor");
-             $('#cedula_proveedor').val(cedula_proveedor);
-        }
-    );
+		{cedula_proveedor : cedula_proveedor}, function(data, status){
+		data = JSON.parse(data);
+
+		//alert(data.cedula);
+
+		console.log(data);
+		
+		//si existe la cedula_relacion entonces tiene relacion con otras tablas
+		if(data.cedula_relacion){
+			$('#proveedorModal').modal('show');
+			$('#cedula').val(cedula_proveedor);
+
+			//desactiva el campo
+		    $("#cedula").attr('disabled', 'disabled');
+			$('#razon').val(data.proveedor);
+						
+			//desactiva el campo
+		    $("#razon").attr('disabled', 'disabled');
+						
+			$('#telefono').val(data.telefono);
+			$('#email').val(data.correo);
+			$('#direccion').val(data.direccion);
+			$('#datepicker').val(data.fecha);
+			$('#estado').val(data.estado);
+			$('.modal-title').text("Editar Proveedor");
+			$('#cedula_proveedor').val(cedula_proveedor);
+		} else {
+			$('#proveedorModal').modal('show');
+			$('#cedula').val(cedula_proveedor);
+			$("#cedula").attr('disabled', false);
+			$('#razon').val(data.proveedor);
+			$("#razon").attr('disabled', false);
+			$('#telefono').val(data.telefono);
+			$('#email').val(data.correo);
+			$('#direccion').val(data.direccion);
+			$('#datepicker').val(data.fecha);
+			$('#estado').val(data.estado);
+			$('.modal-title').text("Editar Proveedor");
+			$('#cedula_proveedor').val(cedula_proveedor);
+		}				
+	});
 }//Fin de la funcion mostrar
 
 //La funcion guardaryeditar(e) es llamada cuando se da click al boton submit
