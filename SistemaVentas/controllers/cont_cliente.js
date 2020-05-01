@@ -94,24 +94,52 @@ function listar(){
 
 //Mostrar datos del cliente en la ventana modal 
 function mostrar(cedula_cliente){
-	$.post("../ajax/cliente.php?op=mostrar",{cedula_cliente : cedula_cliente}, function(data, status){
+	$.post("../ajax/cliente.php?op=mostrar",{cedula_cliente : cedula_cliente}, function(data, status)
+	{
 		data = JSON.parse(data);
 
-		 //alert(data.cedula);
+		//alert(data.cedula);
 
-		   console.log(data);
+		console.log(data);
 		
-			$('#clienteModal').modal('show');
-			$('#cedula').val(cedula_cliente);
-			$('#nombre').val(data.nombre);
-			$('#apellido').val(data.apellido);
-			$('#telefono').val(data.telefono);
-			$('#email').val(data.correo);
-			$('#direccion').val(data.direccion);
-			$('#estado').val(data.estado);
-			$('.modal-title').text("Editar Cliente");
-			$('#cedula_cliente').val(cedula_cliente);			
-	});    
+		//si existe la cedula_relacion entonces tiene relacion con otras tablas
+        if(data.cedula_relacion){	
+					$('#clienteModal').modal('show');
+					$('#cedula').val(cedula_cliente);
+
+					//desactiva el campo
+	                $("#cedula").attr('disabled', 'disabled');
+					$('#nombre').val(data.nombre);
+					
+					//desactiva el campo
+	                $("#nombre").attr('disabled', 'disabled');
+					$('#apellido').val(data.apellido);
+
+					//desactiva el campo
+	                $("#apellido").attr('disabled', 'disabled');
+
+					$('#telefono').val(data.telefono);
+					$('#email').val(data.correo);
+					$('#direccion').val(data.direccion);
+					$('#estado').val(data.estado);
+					$('.modal-title').text("Editar Cliente");
+					$('#cedula_cliente').val(cedula_cliente);      
+		} else{
+		    	    $('#clienteModal').modal('show');
+					$('#cedula').val(cedula_cliente);
+				    $("#cedula").attr('disabled', false);
+					$('#nombre').val(data.nombre);
+					$("#nombre").attr('disabled', false);
+					$('#apellido').val(data.apellido);
+                    $("#apellido").attr('disabled', false);                
+                    $('#telefono').val(data.telefono);
+					$('#email').val(data.correo);
+					$('#direccion').val(data.direccion);
+					$('#estado').val(data.estado);
+					$('.modal-title').text("Editar Cliente");
+					$('#cedula_cliente').val(cedula_cliente);
+		}				
+	}); 
 }
 
 

@@ -36,14 +36,15 @@ switch ($_GET["op"]) {
         /*verificamos si existe el producto en la base de datos, 
         si ya existe un registro con la categoria entonces no se registra la categoria*/
 
-        //importante: se debe poner el $_POST sino no funciona
-        $datos = $productos->get_producto_nombre($_POST["producto"]);
-
         /*si el id no existe entonces lo registra
              importante: se debe poner el $_POST sino no funciona*/
         if (empty($_POST["id_producto"])) {
             /*verificamos si existe el producto en la base de datos, 
             si ya existe un registro con la categoria entonces no se registra*/
+			
+			//importante: se debe poner el $_POST sino no funciona
+			$datos = $productos->get_producto_nombre($_POST["producto"]);
+			
             if (is_array($datos) == true and count($datos) == 0) {
                 //no existe el producto por lo tanto hacemos el registros
                 $productos->registrar_producto($id_categoria, $producto, $presentacion,

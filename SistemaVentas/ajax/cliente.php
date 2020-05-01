@@ -31,15 +31,17 @@ $estado=isset($_POST["estado"]);
 switch($_GET["op"]){
 
   case "guardaryeditar":
-            /*verificamos si existe el cliente en la base de datos
-            *importante: se debe poner el $_POST sino no funciona*/
-            $datos = $clientes->get_datos_cliente($_POST["cedula"],$_POST["nombre"],$_POST["email"]);
-
-            /*si la cedula_cliente no existe entonces lo registra
+			/*verificamos si existe el cliente en la base de datos*/
+            
+			/*si la cedula_cliente no existe entonces lo registra
             importante: se debe poner el $_POST sino no funciona*/
            if(empty($_POST["cedula_cliente"])){
               /*verificamos si la cedula del cliente en la base de datos,
                si ya existe un registro con el cliente entonces no se registra*/
+			   		   
+				//importante: se debe poner el $_POST sino no funciona
+				$datos = $clientes->get_datos_cliente($_POST["cedula"],$_POST["nombre"],$_POST["email"]);
+			
                        if(is_array($datos)==true and count($datos)==0){
                              //no existe el cliente por lo tanto hacemos el registros
                             $clientes->registrar_cliente($cedula,$nombre,$apellido,
@@ -98,42 +100,44 @@ switch($_GET["op"]){
 
   case 'mostrar':
         //el parametro cedula se envia por AJAX cuando se edita el cliente
-        $datos=$clientes->get_cliente_cedula($_POST["cedula_cliente"]);
+		$datos=$clientes->get_cliente_cedula($_POST["cedula_cliente"]);
 
-       // si existe el id del cliente entonces recorre el array
-       if(is_array($datos)==true and count($datos)>0){
-                 foreach($datos as $row){
-                     $output["cedula_cliente"] = $row["cedula_cliente"];
-                     $output["nombre"] = $row["nombre_cliente"];
-                     $output["apellido"] = $row["apellido_cliente"];
-                     $output["telefono"] = $row["telefono_cliente"];
-                     $output["correo"] = $row["correo_cliente"];
-                     $output["direccion"] = $row["direccion_cliente"];
-                     $output["fecha"] = $row["fecha_ingreso"];
-                     $output["estado"] = $row["estado"];
+		//verifica si la cedula tiene registro asociado a ventas
+		$cliente_ventas=$clientes->get_cliente_cedula_ventas($_POST["cedula_cliente"]);
 
-                 }
-               echo json_encode($output);
-         } else {
-              //si no existe el cliente entonces no recorre el array
-             $errors[]="El cliente no existe";
-         }
-         require_once("../views/view_alertas.php");
+		//verifica si la cedula tiene registro asociado a detalle_ventas
+		$cliente_detalle_ventas=$clientes->get_cliente_cedula_detalle_ventas($_POST["cedula_cliente"]);
 
-          /*inicio de mensaje de error
-             if(isset($errors)){
-                 ?>
-                 <div class="alert alert-danger" role="alert">
-                     <button type="button" class="close" data-dismiss="alert">&times;</button>
-                         <strong>Error!</strong> 
-                         <?php
-                             foreach ($errors as $error) {
-                                     echo $error;
-                                 }
-                             ?>
-                 </div>
-                 <?php
-               }//fin de mensaje de error*/
+        /*si la cedula del cliente NO tiene registros asociados en las tablas ventas 
+		y detalle_ventas entonces se puede editar el cliente completo*/
+	    if(is_array($cliente_ventas)==true and count($cliente_ventas)==0 and 
+			is_array($cliente_detalle_ventas)==true and count($cliente_detalle_ventas)==0){
+
+    				foreach($datos as $row){
+    					$output["cedula_cliente"] = $row["cedula_cliente"];
+						$output["nombre"] = $row["nombre_cliente"];
+						$output["apellido"] = $row["apellido_cliente"];
+						$output["telefono"] = $row["telefono_cliente"];
+						$output["correo"] = $row["correo_cliente"];
+						$output["direccion"] = $row["direccion_cliente"];
+						$output["fecha"] = $row["fecha_ingreso"];
+						$output["estado"] = $row["estado"];
+    				}
+	       } else {         
+	           /*si la cedula tiene relacion con la tabla ventas y detalle_ventas 
+			   entonces se deshabilita el cliente,cedula, apellido*/	             
+	            foreach($datos as $row){
+						$output["cedula_relacion"] = $row["cedula_cliente"];
+						$output["nombre"] = $row["nombre_cliente"];
+						$output["apellido"] = $row["apellido_cliente"];
+						$output["telefono"] = $row["telefono_cliente"];
+						$output["correo"] = $row["correo_cliente"];
+						$output["direccion"] = $row["direccion_cliente"];
+						$output["fecha"] = $row["fecha_ingreso"];
+						$output["estado"] = $row["estado"];
+				}
+	        }  
+         echo json_encode($output);
   break;
 
   case "activarydesactivar":

@@ -29,15 +29,21 @@ $direccion=isset($_POST["direccion"]);
 $estado=isset($_POST["estado"]);
 
 switch($_GET["op"]){
-                            /**verificamos si existe la cedula y correo en la BD,
-                             * si ya existe un registro con la categoria entonces no 
-                             * se registra el proveedor**/
-    case "guardaryeditar":$datos = $proveedores->get_datos_proveedor($_POST["cedula"],$_POST["razon"],$_POST["email"]);
+                            
+    case "guardaryeditar":
+				/**verificamos si existe la cedula y correo en la BD,
+                  * si ya existe un registro con la categoria entonces no 
+                  * se registra el proveedor**/
+				
                            /**si la cedula_proveedor no existe entonces lo registra 
                             *importante: se debe poner el $_POST sino no funciona  **/
                             if(empty($_POST["cedula_proveedor"])){
                                 /**verificamos si la cedula del proveedor en la base de datos,
                                      * si ya existe un registro con el proveedor entonces no se registra  **/
+									 
+							//importante: se debe poner el $_POST sino no funciona
+							$datos = $proveedores->get_datos_proveedor($_POST["cedula"],$_POST["razon"],$_POST["email"]);
+							
                                 if(is_array($datos)==true and count($datos)==0){
                                     //no existe el proveedor por lo tanto hacemos el registro
                                     $proveedores->registrar_proveedor($cedula,$proveedor,$telefono,

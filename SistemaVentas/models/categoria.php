@@ -71,20 +71,46 @@
         	$conectar=parent::conexion();
         	parent::set_names();
 
-        	$sql="update categoria set categoria=?,estado=?,id_usuario=? where id_categoria=? ";
-            
-           //echo $sql; exit(); Forma de identificar un error en la consulta
+			require_once("categoria.php");
 
-        	  $sql=$conectar->prepare($sql);
-		    $sql->bindValue(1,$_POST["categoria"]);
-		    $sql->bindValue(2,$_POST["estado"]);
-		    $sql->bindValue(3,$_POST["id_usuario"]);
-		    $sql->bindValue(4,$_POST["id_categoria"]);
-		    $sql->execute();
- 
-               //impriendo el envio de los datos
-               //print_r($nombre); Forma de identificar un error en la ejecucion del registro
+			$categorias= new Categoria();
 
+			//verifica si el id_categoria tiene registro asociado a compras
+			$categoria_compras=$categorias->get_categoria_compras($_POST["id_categoria"]);
+
+			//verifica si el id_categoria tiene registro asociado a detalle_compras
+			$categoria_detalle_compras=$categorias->get_categoria_detallecompras($_POST["id_categoria"]);
+
+            /*si el id_categoria NO tiene registros asociados en las tablas detalle_compras 
+			entonces se puede editar todos los campos de la categoria*/
+			if(is_array($categoria_compras)==true and count($categoria_compras)==0 and 
+				is_array($categoria_detalle_compras)==true and count($categoria_detalle_compras)==0){
+
+				$sql="update categoria set categoria=?,estado=?,id_usuario=? where id_categoria=? ";
+				
+			   //echo $sql; exit(); Forma de identificar un error en la consulta
+
+				$sql=$conectar->prepare($sql);
+				$sql->bindValue(1,$_POST["categoria"]);
+				$sql->bindValue(2,$_POST["estado"]);
+				$sql->bindValue(3,$_POST["id_usuario"]);
+				$sql->bindValue(4,$_POST["id_categoria"]);
+				$sql->execute();
+	 
+				//impriendo el envio de los datos
+				//print_r($nombre); Forma de identificar un error en la ejecucion del registro
+			} else {
+                //si la categoria tiene registros asociados en compras y detalle_compras entonces no se edita la categoria
+                $sql="update categoria set estado=?, id_usuario=? where id_categoria=? ";
+                  
+                //echo $sql; exit();
+
+                $sql=$conectar->prepare($sql);
+				$sql->bindValue(1,$_POST["estado"]);
+                $sql->bindValue(2,$_POST["id_usuario"]);
+                $sql->bindValue(3,$_POST["id_categoria"]);
+                $sql->execute();
+            }
         }
 
          //método para activar Y/0 desactivar el estado de la categoria

@@ -26,18 +26,17 @@
         case "guardaryeditar":
 
                 /*verificamos si existe la categoria en la base de datos, si ya existe un 
-                registro con la categoria entonces no se registra la categoria*/
-                
-                //importante: se debe poner el $_POST sino no funciona
-                $datos = $categorias->get_nombre_categoria($_POST["categoria"]);
+                registro con la categoria entonces no se registra la categoria*/               
 
 	       	   /*si el id no existe entonces lo registra
 	           importante: se debe poner el $_POST sino no funciona*/
 	          if(empty($_POST["id_categoria"])){
-
                  /*verificamos si existe la categoria en la base de datos, 
                  si ya existe un registro con la categoria entonces no se registra*/
 
+				//importante: se debe poner el $_POST sino no funciona
+                $datos = $categorias->get_nombre_categoria($_POST["categoria"]);
+				
 			       	   if(is_array($datos)==true and count($datos)==0){
 			       	   	  //no existe la categoria por lo tanto hacemos el registros
 		                    $categorias->registrar_categoria($categoria,$estado,$id_usuario);

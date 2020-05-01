@@ -177,26 +177,67 @@
         $fecha = $_POST["datepicker"];
         $date_inicial = str_replace('/', '-', $fecha);
         $fecha = date("Y-m-d",strtotime($date_inicial));
+		
+		/*****************************************************************/
+        /*PROCESO DE VALIDACION SI EL PRODUCTO TIENE REGISTROS ASOCIADOS ENTONCES 
+		NO SE EDITA EL PRODUCTO PERO SI SE EDITA SUS CARACTERISTICAS PERO SOLO EN 
+		LA TABLA PRODUCTO, SIN AFECTAR EL NOMBRE DEL PRODUCTO EN LOS REGISTROS 
+		ASOCIADOS, AHORA SI EL PRODUCTO NO TIENE REGISTROS ASOCIADOS ENTONCES SE
+		PUEDE EDITAR EL NOMBRE DEL PRODUCTO Y SUS CARACTERISTICAS EN LA TABLA PRODUCTO*/
+    
+		$producto = new Producto();
 
-        $sql="update producto set id_categoria=?,producto=?,
-            presentacion=?,unidad=?,moneda=?,precio_compra=?,precio_venta=?,
-            stock=?,estado=?,imagen=?,fecha_vencimiento=? id_usuario=? where id_producto=?";
+        //verifica si el id_producto tiene registro asociado a detalle_compra
+        $producto_detalle_compra=$producto->get_producto_detalle_compra($_POST["id_producto"]);
 
-        $sql=$conectar->prepare($sql);
-        $sql->bindValue(1, $_POST["categoria"]);
-        $sql->bindValue(2, $_POST["producto"]);
-        $sql->bindValue(3, $_POST["presentacion"]);
-        $sql->bindValue(4, $_POST["unidad"]);
-        $sql->bindValue(5, $_POST["moneda"]);
-        $sql->bindValue(6, $_POST["precio_compra"]);
-        $sql->bindValue(7, $_POST["precio_venta"]);
-        $sql->bindValue(8, $stocker);
-        $sql->bindValue(9, $_POST["estado"]);
-        $sql->bindValue(10, $imagen);
-        $sql->bindValue(11, $fecha);
-        $sql->bindValue(12, $_POST["id_usuario"]);
-        $sql->bindValue(13, $_POST["id_producto"]);
-        $sql->execute();
+        //verifica si el id_producto tiene registro asociado a detalle_venta
+        $producto_detalle_venta=$producto->get_producto_detalle_venta($_POST["id_producto"]);
+
+        /*valido si el producto NO tiene registros asociados a detalle_compras 
+		y detalle_ventas entonces se edita el producto*/
+        if(is_array($producto_detalle_compra)==true and count($producto_detalle_compra)==0 and 
+			is_array($producto_detalle_venta)==true and count($producto_detalle_venta)==0){
+           
+			$sql="update producto set id_categoria=?,producto=?,
+				presentacion=?,unidad=?,moneda=?,precio_compra=?,precio_venta=?,
+				stock=?,estado=?,imagen=?,fecha_vencimiento=? id_usuario=? where id_producto=?";
+
+			$sql=$conectar->prepare($sql);
+			$sql->bindValue(1, $_POST["categoria"]);
+			$sql->bindValue(2, $_POST["producto"]);
+			$sql->bindValue(3, $_POST["presentacion"]);
+			$sql->bindValue(4, $_POST["unidad"]);
+			$sql->bindValue(5, $_POST["moneda"]);
+			$sql->bindValue(6, $_POST["precio_compra"]);
+			$sql->bindValue(7, $_POST["precio_venta"]);
+			$sql->bindValue(8, $stocker);
+			$sql->bindValue(9, $_POST["estado"]);
+			$sql->bindValue(10, $imagen);
+			$sql->bindValue(11, $fecha);
+			$sql->bindValue(12, $_POST["id_usuario"]);
+			$sql->bindValue(13, $_POST["id_producto"]);
+			$sql->execute();
+		} else {
+            /*si el producto tiene registros asociados a detalle_venta y
+			detalle_compras entonces no se edita la categoria,producto, moneda*/
+
+            $sql="update producto set presentacion=?, unidad=?, precio_compra=?,
+                  precio_venta=?,stock=?, estado=?, imagen=?,fecha_vencimiento=?,
+                  id_usuario=? where id_producto=? ";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $_POST["presentacion"]);
+            $sql->bindValue(2, $_POST["unidad"]);
+            $sql->bindValue(3, $_POST["precio_compra"]);
+            $sql->bindValue(4, $_POST["precio_venta"]);
+            $sql->bindValue(5, $stocker);
+            $sql->bindValue(6, $_POST["estado"]);
+            $sql->bindValue(7, $imagen);
+            $sql->bindValue(8, $fecha);
+            $sql->bindValue(9, $_POST["id_usuario"]);
+            $sql->bindValue(10, $_POST["id_producto"]);
+            $sql->execute();
+        }
     }
     
     //método para activar Y/0 desactivar el estado del producto

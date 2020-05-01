@@ -133,22 +133,53 @@
         $conectar=parent::conexion();
         parent::set_names();
 
+		require_once("proveedor.php");
 
-        $sql="update proveedor set cedula=?,razon_social=?,telefono=?,
-            correo=?,direccion=?,estado=?,id_usuario=? where cedula=?";
+        $proveedor = new Proveedor();
 
-        //echo $sql;exit();
+        //verifica si la cedula tiene registro asociado a compras
+        $proveedor_compras=$proveedor->get_proveedor_cedula_compras($_POST["cedula_proveedor"]);
 
-        $sql=$conectar->prepare($sql);
-        $sql->bindValue(1, $_POST["cedula"]);
-        $sql->bindValue(2, $_POST["razon"]);
-        $sql->bindValue(3, $_POST["telefono"]);
-        $sql->bindValue(4, $_POST["email"]);
-        $sql->bindValue(5, $_POST["direccion"]);
-        $sql->bindValue(6, $_POST["estado"]);
-        $sql->bindValue(7, $_POST["id_usuario"]);
-        $sql->bindValue(8, $_POST["cedula_proveedor"]);
-        $sql->execute();
+        //verifica si la cedula tiene registro asociado a detalle_compras
+        $proveedor_detalle_compras=$proveedor->get_proveedor_cedula_detalle_compras($_POST["cedula_proveedor"]);
+
+        /*si la cedula del proveedor NO tiene registros asociados en las tablas compras 
+		y detalle_compras entonces se puede editar el proveedor completo*/
+        if(is_array($proveedor_compras)==true and count($proveedor_compras)==0 and 
+			is_array($proveedor_detalle_compras)==true and count($proveedor_detalle_compras)==0){
+
+			$sql="update proveedor set cedula=?,razon_social=?,telefono=?,
+				correo=?,direccion=?,estado=?,id_usuario=? where cedula=?";
+
+			//echo $sql;exit();
+
+			$sql=$conectar->prepare($sql);
+			$sql->bindValue(1, $_POST["cedula"]);
+			$sql->bindValue(2, $_POST["razon"]);
+			$sql->bindValue(3, $_POST["telefono"]);
+			$sql->bindValue(4, $_POST["email"]);
+			$sql->bindValue(5, $_POST["direccion"]);
+			$sql->bindValue(6, $_POST["estado"]);
+			$sql->bindValue(7, $_POST["id_usuario"]);
+			$sql->bindValue(8, $_POST["cedula_proveedor"]);
+			$sql->execute();
+			
+		} else {       
+          /*si el proveedor tiene registros asociados en compras y detalle_compras entonces
+		  no se edita el la cedula del proveedor y la razon social*/
+
+            $sql="update proveedor set telefono=?, correo=?,direccion=?,  
+                  estado=?, id_usuario=? where cedula=?";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $_POST["telefono"]);
+            $sql->bindValue(2, $_POST["email"]);
+            $sql->bindValue(3, $_POST["direccion"]);
+            $sql->bindValue(4, $_POST["estado"]);
+            $sql->bindValue(5, $_POST["id_usuario"]);
+            $sql->bindValue(6, $_POST["cedula_proveedor"]);
+            $sql->execute();
+        }
     }
     
     //método para activar Y/0 desactivar el estado del producto

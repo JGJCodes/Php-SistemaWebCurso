@@ -61,32 +61,56 @@
             $conectar=parent::conexion();
             parent::set_names();
 
-            $sql="update clientes set
-                    cedula_cliente=?,
-                    nombre_cliente=?,
-                    apellido_cliente=?,
-                    telefono_cliente=?,
-                    correo_cliente=?,
-                    direccion_cliente=?,
-                    estado=?,
-                    id_usuario=?
-                    where cedula_cliente=?";
+			require_once("cliente.php");
 
-           // echo $sql;  Imprime la sentencia sql en la consola
+            $cliente = new Cliente();
 
-            $sql=$conectar->prepare($sql);
-            $sql->bindValue(1, $_POST["cedula"]);
-        	$sql->bindValue(2, $_POST["nombre"]);
-        	$sql->bindValue(3, $_POST["apellido"]);
-        	$sql->bindValue(4, $_POST["telefono"]);
-            $sql->bindValue(5, $_POST["email"]);
-        	$sql->bindValue(6, $_POST["direccion"]);
-        	$sql->bindValue(7, $_POST["estado"]);
-        	$sql->bindValue(8, $_POST["id_usuario"]);
-        	$sql->bindValue(9, $_POST["cedula_cliente"]);
-            $sql->execute();
+            //verifica si la cedula tiene registro asociado a ventas
+			$cliente_ventas=$cliente->get_cliente_cedula_ventas($_POST["cedula_cliente"]);
 
-            //print_r($_POST); Imprime los resultados de la consulta en la pagina
+			//verifica si la cedula tiene registro asociado a detalle_ventas
+			$cliente_detalle_ventas=$cliente->get_cliente_cedula_detalle_ventas($_POST["cedula_cliente"]);
+
+            /*si la cedula del cliente NO tiene registros asociados en las tablas ventas y
+			detalle_ventas entonces se puede editar el cliente completo*/
+			if(is_array($cliente_ventas)==true and count($cliente_ventas)==0 and 
+				is_array($cliente_detalle_ventas)==true and count($cliente_detalle_ventas)==0){
+
+				$sql="update clientes set cedula_cliente=?, nombre_cliente=?, apellido_cliente=?, telefono_cliente=?,
+						correo_cliente=?,direccion_cliente=?, estado=?, id_usuario=? where cedula_cliente=? ";
+
+			   // echo $sql;  Imprime la sentencia sql en la consola
+
+				$sql=$conectar->prepare($sql);
+				$sql->bindValue(1, $_POST["cedula"]);
+				$sql->bindValue(2, $_POST["nombre"]);
+				$sql->bindValue(3, $_POST["apellido"]);
+				$sql->bindValue(4, $_POST["telefono"]);
+				$sql->bindValue(5, $_POST["email"]);
+				$sql->bindValue(6, $_POST["direccion"]);
+				$sql->bindValue(7, $_POST["estado"]);
+				$sql->bindValue(8, $_POST["id_usuario"]);
+				$sql->bindValue(9, $_POST["cedula_cliente"]);
+				$sql->execute();
+				
+				//print_r($_POST); Imprime los resultados de la consulta en la pagina	
+				
+			} else{
+				/*si el cliente tiene registros asociados en ventas y detalle_ventas 
+				entonces NO se edita la cedula del cedula, nombre y apellido*/
+
+                $sql="update clientes set telefono_cliente=?, correo_cliente=?, 
+					direccion_cliente=?, estado=?, id_usuario=? where cedula_cliente=?";
+
+                $sql=$conectar->prepare($sql);       
+                $sql->bindValue(1, $_POST["telefono"]);
+                $sql->bindValue(2, $_POST["email"]);
+                $sql->bindValue(3, $_POST["direccion"]);
+                $sql->bindValue(4, $_POST["estado"]);
+                $sql->bindValue(5, $_POST["id_usuario"]);
+                $sql->bindValue(6, $_POST["cedula_cliente"]);
+                $sql->execute();
+            }
         }
 
         /**
@@ -212,6 +236,40 @@
 
             return $sql->fetch(PDO::FETCH_ASSOC);
         }
+		
+		//consulta si la cedula del cliente con tiene un detalle_venta asociado
+		public function get_cliente_cedula_ventas($cedula_cliente){           
+            $conectar=parent::conexion();
+            parent::set_names();
+
+            $sql="select c.cedula_cliente,v.cedula_cliente from clientes c             
+              INNER JOIN ventas v ON c.cedula_cliente=v.cedula_cliente
+              where c.cedula_cliente=?";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1,$cedula_cliente);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+
+        }
+
+        //consulta si el id del cliente tiene un detalle_venta asociado
+        public function get_cliente_cedula_detalle_ventas($cedula_cliente){          
+            $conectar=parent::conexion();
+            parent::set_names();
+
+            $sql="select c.cedula_cliente,d.cedula_cliente from clientes c             
+              INNER JOIN detalle_ventas d ON c.cedula_cliente=d.cedula_cliente
+              where c.cedula_cliente=? ";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1,$cedula_cliente);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+      
+       }
 
     }
 
