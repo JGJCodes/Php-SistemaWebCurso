@@ -39,11 +39,13 @@ switch($_GET["op"]){
                            
     case "guardaryeditar":
 					//verificamos si existe la cedula y correo en la BD
-					$datos = $usuarios->get_cedula_correo($_POST["cedula"],$_POST["email"]);
+					
                             if($pass1==$pass2){
                                 //verificamos si no existe el id del usuario
                                 if(empty($_POST["id_usuario"])){
                                     //verificamos si se recuperaron los datos del usuario
+									$datos = $usuarios->get_cedula_correo($_POST["cedula"],$_POST["email"]);
+									
                                     if(is_array($datos)==true and count($datos)==0){
                                         $usuarios->registrar_usuario($nombre,$apellido,$cedula,$telefono,
                                         $email,$direccion,$cargo,$usuario,$pass1,$pass2,$estado);
@@ -95,46 +97,56 @@ switch($_GET["op"]){
                             }//Cierre del IF errors**/
     break;
 	
-    case "mostrar"://Mostrar los datos del usuario recuperados con el id enviado por ajax
-                    $datos = $usuarios->get_usuario_id($_POST["id_usuario"]);
-                    //validacion del id del usuario
-                    if(is_array($datos)==true and count($datos)>0){
-                        //recuperacion de los datos del usuario
-                        foreach($datos as $row){
-                            $output["cedula"]=$row["cedula"];
-                            $output["nombre"]=$row["nombres"];
-                            $output["apellido"]=$row["apellidos"];
-                            $output["cargo"]=$row["cargo"];
-                            $output["usuario"]=$row["usuario"];
-                            $output["password1"]=$row["password"];
-                            $output["password2"]=$row["password2"];
-                            $output["telefono"]=$row["telefono"];
-                            $output["correo"]=$row["correo"];
-                            $output["direccion"]=$row["direccion"];
-                            $output["estado"]=$row["estado"];
-                        }
-                        echo json_encode($output); //mostrar los datos
+    case "mostrar":
+			//selecciona el id del usuario
+    
+           //el parametro id_usuario se envia por AJAX cuando se edita el usuario
+			$datos = $usuarios->get_usuario_id($_POST["id_usuario"]);
 
-                    }else{//Mostrar el mensaje de error que el usuario no existe
-                        $errores[]="El usuario no existe";
-                    }
+			//verifica si el id_usuario tiene registro asociado a compras
+			$usuario_compras=$usuarios->get_usuario_idcompras($_POST["id_usuario"]);
 
-                    require_once("../views/view_alertas.php");
+			//verifica si el id_usuario tiene registro asociado a ventas
+			$usuario_ventas=$usuarios->get_usuario_idventas($_POST["id_usuario"]);
 
-                    /**Mostrar los mensajes de errores de las operaciones
-                    if(isset($errores)){
-                        ?> <!-- Si existen errores por mostrar se genera un contenedor para imprimirlos en la pagina -->
-                        <div class="alert alert-danger" role="alert">
-                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            <strong>¡Error!</strong>
-                            <?php //impresion de los mensajes
-                                foreach($errores as $error){
-                                    echo $error;
-                                }
-                            ?>
-                        </div>
-                        <?php
-                    }//Cierre del IF errors**/
+
+			/*si el id_usuario NO tiene registros asociados en las tablas compras y 
+			ventas entonces se puede editar todos los campos de la tabla usuarios*/
+			if(is_array($usuario_compras)==true and count($usuario_compras)==0 and
+				is_array($usuario_ventas)==true and count($usuario_ventas)==0){
+
+             	foreach($datos as $row){                   
+						$output["cedula"] = $row["cedula"];
+						$output["nombre"] = $row["nombres"];
+            			$output["apellido"] = $row["apellidos"];
+            			$output["cargo"] = $row["cargo"];
+            			$output["usuario"] = $row["usuario"];
+            			$output["password1"] = $row["password"];
+            			$output["password2"] = $row["password2"];
+            			$output["telefono"] = $row["telefono"];
+            			$output["correo"] = $row["correo"];
+            			$output["direccion"] = $row["direccion"];
+            			$output["estado"] = $row["estado"];       	 
+				}        	
+			} else {               
+				/*si el id_usuario tiene relacion con la tabla compras y 
+				tabla ventas entonces se deshabilita el nombre, apellido y cedula*/
+                foreach($datos as $row){
+                    $output["cedula_relacion"] = $row["cedula"];
+                    $output["nombre"] = $row["nombres"];
+                    $output["apellido"] = $row["apellidos"];
+                    $output["cargo"] = $row["cargo"];
+                    $output["usuario"] = $row["usuario"];
+                    $output["password1"] = $row["password"];
+                    $output["password2"] = $row["password2"];
+                    $output["telefono"] = $row["telefono"];
+                    $output["correo"] = $row["correo"];
+                    $output["direccion"] = $row["direccion"];
+                    $output["estado"] = $row["estado"];
+                }
+            }//cierre del else
+          echo json_encode($output);
+			
     break; //Termino del proceso mostrar datos por id
 	
     case "activarydesactivar":

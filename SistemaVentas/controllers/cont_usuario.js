@@ -92,27 +92,57 @@ function listar(){
 
 //Funcion para mostrar datos del usuario
 function mostrar(id_usuario){
-    $.post("../ajax/usuario.php?op=mostrar",
-        {id_usuario : id_usuario}, 
-        function(data,status){
-            data= JSON.parse(data);
-            $("#usuarioModal").modal("show");
-            $("#cedula").val(data.cedula);
-            $("#nombre").val(data.nombre);
-            $("#apellido").val(data.apellido);
-            $("#cargo").val(data.cargo);
-            $("#usuario").val(data.usuario);
-            $("#password1").val(data.password1);
-            $("#password2").val(data.password2);
-            $("#telefono").val(data.telefono);
-            $("#email").val(data.correo);
-            $("#direccion").val(data.direccion);
-            $("#estado").val(data.estado);
-            $(".modal-title").text("Editar Usuario");
-            $("#id_usuario").val(id_usuario);
-            $("#action").val(Edit);
-        }
-    );
+    $.post("../ajax/usuario.php?op=mostrar",{id_usuario : id_usuario}, function(data, status){ 
+
+        data = JSON.parse(data);
+
+        //si existe la cedula_relacion entonces tiene relacion con otras tablas
+				if(data.cedula_relacion){
+						$('#usuarioModal').modal('show');
+						$('#cedula').val(data.cedula_relacion);
+						
+						//desactiva el campo
+		                $("#cedula").attr('disabled', 'disabled');
+						$('#nombre').val(data.nombre);
+						
+						//desactiva el campo
+		                $("#nombre").attr('disabled', 'disabled');
+						$('#apellido').val(data.apellido);
+
+						//desactiva el campo
+		                $("#apellido").attr('disabled', 'disabled');
+
+						$('#cargo').val(data.cargo);
+						$('#usuario').val(data.usuario);
+						$('#password1').val(data.password1);
+						$('#password2').val(data.password2);
+						$('#telefono').val(data.telefono);
+						$('#email').val(data.correo);
+						$('#direccion').val(data.direccion);
+						$('#estado').val(data.estado);
+						$('.modal-title').text("Editar Usuario");
+						$('#id_usuario').val(id_usuario);
+
+				} else{
+                        $('#usuarioModal').modal('show');
+						$('#cedula').val(data.cedula);
+						$("#cedula").attr('disabled', false);
+						$('#nombre').val(data.nombre);
+						$("#nombre").attr('disabled', false);
+						$('#apellido').val(data.apellido);
+                        $("#apellido").attr('disabled', false);
+                        $('#cargo').val(data.cargo);
+						$('#usuario').val(data.usuario);
+						$('#password1').val(data.password1);
+						$('#password2').val(data.password2);
+						$('#telefono').val(data.telefono);
+						$('#email').val(data.correo);
+						$('#direccion').val(data.direccion);
+						$('#estado').val(data.estado);
+						$('.modal-title').text("Editar Usuario");
+						$('#id_usuario').val(id_usuario);                
+				}		
+		});
 }//Fin de la funcion mostrar
 
 //La funcion guardaryeditar(e) es llamada cuando se da click al boton submit

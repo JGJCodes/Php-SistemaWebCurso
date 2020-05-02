@@ -129,18 +129,9 @@
                                     $email,$direccion,$usuario,$password1,$password2){
             $conectar=parent::conexion();
             parent::set_names();
-
-            $sql="update usuarios set
-                nombre=?,
-                apellido=?,
-                cedula=?,
-                telefono=?,
-                email=?,
-                direccion=?,
-                usuario=?,
-                password=?,
-                password2=?,
-                 where id_usuario=?";
+                
+            $sql="update usuarios set nombre=?,apellido=?, cedula=?,telefono=?,
+                email=?,direccion=?, usuario=?,password=?, password2=? where id_usuario=?";
 
             echo $sql;  //Imprime la sentencia sql en la consola
 
@@ -162,47 +153,73 @@
         }
 
         /**
-         * Metodo que actualiza un usuario 
-         * en la tabla de la BD
+         * Metodo que actualiza un usuario en la tabla de la BD
          */
-        public function editar_usuario($id_usuario,$nombre,$apellido,$cedula,$telefono,
-        $email,$direccion,$cargo,$usuario,$password1,$password2,$estado){
+        public function editar_usuario($id_usuario,$nombre,$apellido,$cedula,$telefono,$email,
+										$direccion,$cargo,$usuario,$password1,$password2,$estado){
             $conectar=parent::conexion();
             parent::set_names();
 
-            $sql="update usuarios set
-                nombre=?,
-                apellido=?,
-                cedula=?,
-                telefono=?,
-                email=?,
-                direccion=?,
-                cargo=?,
-                usuario=?,
-                password=?,
-                password2=?,
-                estado=? where id_usuario=?";
+			require_once("usuario.php");
 
-            echo $sql;  //Imprime la sentencia sql en la consola
+            $usuarios= new Usuarios();
 
-            $sql=$conectar->prepare($sql);
+			//verifica si el id_usuario tiene registro asociado a compras
+			$usuario_compras=$usuarios->get_usuario_idcompras($_POST["id_usuario"]);
 
-            $sql->bindValue(1,$_POST["nombre"]);
-            $sql->bindValue(2,$_POST["apellido"]);
-            $sql->bindValue(3,$_POST["cedula"]);
-            $sql->bindValue(4,$_POST["telefono"]);
-            $sql->bindValue(5,$_POST["email"]);
-            $sql->bindValue(6,$_POST["direccion"]);
-            $sql->bindValue(7,$_POST["cargo"]);
-            $sql->bindValue(8,$_POST["usuario"]);
-            $sql->bindValue(9,$_POST["password1"]);
-            $sql->bindValue(10,$_POST["password2"]);
-            $sql->bindValue(11,$_POST["estado"]);
-            $sql->bindValue(12,$_POST["id_usuario"]);
-            $sql->execute();
+			//verifica si el id_usuario tiene registro asociado a ventas
+			$usuario_ventas=$usuarios->get_usuario_idventas($_POST["id_usuario"]);
 
-            print_r($_POST);// Imprime los resultados de la consulta en la pagina
-        }
+
+			/*si el id_usuario NO tiene registros asociados en las tablas compras y
+			ventas entonces se puede editar todos los campos de la tabla usuarios*/
+			if(is_array($usuario_compras)==true and count($usuario_compras)==0 and
+				is_array($usuario_ventas)==true and count($usuario_ventas)==0){
+
+				$sql="update usuarios set nombre=?,apellido=?,cedula=?,telefono=?,email=?,
+				  direccion=?,cargo=?,usuario=?,password=?,password2=?,estado=? where id_usuario=?";
+
+				//echo $sql;  Imprime la sentencia sql en la consola
+
+				$sql=$conectar->prepare($sql);
+
+				$sql->bindValue(1,$_POST["nombre"]);
+				$sql->bindValue(2,$_POST["apellido"]);
+				$sql->bindValue(3,$_POST["cedula"]);
+				$sql->bindValue(4,$_POST["telefono"]);
+				$sql->bindValue(5,$_POST["email"]);
+				$sql->bindValue(6,$_POST["direccion"]);
+				$sql->bindValue(7,$_POST["cargo"]);
+				$sql->bindValue(8,$_POST["usuario"]);
+				$sql->bindValue(9,$_POST["password1"]);
+				$sql->bindValue(10,$_POST["password2"]);
+				$sql->bindValue(11,$_POST["estado"]);
+				$sql->bindValue(12,$_POST["id_usuario"]);
+				$sql->execute();
+
+				//print_r($_POST); Imprime los resultados de la consulta en la pagina
+			
+          } else{			
+				//si el usuario tiene registros asociados en compras y ventas entonces no se edita el nombre, apellido y cedula
+
+                $sql="update usuarios set telefono=?,correo=?, direccion=?,
+                  cargo=?,usuario=?,password=?, password2=?,estado=? where id_usuario=?";
+                  
+                //echo $sql; exit();
+
+                $sql=$conectar->prepare($sql);            
+                $sql->bindValue(1,$_POST["telefono"]);
+                $sql->bindValue(2,$_POST["email"]);
+                $sql->bindValue(3,$_POST["direccion"]);
+                $sql->bindValue(4,$_POST["cargo"]);
+                $sql->bindValue(5,$_POST["usuario"]);
+                $sql->bindValue(6,$_POST["password1"]);
+                $sql->bindValue(7,$_POST["password2"]);
+                $sql->bindValue(8,$_POST["estado"]);
+                $sql->bindValue(9,$_POST["id_usuario"]);
+                $sql->execute();
+			}// fin else
+        }//fin de function
 
         /**
          * Metodo que retorna un usuario 
@@ -280,6 +297,53 @@
 
             return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
+		
+		//método para eliminar un registro
+        public function eliminar_usuario($id_usuario){
+           $conectar=parent::conexion();
+		   parent::set_names();
+
+           $sql="delete from usuarios where id_usuario=?";
+
+           $sql=$conectar->prepare($sql);
+           $sql->bindValue(1,$id_usuario);
+           $sql->execute();
+
+           return $sql->fetch();
+        }
+		
+		//consulta si el id_usuario tiene una compra asociada
+        public function get_usuario_idcompras($id_usuario){       
+            $conectar=parent::conexion();
+            parent::set_names();
+
+            $sql="select u.id_usuario,c.id_usuario from usuarios u              
+              INNER JOIN compras c ON u.id_usuario=c.id_usuario
+              where u.id_usuario=?";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1,$id_usuario);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+        }
+       
+        //consulta si el id_usuario tiene una venta asociada
+        public function get_usuario_idventas($id_usuario){        
+            $conectar=parent::conexion();
+            parent::set_names();
+
+            $sql="select u.id_usuario,v.id_usuario from usuarios u             
+              INNER JOIN ventas v ON u.id_usuario=v.id_usuario
+              where u.id_usuario=? ";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1,$id_usuario);
+            $sql->execute();
+
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
+        }
+
 		
 		
     }
