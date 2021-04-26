@@ -21,6 +21,16 @@
 
         return $sql->fetchAll(PDO::FETCH_ASSOC); 
     }
+	
+	//retorna el numero total de registros en la tabla proveedor
+	  public function get_filas_proveedor(){
+			$conectar= parent::conexion();        
+			$sql="select * from proveedor";         
+			$sql=$conectar->prepare($sql);
+			$sql->execute();
+			$resultado= $sql->fetchAll(PDO::FETCH_ASSOC);
+			return $sql->rowCount();
+      }
 
     //método para insertar registros
     public function registrar_proveedor($cedula,$razon,$telefono,

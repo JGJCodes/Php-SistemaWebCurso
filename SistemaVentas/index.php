@@ -1,4 +1,4 @@
 <?php
-    require_once("view_login.php");
+    require_once("views/view_login.php");
 
 ?>

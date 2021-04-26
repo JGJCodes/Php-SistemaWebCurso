@@ -29,6 +29,8 @@
 
             return $sql->fetchAll();
         }
+		
+		
 
         /**
          * Metodo que valida si el correo y cedula 

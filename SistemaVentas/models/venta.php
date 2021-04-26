@@ -20,6 +20,16 @@ class Ventas extends Conectar{
       return $sql->fetchAll(PDO::FETCH_ASSOC); 
     }
 	
+	//retorna el numero total de registros en la tabla ventas
+		public function get_filas_venta(){
+			$conectar= parent::conexion();        
+			$sql="select * from ventas";         
+			$sql=$conectar->prepare($sql);
+			$sql->execute();
+			$resultado= $sql->fetchAll(PDO::FETCH_ASSOC);
+			return $sql->rowCount();
+		}
+	
 	//método para mostrar los datos de un registro por usuario
     public function get_ventas_idusuario($id_usuario){
             $conectar= parent::conexion();

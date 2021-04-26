@@ -238,6 +238,16 @@
 
             return $sql->fetchAll();
         }
+		
+		//retorna el numero total de registros en la tabla usuarios
+		public function get_filas_usuario(){
+			$conectar= parent::conexion();        
+			$sql="select * from usuarios";         
+			$sql=$conectar->prepare($sql);
+			$sql->execute();
+			$resultado= $sql->fetchAll(PDO::FETCH_ASSOC);
+			return $sql->rowCount();
+		}
 
         /**
          * Metodo que edita el estado del usuario

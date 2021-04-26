@@ -11,6 +11,10 @@
     if(isset($_SESSION["id_usuario"])){
     
       require_once("view_header.php");
+	  
+	  //Verifica los permisos de acceso
+	  if($_SESSION["usuarios"]==1){
+
 ?>
 
 <!--Contenido-->
@@ -153,6 +157,12 @@
 </div><!-- Fin de formulario modal de usuario -->
 
 <?php
+
+	} else {
+
+       require("sinacceso.php");
+	}//CIERRE DE SESSION DE PERMISO
+
     require_once("view_footer.php");
 ?>
 

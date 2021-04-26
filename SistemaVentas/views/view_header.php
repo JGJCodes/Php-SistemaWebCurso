@@ -3,9 +3,34 @@
   encabezado de las paginas del sistema
 -->
 <?php
-   require_once("../config/conexion.php");
 
-    if(isset($_SESSION["id_usuario"])){
+   /*validamos si no existe una variable de session entonces 
+   el id de session es menor que 1 entonces iniciaria la session
+   y si ya existen una session iniciada entonces no vamos hacer
+   nada, esto para omitir algunos errores de que si ya ha 
+   existido la session anteriormente*/
+   if(strlen(session_id()) < 1)
+      session_start();
+
+	  require_once("../config/conexion.php");
+
+      if(isset($_SESSION["id_usuario"])){
+		  /*Se llaman los modelos y se crean los objetos para llamar el numero de registros en el menu lateral izquierdo y en el home*/
+          require_once("../models/categoria.php");
+          require_once("../models/producto.php");
+          require_once("../models/proveedor.php");
+          require_once("../models/usuario.php");
+          require_once("../models/compra.php");
+          require_once("../models/cliente.php");
+          require_once("../models/venta.php");
+
+		   $categoria = new Categoria();
+		   $producto = new Producto();
+		   $proveedor = new Proveedor();
+		   $compra = new Compras();
+		   $cliente = new Cliente();
+		   $venta = new Ventas();
+		   $usuario = new Usuarios();
 ?>
 
 <!DOCTYPE html>
@@ -64,7 +89,7 @@
 
   <header class="main-header">
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a href="" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>A</b>LT</span>
       <!-- logo for regular state and mobile devices -->
@@ -149,42 +174,68 @@
           </a>
           
         </li>
+		
+		<?php 
+		
+		if($_SESSION["categoria"]==1){
 
-         <li class="">
-          <a href="view_categoria.php">
-            <i class="fa fa-list" aria-hidden="true"></i> <span>Categoría</span>
-            <span class="pull-right-container badge bg-blue">
-              <i class="fa fa-bell pull-right">20</i>
-            </span>
-          </a>
+            echo '<li class="">
+
+              <a href="view_categoria.php">
+                <i class="fa fa-list" aria-hidden="true"></i> <span>Categoría</span>
+                <span class="pull-right-container badge bg-blue">
+                  <i class="fa fa-bell pull-right">'.$categoria->get_filas_categoria().'</i>
+                </span>
+              </a>
          
-        </li>
+          </li>';
+          }
+         ?>
 
-         <li class="">
-          <a href="view_producto.php">
+        <?php 
+		
+		if($_SESSION["productos"]==1){
+
+            echo ' <li class="">
+			<a href="view_producto.php">
             <i class="fa fa-tasks" aria-hidden="true"></i> <span>Productos</span>
             <span class="pull-right-container badge bg-blue">
-              <i class="fa fa-bell pull-right">20</i>
+              <i class="fa fa-bell pull-right">'.$producto->get_filas_producto().'</i>
             </span>
-          </a>
+			</a>
          
-        </li>
+			</li>';
 
-         <li class="">
-              <a href="view_proveedor.php">
+          }
+        ?>
+
+
+		<?php 
+		
+		if($_SESSION["proveedores"]==1){
+
+            echo ' <li class="">
+				<a href="view_proveedor.php">
                 <i class="fa fa-users"></i> <span>Proveedores</span>
                 <span class="pull-right-container badge bg-blue">
-                  <i class="fa fa-bell pull-right">5</i>
+                  <i class="fa fa-bell pull-right">'.$proveedor->get_filas_proveedor().'<</i>
                 </span>
               </a>
 
-          </li>
+			</li>';
 
-           <li class="treeview">
+          }
+        ?>
+
+        <?php 
+		
+		if($_SESSION["compras"]==1){
+
+            echo '<li class="treeview">
           <a href="view_compras.php">
             <i class="fa fa-shopping-cart" aria-hidden="true"></i> <span>Compras</span>
             <span class="pull-right-container badge bg-blue">
-              <i class="fa fa-bell pull-right">10</i>
+              <i class="fa fa-bell pull-right">'.$compra->get_filas_compra().'<</i>
               <i class="fa fa-angle-left pull-right"></i>  <!-- icono de submenu -->
             </span>
           </a>
@@ -196,23 +247,40 @@
             <li><a href="view_compras_mes.php"><i class="fa fa_circle-o"></i>Consultar compras por mes</a></li>
           </ul>
 
-        </li>
+        </li>';
 
-           <li class="">
+          }
+        ?>
+
+        <?php 
+		
+		if($_SESSION["clientes"]==1){
+
+            echo '<li class="">
           <a href="view_clientes.php">
             <i class="fa fa-users"></i> <span>Clientes</span>
             <span class="pull-right-container badge bg-blue">
-              <i class="fa fa-bell pull-right">3</i>
+              <i class="fa fa-bell pull-right">'.$cliente->get_filas_cliente().'</i>
             </span>
           </a>
          
-        </li>
+        </li>';
+
+          }
+        ?>
+		
+		
+		 <?php 
+		
+		if($_SESSION["clientes"]==1){
+
+            echo '
           <!-- clase treeview de submenu -->
          <li class="treeview">
           <a href="view_ventas.php">
             <i class="fa fa-suitcase" aria-hidden="true"></i> <span>Ventas</span>
             <span class="pull-right-container badge bg-blue">
-              <i class="fa fa-bell pull-right">8</i>
+              <i class="fa fa-bell pull-right">'.$venta->get_filas_venta().'</i>
               <i class="fa fa-angle-left pull-right"></i>  <!-- icono de submenu -->
             </span>
           </a>
@@ -225,8 +293,17 @@
             <li><a href="view_ventas_mes.php"><i class="fa fa_circle-o"></i>Consultar ventas por mes</a></li>
           </ul>
 
-        </li>
+         </li>';
 
+          }
+        ?>
+
+
+		 <?php 
+		
+		if($_SESSION["reporte_compras"]==1){
+
+            echo '
         <li class="treeview">
           <a href="view_reportes_compras.php">
             <i class="fa fa-bar-chart" aria-hidden="true"></i> <span>Reportes de compras</span>
@@ -241,8 +318,17 @@
             <li><a href="view_reporte_compras_proveedor.php"><i class="fa fa_circle-o"></i>Reporte de compras por proveedor</a></li>
            
           </ul>
-        </li>
+         </li>';
 
+          }
+        ?>
+		
+		
+		 <?php 
+		
+		if($_SESSION["reporte_ventas"]==1){
+
+            echo '
         <li class="treeview">
           <a href="view_reportes_ventas.php">
             <i class="fa fa-pie-chart" aria-hidden="true"></i> <span>Reportes de ventas</span>
@@ -257,20 +343,33 @@
             <li><a href="view_reporte_ventas_cliente.php"><i class="fa fa_circle-o"></i>Reporte de ventas por cliente</a></li>
            
           </ul>
-        </li>
+         </li>';
+
+          }
+        ?>
 
 
+		 <?php 
+		
+		if($_SESSION["usuarios"]==1){
+
+            echo '
         <li class="">
           <a href="view_usuarios.php">
             <i class="fa fa-user" aria-hidden="true"></i> <span>Usuarios</span>
             <span class="pull-right-container badge bg-blue">
-              <i class="fa fa-bell pull-right">3</i>
+              <i class="fa fa-bell pull-right">'.$usuario->get_filas_usuario().'</i>
             </span>
           </a>
          
-        </li>
+         </li>';
 
-         <li class="">
+          }
+        ?>
+
+         
+		 
+		<!--<li class="">
           <a href="view_backup.php">
             <i class="fa fa-database" aria-hidden="true"></i> <span>BackUp</span>
             <span class="pull-right-container badge bg-blue">
@@ -278,13 +377,22 @@
             </span>
           </a>
          
-        </li>
+         </li>--!>
+		
+		 <?php 
+		
+		if($_SESSION["empresa"]==1){
+
+            echo '
 
         <li class="">
           <a href="" onclick="mostrar_empresa('<?php echo $_SESSION["id_usuario"]?>')">
             <i class="fa fa-building" aria-hidden="true"> <span>Empresa</span> </i>
           </a>
-        </li>
+         </li>';
+
+          }
+        ?>
        
        
       </ul>
@@ -292,14 +400,24 @@
     <!-- /.sidebar -->
   </aside>
 
+ 
+
   <?php
 
-    require_once("view_perfil.php");
-    require_once("view_empresa.php");
+    require_once("view_perfil.php"); //FORMULARIO PERFIL USUARIO MODAL-->
+    require_once("view_empresa.php"); //VISTA MODAL PARA EDITAR EMPRESA-->
+	
+	?>
+	
+	<script src="../public/bower_components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="controllers/cont_perfil.js"></script> 
+	<script type="text/javascript" src="controllers/cont_empresa.js"></script>
+	
+	<?php
      
     } else {
 
-       header("Location:".Conectar::ruta()."views/view_login.php");
+       header("Location:".Conectar::ruta()."index.php");
        exit();
     }
  ?>

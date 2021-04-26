@@ -27,6 +27,16 @@
 
             return  $sql->fetchAll();//devuelve los resultados de la consulta
         }
+		
+		//retorna el numero total de registros en la tabla clientes
+		public function get_filas_cliente(){
+			$conectar= parent::conexion();        
+			$sql="select * from clientes";         
+			$sql=$conectar->prepare($sql);
+			$sql->execute();
+			$resultado= $sql->fetchAll(PDO::FETCH_ASSOC);
+			return $sql->rowCount();
+		}
 
         /**
          * Metodo que registra un cliente 

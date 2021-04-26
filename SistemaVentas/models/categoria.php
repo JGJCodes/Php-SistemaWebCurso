@@ -21,6 +21,16 @@
 
    	   	  return $sql->fetchAll(PDO::FETCH_ASSOC);
    	   }
+	   
+	   //retorna el numero total de registros en la tabla categoria
+	  public function get_filas_categoria(){
+			$conectar= parent::conexion();        
+			$sql="select * from categoria";         
+			$sql=$conectar->prepare($sql);
+			$sql->execute();
+			$resultado= $sql->fetchAll(PDO::FETCH_ASSOC);
+			return $sql->rowCount();
+      }
 
    	    //método para mostrar los datos de un registro a modificar
         public function get_categoria_id($id_categoria){
@@ -201,6 +211,8 @@
 
             return $sql->fetchAll(PDO::FETCH_ASSOC);       
       }
+	  
+	  
 
    }
 

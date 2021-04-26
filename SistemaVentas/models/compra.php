@@ -9,7 +9,7 @@
    
 class Compras extends Conectar{
 
-//método para seleccionar todos los registros
+	//método para seleccionar todos los registros
     public function get_compras(){
       $conectar= parent::conexion();
       parent::set_names();
@@ -20,8 +20,18 @@ class Compras extends Conectar{
 
       return $sql->fetchAll(PDO::FETCH_ASSOC); 
     }
+	
+	//retorna el numero total de registros en la tabla compras
+	public function get_filas_compra(){
+			$conectar= parent::conexion();        
+			$sql="select * from compras";         
+			$sql=$conectar->prepare($sql);
+			$sql->execute();
+			$resultado= $sql->fetchAll(PDO::FETCH_ASSOC);
+			return $sql->rowCount();
+    }
 
-//método para mostrar los datos de un registro a modificar
+	//método para mostrar los datos de un registro a modificar
     public function get_compra_id($id_compras){
              $conectar= parent::conexion();
              parent::set_names();

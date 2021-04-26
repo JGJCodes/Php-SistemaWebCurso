@@ -26,6 +26,16 @@
             $sql->execute();
             return $sql->fetchAll(PDO::FETCH_ASSOC);
        }
+	   
+	   //retorna el numero total de registros en la tabla empresa
+	  public function get_filas_empresa(){
+			$conectar= parent::conexion();        
+			$sql="select * from empresa";         
+			$sql=$conectar->prepare($sql);
+			$sql->execute();
+			$resultado= $sql->fetchAll(PDO::FETCH_ASSOC);
+			return $sql->rowCount();
+      }
  
       //metodo muestra la informacion de la empresa por usuario
        public function get_empresa_idusuario($id_usuario_empresa){
