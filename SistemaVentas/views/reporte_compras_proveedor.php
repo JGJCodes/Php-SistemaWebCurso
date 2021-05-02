@@ -6,7 +6,7 @@
 
    if(isset($_SESSION["id_usuario"])){
 
-    require_once("../modelos/Proveedores.php");
+    require_once("../models/proveedor.php");
 
     $prov= new Proveedor();
 
@@ -17,7 +17,7 @@
 
 
 <!-- INICIO DEL HEADER - LIBRERIAS -->
-<?php require_once("header.php");?>
+<?php require_once("view_header.php");?>
 
 <!-- FIN DEL HEADER - LIBRERIAS -->
 
@@ -107,7 +107,7 @@
   <!-- /.content-wrapper -->
 
 
-   <?php require_once("footer.php");?>
+   <?php require_once("view_footer.php");?>
 
 
 

@@ -4,7 +4,7 @@
 
    if(isset($_SESSION["id_usuario"])){
 
-   	require_once("../modelos/Ventas.php");
+   	require_once("../models/venta.php");
 
 
    	$ventas=new Ventas();
@@ -20,7 +20,7 @@
 
 
 <!-- INICIO DEL HEADER - LIBRERIAS -->
-<?php require_once("header.php");?>
+<?php require_once("view_header.php");?>
 
 <!-- FIN DEL HEADER - LIBRERIAS -->
 
@@ -83,7 +83,8 @@
 
 
 				    //imprime la fecha por separado ejemplo: dia, mes y año
-                      $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                      $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio",
+					  "Agosto","Septiembre","Octubre","Noviembre","Diciembre");
  
                        $fecha= $datos[$i]["mes"];
 
@@ -123,7 +124,8 @@
 
 	             <div class="">
 
-				     <h2 class="reporte_compras_general container-fluid bg-red text-white col-lg-12 text-center mh-50">PORCENTAJE POR AÑO</h2>
+				     <h2 class="reporte_compras_general container-fluid bg-red text-white 
+					 col-lg-12 text-center mh-50">PORCENTAJE POR AÑO</h2>
 				    
 		         
 		         <table class="table table-bordered">
@@ -142,17 +144,13 @@
             
 	                 ?>
                  
-                    <?php for($i=0; $i<count($datos_ano); $i++){
+                    <?php 
+					for($i=0; $i<count($datos_ano); $i++){
                   
 
 			           array_push($arregloReg, 
-					            array(
-					
-				      
-				     'ano' => $datos_ano[$i]["ano"],
-
-				     'total_venta_ano' => $datos_ano[$i]["total_venta_ano"]
-				               
+					            array('ano' => $datos_ano[$i]["ano"],
+								'total_venta_ano' => $datos_ano[$i]["total_venta_ano"]     
 				            )
 				        );
                
@@ -175,17 +173,17 @@
 
 					for($i=0;$i<count($arregloReg);$i++) {
 
-             //CALCULO DEL PORCENTAJE
-			  $dato_por_ano=$arregloReg[$i]["total_venta_ano"];
+						 //CALCULO DEL PORCENTAJE
+						  $dato_por_ano=$arregloReg[$i]["total_venta_ano"];
 
-			 
-			 $porcentaje_por_ano= round(($dato_por_ano/$sumaTotal)*100,2);	
+						 
+						 $porcentaje_por_ano= round(($dato_por_ano/$sumaTotal)*100,2);	
 
-			  $porcentaje_total= $porcentaje_total+ $porcentaje_por_ano;
+						  $porcentaje_total= $porcentaje_total+ $porcentaje_por_ano;
               
 
 
-                    	?>
+                   ?>
 
 	                 <tr>
 	                 	<td><?php echo $arregloReg[$i]["ano"];?></td>
@@ -230,7 +228,8 @@
 
 			       <div class="">
 
-					<h2 class="reporte_compras_general container-fluid bg-red text-white col-lg-12 text-center mh-50">REPORTE GENERAL DE VENTAS</h2>
+					<h2 class="reporte_compras_general container-fluid bg-red text-white
+					col-lg-12 text-center mh-50">REPORTE GENERAL DE VENTAS</h2>
 
       
 	          <!--GRAFICA-->
@@ -251,7 +250,8 @@
 
 			       <div class="">
 
-					<h2 class="reporte_compras_general container-fluid bg-primary text-white col-lg-12 text-center mh-50">REPORTE GENERAL DE VENTAS CANCELADAS</h2>
+					<h2 class="reporte_compras_general container-fluid bg-primary 
+					text-white col-lg-12 text-center mh-50">REPORTE GENERAL DE VENTAS CANCELADAS</h2>
 
       
 	          <!--GRAFICA-->
@@ -278,13 +278,13 @@
   
   <?php  } else {
 
-       require("noacceso.php");
+       require("sinacceso.php");
   }
    
   ?><!--CIERRE DE SESSION DE PERMISO -->
 
 
-   <?php require_once("footer.php");?>
+   <?php require_once("view_footer.php");?>
 
 
 				<script type="text/javascript">

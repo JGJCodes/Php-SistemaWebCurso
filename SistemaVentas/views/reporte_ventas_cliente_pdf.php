@@ -1,35 +1,32 @@
 
 <?php
-/*IMPORTANTE:ESTE ARCHIVO DE PDF NO ACEPTA LOS ESTILOS DE LIBRERIAS EXTERNAS NI BOOTSTRAP, HAY QUE USAR STYLE COMO ATRIBUTO Y LA ETIQUETA STYLE DEBAJO DE HEAD*/
+/*IMPORTANTE:ESTE ARCHIVO DE PDF NO ACEPTA LOS ESTILOS DE LIBRERIAS EXTERNAS NI BOOTSTRAP,
+ HAY QUE USAR STYLE COMO ATRIBUTO Y LA ETIQUETA STYLE DEBAJO DE HEAD*/
 
   require_once("../config/conexion.php"); 
 
    if(isset($_SESSION["nombre"]) and isset($_SESSION["correo"])){
 
-require_once("../modelos/Clientes.php");
-require_once("../modelos/Ventas.php");
-require_once("../modelos/Empresa.php");
+		require_once("../models/cliente.php");
+		require_once("../models/venta.php");
+		require_once("../models/empresa.php");
 
-$clientes=new Cliente();
-$vent = new Ventas();
-$informacion_empresa=new Empresa();
+		$clientes=new Cliente();
+		$vent = new Ventas();
+		$informacion_empresa=new Empresa();
 
+		$datos=$clientes->get_cliente_por_cedula($_POST["cedula"]);
+		$venta=$vent->get_venta_por_fecha($_POST["cedula"],$_POST["datepicker"],$_POST["datepicker2"]);
 
-$datos=$clientes->get_cliente_por_cedula($_POST["cedula"]);
-$venta=$vent->get_venta_por_fecha($_POST["cedula"],$_POST["datepicker"],$_POST["datepicker2"]);
+		$total_productos=$vent->get_cant_productos_por_fecha($_POST["cedula"],$_POST["datepicker"],$_POST["datepicker2"]);
 
-$total_productos=$vent->get_cant_productos_por_fecha($_POST["cedula"],$_POST["datepicker"],$_POST["datepicker2"]);
+		$datos_empresa=$informacion_empresa->get_empresa();
 
-$datos_empresa=$informacion_empresa->get_empresa();
+		ob_start(); 
 
-
-
-ob_start(); 
-
-   
 ?>
 
-<link type="text/css" rel="stylesheet" href="dompdf/css/print_static.css"/>
+<link type="text/css" rel="stylesheet" href="../public/dompdf/css/print_static.css"/>
   <style type="text/css">
 
     
@@ -255,8 +252,6 @@ ob_start();
 </table>
 
 
-
-
 <table style="border-top: 1px solid black; padding-top: 2em; margin-top: 2em;">
   <tr>
     <td style="padding-top: 0em"><span class="Estilo2"><strong>REVISADO POR :</strong></span></td>
@@ -285,7 +280,7 @@ ob_start();
   $salida_html = ob_get_contents();
   ob_end_clean(); 
 
-    require_once("dompdf/dompdf_config.inc.php");       
+    require_once("../public/dompdf/dompdf_config.inc.php");       
     $dompdf = new DOMPDF();
     $dompdf->load_html($salida_html);
     $dompdf->render();

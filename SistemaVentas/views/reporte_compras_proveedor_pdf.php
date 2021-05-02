@@ -1,35 +1,37 @@
 
 <?php
-/*IMPORTANTE:ESTE ARCHIVO DE PDF NO ACEPTA LOS ESTILOS DE LIBRERIAS EXTERNAS NI BOOTSTRAP, HAY QUE USAR STYLE COMO ATRIBUTO*/
+
+/*IMPORTANTE:ESTE ARCHIVO DE PDF NO ACEPTA LOS ESTILOS DE LIBRERIAS EXTERNAS NI BOOTSTRAP,
+ HAY QUE USAR STYLE COMO ATRIBUTO*/
 
   require_once("../config/conexion.php"); 
 
   if(isset($_SESSION["nombre"]) and isset($_SESSION["correo"])){
 
-require_once("../modelos/Proveedores.php");
-require_once("../modelos/Compras.php");
-require_once("../modelos/Empresa.php");
+	require_once("../models/proveedor.php");
+	require_once("../models/compra.php");
+	require_once("../models/empresa.php");
 
-$proveedores=new Proveedor();
-$compra = new Compras();
-$informacion_empresa=new Empresa();
-
-
-$datos=$proveedores->get_proveedor_por_cedula($_POST["cedula"]);
-$pedidos=$compra->get_pedido_por_fecha($_POST["cedula"],$_POST["datepicker"],$_POST["datepicker2"]);
-
-$total_productos=$compra->get_cant_productos_por_fecha($_POST["cedula"],$_POST["datepicker"],$_POST["datepicker2"]);
-
-$datos_empresa=$informacion_empresa->get_empresa();
+	$proveedores=new Proveedor();
+	$compra = new Compras();
+	$informacion_empresa=new Empresa();
 
 
+	$datos=$proveedores->get_proveedor_por_cedula($_POST["cedula"]);
+	$pedidos=$compra->get_pedido_por_fecha($_POST["cedula"],$_POST["datepicker"],$_POST["datepicker2"]);
 
-ob_start(); 
+	$total_productos=$compra->get_cant_productos_por_fecha($_POST["cedula"],$_POST["datepicker"],$_POST["datepicker2"]);
+
+	$datos_empresa=$informacion_empresa->get_empresa();
+
+
+
+	ob_start(); 
 
    
 ?>
 
-<link type="text/css" rel="stylesheet" href="dompdf/css/print_static.css"/>
+<link type="text/css" rel="stylesheet" href="../public/dompdf/css/print_static.css"/>
   <style type="text/css">
 
     
@@ -47,7 +49,8 @@ ob_start();
 
 <table style="width: 100%;" class="header">
 <tr>
-<td width="54%" height="111"><h1 style="text-align: left; margin-right:20px;"><img src="../public/images/logo_mercado.jpg" width="340" height="200"  /></h1></td>
+<td width="54%" height="111"><h1 style="text-align: left; margin-right:20px;">
+<img src="../public/images/logo_mercado.jpg" width="340" height="200"  /></h1></td>
 
 
 <td width="46%" height="111">
@@ -172,17 +175,15 @@ ob_start();
         <?php
         
         $pagoTotal=0;
-
-
        
-         for($j=0;$j<count($pedidos);$j++){
+        for($j=0;$j<count($pedidos);$j++){
 
            $decision=$pedidos[$j]["precio_compra"] * $pedidos[$j]["cantidad_compra"];
 
-          $pagoTotal= $pagoTotal + $decision;
+			$pagoTotal= $pagoTotal + $decision;
 
 
-         ?>
+        ?>
     <tr class="even_row" style="font-size:10pt">
      
       <td style="text-align: center"><span><?php echo $pedidos[$j]["producto"];?></span></td>
@@ -293,7 +294,7 @@ ob_start();
   $salida_html = ob_get_contents();
   ob_end_clean();
 
-    require_once("dompdf/dompdf_config.inc.php");  
+    require_once("../public/dompdf/dompdf_config.inc.php");  
 
     $dompdf = new DOMPDF();
     $dompdf->load_html($salida_html);

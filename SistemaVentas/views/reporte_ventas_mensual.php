@@ -1,46 +1,39 @@
 <?php
 
 
-   
    require_once("../config/conexion.php");
 
    if(isset($_SESSION["id_usuario"])){
 
-   	require_once("../modelos/Ventas.php");
+		require_once("../models/venta.php");
 
-   	 
-//SI EXISTE EL POST ENTONCES SE LLAMA AL METODO PARA SELECCIONAR LA FECHA
-     
-    $ventas=new Ventas();
+		 
+		//SI EXISTE EL POST ENTONCES SE LLAMA AL METODO PARA SELECCIONAR LA FECHA
+		 
+		$ventas=new Ventas();
 
-   	if(isset($_POST["year"])){
-   
+		if(isset($_POST["year"])){
+	   
+		  $datos= $ventas->get_ventas_mensual($_POST["year"]);  
+	 
+		} else {
 
-      $datos= $ventas->get_ventas_mensual($_POST["year"]);  
- 
-    } else {
+			$fecha_inicial=date("Y");
+			$datos= $ventas->get_ventas_mensual($fecha_inicial);  
+		}
 
-    	$fecha_inicial=date("Y");
-
-        $datos= $ventas->get_ventas_mensual($fecha_inicial);  
-    }
-
-
-     $fecha_ventas= $ventas->get_year_ventas();
+		 $fecha_ventas= $ventas->get_year_ventas();
 ?>
 
 
 <!-- INICIO DEL HEADER - LIBRERIAS -->
-<?php require_once("header.php");?>
+<?php require_once("view_header.php");?>
 
 <!-- FIN DEL HEADER - LIBRERIAS -->
 
 
 
-  <?php if($_SESSION["reporte_ventas"]==1)
-     {
-
-     ?>
+  <?php if($_SESSION["reporte_ventas"]==1){   ?>
 
 
   <!-- Content Wrapper. Contains page content -->
@@ -57,7 +50,8 @@
         <div class="panel-body">
 
          <div class="btn-group text-center">
-          <button type='button' id="buttonExport" class="btn btn-primary btn-lg" ><i class="fa fa-print" aria-hidden="true"></i> Imprimir</button>
+          <button type='button' id="buttonExport" class="btn btn-primary btn-lg" >
+		  <i class="fa fa-print" aria-hidden="true"></i> Imprimir</button>
          </div>
 
 
@@ -278,13 +272,13 @@
   
   <?php  } else {
 
-       require("noacceso.php");
+       require("sinacceso.php");
   }
    
   ?><!--CIERRE DE SESSION DE PERMISO -->
  
 
-   <?php require_once("footer.php");?>
+   <?php require_once("view_footer.php");?>
 
       <!--AJAX COMPRAS-->
 <!--<script type="text/javascript" src="js/compras.js"></script>-->

@@ -294,6 +294,30 @@
             return $sql->fetchAll();
         }
 		
+		// esta function alista los permisos (NO MARCADOS)
+        public function permisos(){
+            $conectar=parent::conexion();
+
+            $sql="select * from permisos;";
+
+            $sql=$conectar->prepare($sql);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+        } 
+
+        //listamos los permisos asignados al usuario 
+        //tambien se usa para verificar para que modulos tiene acceso 
+        public function listar_permisos_por_usuario($id_usuario){
+            $conectar=parent::conexion();
+
+            $sql="select * from usuario_permiso where id_usuario=?";
+
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $id_usuario);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+        }
+		
 		//Retorna los permisos de un usuario
 		public function get_usuario_permiso_idusuario($id_usuario){
             $conectar= parent::conexion();

@@ -1,46 +1,39 @@
 <?php
+/*
+  Archivo que contiene la estructura de
+  la pagina de impresion de reportas mensuales
+*/
 
-
-   
-   require_once("../config/conexion.php");
+   require_once("../config/conexion.php");//Agregamos la conexion con la BD
 
    if(isset($_SESSION["id_usuario"])){
 
-   	require_once("../modelos/Compras.php");
-
+   	require_once("../models/compra.php");
    	 
-//SI EXISTE EL POST ENTONCES SE LLAMA AL METODO PARA SELECCIONAR LA FECHA
+	//SI EXISTE EL POST ENTONCES SE LLAMA AL METODO PARA SELECCIONAR LA FECHA
      
     $compras=new Compras();
 
    	if(isset($_POST["year"])){
-   
-
       $datos= $compras->get_compras_mensual($_POST["year"]);  
  
     } else {
-
     	$fecha_inicial=date("Y");
-
         $datos= $compras->get_compras_mensual($fecha_inicial);  
     }
-
 
     $fecha_compras= $compras->get_year_compras();
 ?>
 
-
 <!-- INICIO DEL HEADER - LIBRERIAS -->
-<?php require_once("header.php");?>
-
+<?php require_once("view_header.php");?>
 <!-- FIN DEL HEADER - LIBRERIAS -->
 
+ <?php
 
+  if($_SESSION["reporte_compras"]==1){
 
-  <?php if($_SESSION["reporte_compras"]==1)
-     {
-
-     ?>
+ ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -75,55 +68,39 @@
                  <div class="col-sm-10">
                   <select class="form-control" name="year" id="year">
 						 <option value="0">Seleccione...</option>
-						 <?php
-                       
+			<?php
                        //si se envia el POST
-                       if(isset($_POST["year"])){
-                          
+                     if(isset($_POST["year"])){                         
 
 						 for($i=0; $i<count($fecha_compras); $i++){
-
-                        
+                 
                           	if($fecha_compras[$i]["fecha"]==$_POST["year"]){
 
-
                           	echo '<option value="'.$fecha_compras[$i]["fecha"].'" selected=selected>'.$fecha_compras[$i]["fecha"].'</option>';
-                                  
-       	      
+                                       	      
                             } else{ 
-
-                            	  /*despues de enviarse entonces se alistan los años*/
-
-                                   	echo '<option value="'.$fecha_compras[$i]["fecha"].'">'.$fecha_compras[$i]["fecha"].'</option>';
-                             } 
-
-                        }//cierre del ciclo for
-
-                       
-                       //SI NO SE ENVIA EL POST
-                       } else {
-
+                            	  //despues de enviarse entonces se alistan los año
+                                  echo '<option value="'.$fecha_compras[$i]["fecha"].'">'.$fecha_compras[$i]["fecha"].'</option>';
+                            } 
+						 }//cierre del ciclo for
+                      
+                      //SI NO SE ENVIA EL POST
+                      } else {
 
 						 for ($i=0; $i<count($fecha_compras); $i++){
 
-                     /*si no se envia entonces se alistan los años*/
-
-                    echo '<option value="'. $fecha_compras[$i]["fecha"].'" selected=selected>'. $fecha_compras[$i]["fecha"].'</option>';
-                           
-						 //}          
-
+							//si no se envia entonces se alistan los años*/
+							echo '<option value="'. $fecha_compras[$i]["fecha"].'" selected=selected>'. $fecha_compras[$i]["fecha"].'</option>';
+                                  
                         }//cierre del ciclo for
 
-                      }//cierre del ese*/
+                      }//cierre del ese
 
 					  ?>
 						 
 					 </select>
                  </div>
-              </div>
-
-             
-
+              </div>          
                <div class="btn-group text-center">
                  <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i> Consultar</button>
                </div>
@@ -135,15 +112,10 @@
   
 
 	<div class="row">
-
 	 <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-
 	    <div class="box">
-
 	       <div class="">
-
-				  <h2 class="reporte_compras_general container-fluid bg-primary text-white col-lg-12 text-center mh-50">REPORTE DE COMPRAS MENSUAL</h2>
-				              
+			  <h2 class="reporte_compras_general container-fluid bg-primary text-white col-lg-12 text-center mh-50">REPORTE DE COMPRAS MENSUAL</h2>			              
 				  <table class="table table-bordered">
 				    <thead>
 				      <tr>
@@ -274,20 +246,20 @@
    
   <?php  } else {
 
-       require("noacceso.php");
+       require("sinacceso.php");
   }
    
   ?><!--CIERRE DE SESSION DE PERMISO -->
 
 
-   <?php require_once("footer.php");?>
+   <?php require_once("view_footer.php");?>
 
       <!--AJAX COMPRAS-->
 <!--<script type="text/javascript" src="js/compras.js"></script>-->
 
 
 
-				<script type="text/javascript">
+<script type="text/javascript">
 
      $(document).ready(function() {
 

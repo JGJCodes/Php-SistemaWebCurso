@@ -8,7 +8,7 @@
 
     
 
-    require_once("../modelos/Clientes.php");
+    require_once("../models/cliente.php");
 
     $cliente= new Cliente();
 
@@ -19,7 +19,7 @@
 
 
 <!-- INICIO DEL HEADER - LIBRERIAS -->
-<?php require_once("header.php");?>
+<?php require_once("view_header.php");?>
 
 <!-- FIN DEL HEADER - LIBRERIAS -->
 
@@ -83,7 +83,8 @@
 
                        ?>
                          
-                         <option value="<?php echo $clientes[$i]["cedula_cliente"]?>"><?php echo $clientes[$i]["nombre_cliente"]?></option>
+                         <option value="<?php echo $clientes[$i]["cedula_cliente"]?>">
+						 <?php echo $clientes[$i]["nombre_cliente"]?></option>
 
                        <?php
 
@@ -116,13 +117,13 @@
   
   <?php  } else {
 
-       require("noacceso.php");
+       require("sinacceso.php");
   }
    
   ?><!--CIERRE DE SESSION DE PERMISO -->
 
    
-   <?php require_once("footer.php");?>
+   <?php require_once("view_footer.php");?>
 
   
 <?php

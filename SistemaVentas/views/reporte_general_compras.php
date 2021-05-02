@@ -4,15 +4,11 @@
 
    if(isset($_SESSION["id_usuario"])){
 
-   	require_once("../modelos/Compras.php");
+		require_once("../models/compra.php");
 
-
-   	$compras=new Compras();
-
-   	$datos= $compras->get_compras_reporte_general();
-
-
-   	$datos_ano= $compras->suma_compras_total_ano();
+		$compras=new Compras();
+		$datos= $compras->get_compras_reporte_general();
+		$datos_ano= $compras->suma_compras_total_ano();
       
 	
 	
@@ -20,16 +16,13 @@
 
 
 <!-- INICIO DEL HEADER - LIBRERIAS -->
-<?php require_once("header.php");?>
+<?php require_once("view_header.php");?>
 
 <!-- FIN DEL HEADER - LIBRERIAS -->
 
 
 
-  <?php if($_SESSION["reporte_compras"]==1)
-     {
-
-     ?>
+  <?php if($_SESSION["reporte_compras"]==1){ ?>
 
 
   <!-- Content Wrapper. Contains page content -->
@@ -85,8 +78,9 @@
                     for($i=0;$i<count($datos);$i++){
 
 
-				    //para traducir el nombre del mes ya que si lo traemos desde phpmyadmin lo traerá en ingles
-                      $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+						//para traducir el nombre del mes ya que si lo traemos desde phpmyadmin lo traerá en ingles
+                      $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio",
+									"Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                       
                       //trae el nombre del mes
                        $fecha= $datos[$i]["mes"];
@@ -128,7 +122,8 @@
 
 	             <div class="">
 
-				     <h2 class="reporte_compras_general container-fluid bg-primary text-white col-lg-12 text-center mh-50">PORCENTAJE POR AÑO</h2>
+				     <h2 class="reporte_compras_general container-fluid bg-primary text-white 
+								col-lg-12 text-center mh-50">PORCENTAJE POR AÑO</h2>
 				    
 		         
 		         <table class="table table-bordered">
@@ -144,8 +139,9 @@
 
 	                <?php
                        
-                       //DEBEMOS HACER TRES CICLO FOR PARA OBTENER LA SUMA TOTAL POR Año para calcular el porcentaje del campo total de todos los registros que se tenga en la tabla compras
-	                   //se declara un array vacio
+                       /*EBEMOS HACER TRES CICLO FOR PARA OBTENER LA SUMA TOTAL POR Año para calcular
+					   el porcentaje del campo total de todos los registros que se tenga en la tabla compras
+	                   se declara un array vacio*/
                        $arregloReg = array();
             
 	                 ?>
@@ -173,7 +169,9 @@
 				   }//cierre del primer ciclo for
 
 
-				   //SEGUNDO CICLO for para obtener la suma total del total_compra_ano dependiendo del numero de registros que se tenga en la tabla compras, esto es para obtener ese datos para calcular el porcentaje
+				   /*SEGUNDO CICLO for para obtener la suma total del total_compra_ano dependiendo 
+				   del numero de registros que se tenga en la tabla compras, esto es para obtener 
+				   ese datos para calcular el porcentaje*/
                    $sumaTotal = 0;
  
 				   for($j=0;$j<count($arregloReg);$j++){
@@ -194,7 +192,10 @@
 
 			 
 			 $porcentaje_por_ano= round(($dato_por_ano/$sumaTotal)*100,2);	
-             /*suma el porcentaje del campo total de todos los registros de la tabla compras dependiendo del numero total de los registros de la tabla compras y eso se obtiene por el count($arregloReg)*/
+			 
+             /*suma el porcentaje del campo total de todos los registros de la tabla compras 
+			 dependiendo del numero total de los registros de la tabla compras y eso se obtiene 
+			 por el count($arregloReg)*/
 			  $porcentaje_total= $porcentaje_total+ $porcentaje_por_ano;
               
 
@@ -283,14 +284,14 @@
    
   <?php  } else {
 
-       require("noacceso.php");
+       require("sinacceso.php");
   }
    
   ?><!--CIERRE DE SESSION DE PERMISO -->
 
 
   
-   <?php require_once("footer.php");?>
+   <?php require_once("view_footer.php");?>
 
 
   <script type="text/javascript">
